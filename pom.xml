@@ -58,6 +58,10 @@
             <id>java.net</id>
             <url>https://maven.java.net/content/repositories/public/</url>
         </repository>
+        <repository>
+            <id>runwalk.be</id>
+            <url>http://maven2.runwalk.be/</url>
+        </repository>
     </repositories>
 
 
