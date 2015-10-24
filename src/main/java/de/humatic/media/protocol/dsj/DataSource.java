@@ -5,7 +5,7 @@
 * I have never really used JMF, so I have no idea
 * if this is what a jmf guru would expect.
 * It seems to work though.
-* Thanks to M.Göllnitz, who found out that providing JMF with at least a fake timestamp
+* Thanks to M.G?llnitz, who found out that providing JMF with at least a fake timestamp
 * in the read method instead of using Buffer.TIME_UNKNOWN will make things
 * running with halfway OK speed.
 **/

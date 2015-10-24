@@ -24,9 +24,9 @@ import java.util.Vector;
 
 import sk.calvary.misc.ImageLoader;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageDecoder;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+//import com.sun.image.codec.jpeg.JPEGCodec;
+//import com.sun.image.codec.jpeg.JPEGImageDecoder;
+//import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 public class Thumbnails {
     private static final int MAX_STRONG_REFERENCES = 100;
@@ -214,8 +214,8 @@ public class Thumbnails {
             BufferedOutputStream os = new BufferedOutputStream(
                     new FileOutputStream(tf));
             try {
-                JPEGImageEncoder c = JPEGCodec.createJPEGEncoder(os);
-                c.encode(th);
+//                JPEGImageEncoder c = JPEGCodec.createJPEGEncoder(os);
+//                c.encode(th);
             } finally {
                 os.close();
             }
@@ -234,8 +234,9 @@ public class Thumbnails {
             BufferedInputStream is = new BufferedInputStream(
                     new FileInputStream(tf));
             try {
-                JPEGImageDecoder c = JPEGCodec.createJPEGDecoder(is);
-                return c.decodeAsBufferedImage();
+//                JPEGImageDecoder c = JPEGCodec.createJPEGDecoder(is);
+//                return c.decodeAsBufferedImage();
+                return null;
             } finally {
                 is.close();
             }

@@ -501,9 +501,10 @@ public class App extends JFrame implements ActionListener {
 			
 			try {
 				Lang.copyDefaultLangFile(file);
-				//lang = Lang.parse(new FileInputStream(file));
+				langObj = Lang.parse(new FileInputStream(file));
 			}
 			catch (Exception ee) {
+				e.printStackTrace();
 				throw new IllegalStateException("An error occured during copying language.", ee);
 			}
 		}

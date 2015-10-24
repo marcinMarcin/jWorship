@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.text.AttributedString;
 import java.util.Collections;
 import java.util.Vector;
@@ -777,6 +778,9 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
 	private FormatButton getFormatButton9() {
 		if (formatButton9 == null) {
 			formatButton9 = new FormatButton();
+            String path = getClass().getResource("").getPath();
+            File file = new File(path);
+            System.out.println(file.getAbsolutePath());
 			formatButton9.setIcon(new ImageIcon(getClass().getResource(
 					"/sk/calvary/worship/separateWithBlankLines.png")));
 			daApp.linkToggleBoolean("separateVersesWithBlankLine",

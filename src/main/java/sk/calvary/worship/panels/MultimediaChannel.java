@@ -30,6 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+//import com.jogamp.opengl.GL;
 import sk.calvary.misc.GraphicsTools;
 import sk.calvary.misc.ui.FloatSlider;
 import sk.calvary.worship.App;

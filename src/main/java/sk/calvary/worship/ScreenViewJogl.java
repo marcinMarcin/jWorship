@@ -6,26 +6,10 @@
  */
 package sk.calvary.worship;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
-import java.nio.ByteBuffer;
-
-import javax.media.opengl.DebugGL;
-import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCanvas;
-import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLJPanel;
-
 import sk.calvary.worship.MyImage.NewFrameListener;
+
+import javax.media.opengl.*;
+import java.awt.*;
 
 public class ScreenViewJogl extends GLCanvas implements ScreenView,
 		GLEventListener, NewFrameListener {

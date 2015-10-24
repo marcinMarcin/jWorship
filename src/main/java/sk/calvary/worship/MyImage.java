@@ -6,6 +6,9 @@
  */
 package sk.calvary.worship;
 
+//import com.jogamp.opengl.GL;
+
+import javax.media.opengl.GL;
 import java.awt.Point;
 import java.awt.Transparency;
 import java.awt.color.ColorSpace;
@@ -20,7 +23,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Vector;
 
-import javax.media.opengl.GL;
+
 
 public class MyImage extends BufferedImage {
 

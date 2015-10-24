@@ -4,14 +4,10 @@
  */
 package sk.calvary.misc;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import sun.misc.IOUtils;
+
+import java.io.*;
+import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -217,7 +213,6 @@ public class Lang {
             else if (line.startsWith("#")) {
             	// zaciatok stringu
                 string = langObj.new LangString(line);
-                
                 if (nextComment != null) {
                     string.introComment = nextComment;
                     nextComment = "";
@@ -243,7 +238,7 @@ public class Lang {
                 String text = line.substring(i1 + 1, i2);
                 
                 text = text.replace("\\n", "\r\n");
-                
+                if(string == null) break;
                 if (text.length() > 0 || !string.hasLang(lang))
                 	string.set(lang, text);
             }
@@ -455,12 +450,26 @@ public class Lang {
     }
     
     public static void copyDefaultLangFile(File target) throws IOException, URISyntaxException{
-    	Lang lang = new Lang();
-    	URL url = lang.getClass().getResource("lang.lng");
-    	URI uri = url.toURI();
-    	File source = new File(uri.getPath());
+        Lang lang = new Lang();
+    	InputStream in = lang.getClass().getResourceAsStream("/sk/calvary/misc/lang.lng");
+        copyInputStreamToFile(in, target);
     	target.createNewFile();
 
-    	FileTools.copyFile(source, target);
+    	//FileTools.copyFile(source, target);
+    }
+
+    private static void copyInputStreamToFile(InputStream in, File file) {
+        try {
+            OutputStream out = new FileOutputStream(file);
+            byte[] buf = new byte[1024];
+            int len;
+            while((len=in.read(buf))>0){
+                out.write(buf,0,len);
+            }
+            out.close();
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
