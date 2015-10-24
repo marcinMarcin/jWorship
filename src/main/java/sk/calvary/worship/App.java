@@ -840,7 +840,7 @@ public class App extends JFrame implements ActionListener {
 	}
 	
 	private void loadDefaultGeneralSettings(){
-		generalSettings.put(SETTING_LANGUAGE, "sk");
+		generalSettings.put(SETTING_LANGUAGE, "en");
 	}
 
 	void initializeFullScreen(int screen) {
