@@ -238,7 +238,7 @@ public class Lang {
                 String text = line.substring(i1 + 1, i2);
                 
                 text = text.replace("\\n", "\r\n");
-                if(string == null) break;
+
                 if (text.length() > 0 || !string.hasLang(lang))
                 	string.set(lang, text);
             }
@@ -454,8 +454,6 @@ public class Lang {
     	InputStream in = lang.getClass().getResourceAsStream("/sk/calvary/misc/lang.lng");
         copyInputStreamToFile(in, target);
     	target.createNewFile();
-
-    	//FileTools.copyFile(source, target);
     }
 
     private static void copyInputStreamToFile(InputStream in, File file) {

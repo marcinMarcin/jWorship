@@ -778,9 +778,6 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
 	private FormatButton getFormatButton9() {
 		if (formatButton9 == null) {
 			formatButton9 = new FormatButton();
-            String path = getClass().getResource("").getPath();
-            File file = new File(path);
-            System.out.println(file.getAbsolutePath());
 			formatButton9.setIcon(new ImageIcon(getClass().getResource(
 					"/sk/calvary/worship/separateWithBlankLines.png")));
 			daApp.linkToggleBoolean("separateVersesWithBlankLine",
