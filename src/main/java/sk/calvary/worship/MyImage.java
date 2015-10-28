@@ -9,20 +9,12 @@ package sk.calvary.worship;
 //import com.jogamp.opengl.GL;
 
 import javax.media.opengl.GL;
-import java.awt.Point;
-import java.awt.Transparency;
+import java.awt.*;
 import java.awt.color.ColorSpace;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ComponentColorModel;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
-import java.awt.image.PixelInterleavedSampleModel;
-import java.awt.image.WritableRaster;
+import java.awt.image.*;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Vector;
-
 
 
 public class MyImage extends BufferedImage {
@@ -39,28 +31,28 @@ public class MyImage extends BufferedImage {
 
     static int pixelStride(int glType) {
         switch (glType) {
-        case GL.GL_BGR:
-        case GL.GL_RGB:
-            return 3;
-        case GL.GL_BGRA:
-        case GL.GL_RGBA:
-            return 4;
+            case GL.GL_BGR:
+            case GL.GL_RGB:
+                return 3;
+            case GL.GL_BGRA:
+            case GL.GL_RGBA:
+                return 4;
         }
         return 4;
     }
 
     static int[] bandOffsets(int glType) {
         switch (glType) {
-        case GL.GL_BGR:
-            return new int[] { 2, 1, 0 };
-        case GL.GL_RGB:
-            return new int[] { 0, 1, 2 };
-        case GL.GL_BGRA:
-            return new int[] { 2, 1, 0, 3 };
-        case GL.GL_RGBA:
-            return new int[] { 0, 1, 2, 3 };
+            case GL.GL_BGR:
+                return new int[]{2, 1, 0};
+            case GL.GL_RGB:
+                return new int[]{0, 1, 2};
+            case GL.GL_BGRA:
+                return new int[]{2, 1, 0, 3};
+            case GL.GL_RGBA:
+                return new int[]{0, 1, 2, 3};
         }
-        return new int[] { 0, 1, 2, 3 };
+        return new int[]{0, 1, 2, 3};
     }
 
     static ColorModel colorModel(int glType) {
@@ -83,12 +75,12 @@ public class MyImage extends BufferedImage {
         }
 
         private MyRaster(int width, int height, int glType, int pixelStride,
-                byte data[]) {
+                         byte data[]) {
             super(new PixelInterleavedSampleModel(DataBuffer.TYPE_BYTE, width,
-                    height, pixelStride, pixelStride * width,
-                    bandOffsets(glType)), new DataBufferByte(
-                    data != null ? data : (data = new byte[width * height
-                            * pixelStride]), width * height * pixelStride, 0),
+                            height, pixelStride, pixelStride * width,
+                            bandOffsets(glType)), new DataBufferByte(
+                            data != null ? data : (data = new byte[width * height
+                                    * pixelStride]), width * height * pixelStride, 0),
                     new Point(0, 0));
             this.data = data;
             this.glType = glType;

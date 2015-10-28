@@ -4,13 +4,13 @@ import java.util.Vector;
 
 /**
  * Insert the type's description here. Creation date: (1.4.2004 11:10:59)
- * 
+ *
  * @author:
  */
 public class ObjectListModel extends javax.swing.DefaultListModel {
-	private static final long serialVersionUID = 7816188842543917124L;
-	
-	protected Vector<?> sourceVector;
+    private static final long serialVersionUID = 7816188842543917124L;
+
+    protected Vector<?> sourceVector;
 
     public ObjectListModel() {
     }
@@ -52,7 +52,7 @@ public class ObjectListModel extends javax.swing.DefaultListModel {
         int i2 = 0;
         while (i1 + i2 < ms
                 && o[o.length - 1 - i2]
-                        .equals(getElementAt(getSize() - 1 - i2)))
+                .equals(getElementAt(getSize() - 1 - i2)))
             i2++;
 
         // co je medzi prepiseme

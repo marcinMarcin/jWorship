@@ -6,28 +6,26 @@
  */
 package sk.calvary.worship;
 
-import java.awt.Color;
-import java.awt.Dimension;
-
-import javax.swing.JToggleButton;
+import javax.swing.*;
+import java.awt.*;
 
 public class FormatButton extends JToggleButton {
-	private static final long serialVersionUID = 8159562839448552818L;
-	
-	private static final Dimension DIMENSION = new Dimension(22, 22);
+    private static final long serialVersionUID = 8159562839448552818L;
 
-	public FormatButton() {
-		super();
-		Dimension d = DIMENSION;
-		setMinimumSize(d);
-		setPreferredSize(d);
-	}
+    private static final Dimension DIMENSION = new Dimension(22, 22);
 
-	public Color getBackground() {
-		Color c = super.getBackground();
-		if (c != null && isSelected())
-			return /* c.darker().darker().darker() */Color.green;
-		return c;
-	}
+    public FormatButton() {
+        super();
+        Dimension d = DIMENSION;
+        setMinimumSize(d);
+        setPreferredSize(d);
+    }
+
+    public Color getBackground() {
+        Color c = super.getBackground();
+        if (c != null && isSelected())
+            return /* c.darker().darker().darker() */Color.green;
+        return c;
+    }
 
 }

@@ -6,33 +6,7 @@
  */
 package sk.calvary.worship.panels;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.Vector;
-
-import javax.media.CaptureDeviceInfo;
-import javax.media.CaptureDeviceManager;
-import javax.media.Format;
-import javax.media.MediaLocator;
-import javax.media.format.RGBFormat;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
+import com.sun.media.ui.VideoFormatChooser;
 import sk.calvary.misc.GraphicsTools;
 import sk.calvary.misc.ui.List2ComboBoxModel;
 import sk.calvary.misc.ui.ObjectListModel;
@@ -42,12 +16,21 @@ import sk.calvary.worship.DirBrowser;
 import sk.calvary.worship.jmf.Video2Image;
 import sk.calvary.worship.jmf.Video2ImageListener;
 
-import com.sun.media.ui.VideoFormatChooser;
+import javax.media.CaptureDeviceInfo;
+import javax.media.CaptureDeviceManager;
+import javax.media.Format;
+import javax.media.MediaLocator;
+import javax.media.format.RGBFormat;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Vector;
 
 public class VideoPanel extends AppPanel implements Video2ImageListener {
-    public static final String[] EXTENSIONS = new String[] { "avi", "mov", "mpeg", "mpg", "wmv" };
+    public static final String[] EXTENSIONS = new String[]{"avi", "mov", "mpeg", "mpg", "wmv"};
 
-	private static final String captureMediaType = "capturevideo";
+    private static final String captureMediaType = "capturevideo";
 
     private static final String videoMediaType = "videos";
 
@@ -80,7 +63,6 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
 
     /**
      * This method initializes this
-     * 
      */
     private void initialize() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -108,7 +90,7 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
 
     /**
      * This method initializes jButton1
-     * 
+     *
      * @return javax.swing.JButton
      */
     private JButton getJButton1() {
@@ -180,7 +162,7 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
 
     /**
      * This method initializes videoComponent
-     * 
+     *
      * @return sk.asc.worship.panels.VideoPanel.VideoComponent
      */
     private VideoPanel.VideoComponent getVideoComponent() {
@@ -192,7 +174,7 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
 
     /**
      * This method initializes jPanel
-     * 
+     *
      * @return javax.swing.JPanel
      */
     private JPanel getJPanel() {
@@ -210,7 +192,7 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
 
     /**
      * This method initializes dirBrowser
-     * 
+     *
      * @return sk.asc.worship.DirBrowser
      */
     private DirBrowser getDirBrowser() {
@@ -231,7 +213,7 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
 
     /**
      * This method initializes jScrollPane
-     * 
+     *
      * @return javax.swing.JScrollPane
      */
     private JScrollPane getJScrollPane() {
@@ -244,7 +226,7 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
 
     /**
      * This method initializes jList
-     * 
+     *
      * @return javax.swing.JList
      */
     private JList getJList() {
@@ -271,8 +253,7 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
 
     /**
      * @param media
-     * @param open
-     *            0 - do not open, 1 - open if not found, 2 - reopen
+     * @param open  0 - do not open, 1 - open if not found, 2 - reopen
      * @return
      */
     private Video2Image getVideo(String media, int open) {
@@ -367,8 +348,8 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
         cb.setSelectedItem(cdi);
         cb.setRenderer(new DefaultListCellRenderer() {
             public Component getListCellRendererComponent(JList list,
-                    Object value, int index, boolean isSelected,
-                    boolean cellHasFocus) {
+                                                          Object value, int index, boolean isSelected,
+                                                          boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index,
                         isSelected, cellHasFocus);
                 CaptureDeviceInfo cdi = (CaptureDeviceInfo) value;
@@ -378,8 +359,8 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
             }
 
         });
-        if (JOptionPane.showConfirmDialog(app, new Object[] {
-                "Vyber zariadenie:", cb }, app.getTitle(),
+        if (JOptionPane.showConfirmDialog(app, new Object[]{
+                        "Vyber zariadenie:", cb}, app.getTitle(),
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.OK_OPTION)
             return null;
 
@@ -390,8 +371,8 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
         if (format != null && format.length == 1) {
             VideoFormatChooser vfc = new VideoFormatChooser(cdi.getFormats(),
                     null, false, null, true);
-            if (JOptionPane.showConfirmDialog(app, new Object[] {
-                    "Nastavenia:", vfc }, app.getTitle(),
+            if (JOptionPane.showConfirmDialog(app, new Object[]{
+                            "Nastavenia:", vfc}, app.getTitle(),
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.OK_OPTION)
                 return null;
             format[0] = vfc.getFormat();

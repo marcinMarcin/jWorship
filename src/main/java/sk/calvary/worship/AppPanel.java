@@ -6,21 +6,20 @@
  */
 package sk.calvary.worship;
 
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
-
-import javax.swing.JPanel;
 
 /**
  * @author marsian
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         <p/>
+ *         TODO To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Generation - Code and Comments
  */
 public class AppPanel extends JPanel {
-	private static final long serialVersionUID = -4486648756765029068L;
+    private static final long serialVersionUID = -4486648756765029068L;
 
-	public final App app;
+    public final App app;
 
     private String panelName = "???";
 

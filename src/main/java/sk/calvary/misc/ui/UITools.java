@@ -1,11 +1,6 @@
 package sk.calvary.misc.ui;
 
-import java.awt.Container;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.Document;
@@ -13,6 +8,8 @@ import javax.swing.text.JTextComponent;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class UITools {
     public static UndoManager addUndoSupport(JTextComponent textcomp) {
@@ -29,9 +26,9 @@ public class UITools {
 
         // Create an undo action and add it to the text component
         textcomp.getActionMap().put("Undo", new AbstractAction("Undo") {
-			private static final long serialVersionUID = 7600608362351595713L;
+            private static final long serialVersionUID = 7600608362351595713L;
 
-			public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 try {
                     if (undo.canUndo()) {
                         undo.undo();
@@ -46,9 +43,9 @@ public class UITools {
 
         // Create a redo action and add it to the text component
         textcomp.getActionMap().put("Redo", new AbstractAction("Redo") {
-			private static final long serialVersionUID = -2307470037115282120L;
+            private static final long serialVersionUID = -2307470037115282120L;
 
-			public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 try {
                     if (undo.canRedo()) {
                         undo.redo();

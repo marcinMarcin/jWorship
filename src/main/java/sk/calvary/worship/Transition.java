@@ -6,19 +6,15 @@
  */
 package sk.calvary.worship;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-
 import sk.calvary.misc.Freezable;
+
+import java.awt.*;
 
 /**
  * @author marsian
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         <p/>
+ *         TODO To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Style - Code Templates
  */
 public abstract class Transition extends Freezable {
     private ScreenView view;
@@ -34,7 +30,7 @@ public abstract class Transition extends Freezable {
     double duration = 1.0;
 
     public void init(ScreenView view, Dimension size, float targetScale,
-            Screen previous, Screen next) {
+                     Screen previous, Screen next) {
         this.view = view;
 
         previousScreen = previous;
@@ -107,8 +103,7 @@ public abstract class Transition extends Freezable {
     }
 
     /**
-     * @param duration
-     *            The duration to set.
+     * @param duration The duration to set.
      */
     public void setDuration(double duration) {
         checkFreeze();

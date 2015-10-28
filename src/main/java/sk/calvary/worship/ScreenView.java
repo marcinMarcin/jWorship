@@ -8,14 +8,14 @@ package sk.calvary.worship;
 
 public interface ScreenView {
 
-	void cancelFullScreen();
+    void cancelFullScreen();
 
-	void setScreen(Screen screenLive);
+    void setScreen(Screen screenLive);
 
-	void setTransition(Transition currentTransition);
+    void setTransition(Transition currentTransition);
 
-	void grabFullScreen();
+    void grabFullScreen();
 
-	void newMediaFrame(String media);
+    void newMediaFrame(String media);
 
 }

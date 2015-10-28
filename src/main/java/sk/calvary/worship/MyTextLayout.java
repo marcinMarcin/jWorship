@@ -22,8 +22,8 @@ public class MyTextLayout {
         this.text = text;
         this.height = height;
     }
-    
+
     class Row {
-        
+
     }
 }

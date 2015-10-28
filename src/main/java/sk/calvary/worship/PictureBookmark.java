@@ -11,28 +11,28 @@ import java.io.Serializable;
 
 public class PictureBookmark extends Bookmark implements Serializable {
 
-	private static final long serialVersionUID = 3990063495003307532L;
+    private static final long serialVersionUID = 3990063495003307532L;
 
-	public PictureBookmark(String value) {
-		super();
-		if (value == null)
-			throw new NullPointerException();
-		this.value = value;
-		File f = new File(value);
-		if (f.exists()) {
-			fLength = f.length();
-			fModified = f.lastModified();
-		}
-	}
+    public PictureBookmark(String value) {
+        super();
+        if (value == null)
+            throw new NullPointerException();
+        this.value = value;
+        File f = new File(value);
+        if (f.exists()) {
+            fLength = f.length();
+            fModified = f.lastModified();
+        }
+    }
 
-	String value;
+    String value;
 
-	private long fLength;
+    private long fLength;
 
-	private long fModified;
+    private long fModified;
 
-	@Override
-	public Object getValue() {
-		return value;
-	}
+    @Override
+    public Object getValue() {
+        return value;
+    }
 }

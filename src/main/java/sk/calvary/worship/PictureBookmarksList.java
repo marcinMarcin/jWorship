@@ -7,23 +7,23 @@
 package sk.calvary.worship;
 
 public class PictureBookmarksList extends BookmarksList<PictureBookmarks> {
-	private static final long serialVersionUID = 238729326306451351L;
+    private static final long serialVersionUID = 238729326306451351L;
 
-	public PictureBookmarksList() {
-	}
+    public PictureBookmarksList() {
+    }
 
-	public PictureBookmarksList(App app) {
-		this();
-		this.app = app;
-	}
+    public PictureBookmarksList(App app) {
+        this();
+        this.app = app;
+    }
 
-	@Override
-	protected PictureBookmarks newBookmarksInstance() {
-		return new PictureBookmarks(null);
-	}
+    @Override
+    protected PictureBookmarks newBookmarksInstance() {
+        return new PictureBookmarks(null);
+    }
 
-	@Override
-	protected PictureBookmarks[] getBlankArray() {
-		return new PictureBookmarks[0];
-	}
+    @Override
+    protected PictureBookmarks[] getBlankArray() {
+        return new PictureBookmarks[0];
+    }
 }

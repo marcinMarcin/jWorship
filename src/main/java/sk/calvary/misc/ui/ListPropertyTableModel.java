@@ -6,30 +6,29 @@
  */
 package sk.calvary.misc.ui;
 
+import sk.calvary.misc.AscIntrospector;
+import sk.calvary.misc.StringTools;
+
+import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import javax.swing.table.AbstractTableModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-import javax.swing.table.AbstractTableModel;
-
-import sk.calvary.misc.AscIntrospector;
-import sk.calvary.misc.StringTools;
-
 /**
  * @author marsian
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         <p/>
+ *         TODO To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Generation - Code and Comments
  */
 public class ListPropertyTableModel extends AbstractTableModel {
-	private static final long serialVersionUID = -5852131851499438176L;
-	
-	ProxyListModel proxyList;
+    private static final long serialVersionUID = -5852131851499438176L;
+
+    ProxyListModel proxyList;
     Class<?> rowClass;
 
     public ListPropertyTableModel(ListModel list) {
@@ -50,7 +49,7 @@ public class ListPropertyTableModel extends AbstractTableModel {
     }
 
     public ListPropertyTableModel(ObjectListModel list, Class<?> rowClass,
-            String columns) {
+                                  String columns) {
         this(list);
         this.rowClass = rowClass;
         setColumnsAsString(columns);
@@ -118,9 +117,8 @@ public class ListPropertyTableModel extends AbstractTableModel {
 
     /**
      * Insert the method's description here. Creation date: (31.3.2004 16:37:53)
-     * 
-     * @param newColumnsAsString
-     *            java.lang.String
+     *
+     * @param newColumnsAsString java.lang.String
      */
     public synchronized void setColumnsAsString(
             java.lang.String newColumnsAsString) {

@@ -1,22 +1,21 @@
 package sk.calvary.misc;
 
+import javax.swing.*;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.swing.ListModel;
-
 /**
  * Insert the type's description here. Creation date: (31.3.2004 16:36:18)
- * 
+ *
  * @author:
  */
 public class ObjectPropertyTableModel extends
         javax.swing.table.AbstractTableModel implements
         javax.swing.event.ListDataListener {
 
-	private static final long serialVersionUID = -7146768875526970928L;
+    private static final long serialVersionUID = -7146768875526970928L;
 
-	String columnsAsString = "";
+    String columnsAsString = "";
 
     String columns[] = new String[0];
 
@@ -46,9 +45,8 @@ public class ObjectPropertyTableModel extends
      * Sent when the contents of the list has changed in a way that's too
      * complex to characterize with the previous methods. Index0 and index1
      * bracket the change.
-     * 
-     * @param e
-     *            a ListDataEvent encapuslating the event information
+     *
+     * @param e a ListDataEvent encapuslating the event information
      */
     public void contentsChanged(javax.swing.event.ListDataEvent e) {
         setObjects((ListModel) e.getSource());
@@ -70,7 +68,7 @@ public class ObjectPropertyTableModel extends
 
     /**
      * Insert the method's description here. Creation date: (31.3.2004 16:37:53)
-     * 
+     *
      * @return java.lang.String
      */
     public java.lang.String getColumnsAsString() {
@@ -100,9 +98,8 @@ public class ObjectPropertyTableModel extends
     /**
      * Sent after the indices in the index0,index1 interval have been inserted
      * in the data model. The new interval includes both index0 and index1.
-     * 
-     * @param e
-     *            a ListDataEvent encapuslating the event information
+     *
+     * @param e a ListDataEvent encapuslating the event information
      */
     public void intervalAdded(javax.swing.event.ListDataEvent e) {
         setObjects((ListModel) e.getSource());
@@ -111,9 +108,8 @@ public class ObjectPropertyTableModel extends
     /**
      * Sent after the indices in the index0,index1 interval have been removed
      * from the data model. The interval includes both index0 and index1.
-     * 
-     * @param e
-     *            a ListDataEvent encapuslating the event information
+     *
+     * @param e a ListDataEvent encapuslating the event information
      */
     public void intervalRemoved(javax.swing.event.ListDataEvent e) {
         setObjects((ListModel) e.getSource());
@@ -121,9 +117,8 @@ public class ObjectPropertyTableModel extends
 
     /**
      * Insert the method's description here. Creation date: (31.3.2004 16:37:53)
-     * 
-     * @param newColumnsAsString
-     *            java.lang.String
+     *
+     * @param newColumnsAsString java.lang.String
      */
     public synchronized void setColumnsAsString(
             java.lang.String newColumnsAsString) {

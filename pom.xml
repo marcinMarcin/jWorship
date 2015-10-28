@@ -46,8 +46,8 @@
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include> **/*.png</include>
-                    <include> **/*.lng</include>
+                    <include>**/*.png</include>
+                    <include>**/*.lng</include>
                 </includes>
             </resource>
         </resources>

@@ -6,28 +6,26 @@
  */
 package sk.calvary.worship;
 
-import java.awt.Color;
-import java.awt.Dimension;
-
-import javax.swing.JButton;
+import javax.swing.*;
+import java.awt.*;
 
 public class ClickButton extends JButton {
-	private static final long serialVersionUID = 3006044683030843649L;
-	
-	private static final Dimension DIMENSION = new Dimension(22, 22);
+    private static final long serialVersionUID = 3006044683030843649L;
 
-	public ClickButton() {
-		super();
-		Dimension d = DIMENSION;
-		setMinimumSize(d);
-		setPreferredSize(d);
-	}
+    private static final Dimension DIMENSION = new Dimension(22, 22);
 
-	public Color getBackground() {
-		Color c = super.getBackground();
-		if (c != null && isSelected())
-			return /* c.darker().darker().darker() */Color.green;
-		return c;
-	}
+    public ClickButton() {
+        super();
+        Dimension d = DIMENSION;
+        setMinimumSize(d);
+        setPreferredSize(d);
+    }
+
+    public Color getBackground() {
+        Color c = super.getBackground();
+        if (c != null && isSelected())
+            return /* c.darker().darker().darker() */Color.green;
+        return c;
+    }
 
 }

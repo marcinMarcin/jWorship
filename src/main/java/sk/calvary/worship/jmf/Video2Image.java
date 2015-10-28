@@ -6,31 +6,7 @@
  */
 package sk.calvary.worship.jmf;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
-import java.util.Vector;
-
-import javax.media.Buffer;
-import javax.media.ConfigureCompleteEvent;
-import javax.media.Control;
-import javax.media.ControllerEvent;
-import javax.media.ControllerListener;
-import javax.media.Effect;
-import javax.media.EndOfMediaEvent;
-import javax.media.Format;
-import javax.media.Manager;
-import javax.media.MediaLocator;
-import javax.media.PrefetchCompleteEvent;
-import javax.media.Processor;
-import javax.media.RealizeCompleteEvent;
-import javax.media.Renderer;
-import javax.media.ResourceUnavailableEvent;
-import javax.media.ResourceUnavailableException;
-import javax.media.Time;
-import javax.media.UnsupportedPlugInException;
+import javax.media.*;
 import javax.media.control.FormatControl;
 import javax.media.control.TrackControl;
 import javax.media.format.RGBFormat;
@@ -38,6 +14,10 @@ import javax.media.format.VideoFormat;
 import javax.media.protocol.CaptureDevice;
 import javax.media.protocol.DataSource;
 import javax.media.renderer.VideoRenderer;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.util.Vector;
 
 public class Video2Image implements ControllerListener {
     private MediaLocator mediaLocator;
@@ -268,7 +248,7 @@ public class Video2Image implements ControllerListener {
                     Format.byteArray, Format.NOT_SPECIFIED, 24, 3, 2, 1, 3,
                     Format.NOT_SPECIFIED, Format.TRUE, Format.NOT_SPECIFIED);
 
-            supportedFormats = new VideoFormat[] { supportedRGB };
+            supportedFormats = new VideoFormat[]{supportedRGB};
         }
 
         public Component getComponent() {

@@ -6,27 +6,21 @@
  */
 package sk.calvary.worship;
 
-import java.awt.BorderLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JToolBar;
-
 /**
  * @author marsian
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         <p/>
+ *         TODO To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Style - Code Templates
  */
 public class SongConverter extends JFrame {
-	private static final long serialVersionUID = 6080720181306701017L;
+    private static final long serialVersionUID = 6080720181306701017L;
 
-	private JPanel jContentPane = null;
+    private JPanel jContentPane = null;
 
     private JToolBar jToolBar = null;
 
@@ -38,7 +32,6 @@ public class SongConverter extends JFrame {
 
     /**
      * This method initializes
-     * 
      */
     public SongConverter() {
         super();
@@ -47,7 +40,7 @@ public class SongConverter extends JFrame {
 
     /**
      * This method initializes this
-     * 
+     *
      * @return void
      */
     private void initialize() {
@@ -58,7 +51,7 @@ public class SongConverter extends JFrame {
 
     /**
      * This method initializes jContentPane
-     * 
+     *
      * @return javax.swing.JPanel
      */
     private JPanel getJContentPane() {
@@ -73,7 +66,7 @@ public class SongConverter extends JFrame {
 
     /**
      * This method initializes jToolBar
-     * 
+     *
      * @return javax.swing.JToolBar
      */
     private JToolBar getJToolBar() {
@@ -86,7 +79,7 @@ public class SongConverter extends JFrame {
 
     /**
      * This method initializes jScrollPane
-     * 
+     *
      * @return javax.swing.JScrollPane
      */
     private JScrollPane getJScrollPane() {
@@ -99,7 +92,7 @@ public class SongConverter extends JFrame {
 
     /**
      * This method initializes jTextArea
-     * 
+     *
      * @return javax.swing.JTextArea
      */
     private JTextArea getJTextArea() {
@@ -111,7 +104,7 @@ public class SongConverter extends JFrame {
 
     /**
      * This method initializes jButton
-     * 
+     *
      * @return javax.swing.JButton
      */
     private JButton getJButton() {
@@ -128,7 +121,7 @@ public class SongConverter extends JFrame {
     }
 
     /**
-     * 
+     *
      */
     protected void konvertuj() {
         String src = getJTextArea().getText();

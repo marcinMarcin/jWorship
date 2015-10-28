@@ -6,17 +6,17 @@
  */
 package sk.calvary.worship.panels;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FileDialog;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.Rectangle;
+import de.humatic.dsj.DSFiltergraph;
+import sk.calvary.misc.GraphicsTools;
+import sk.calvary.misc.ui.FloatSlider;
+import sk.calvary.worship.App;
+import sk.calvary.worship.ClickButton;
+import sk.calvary.worship.MyImage;
+import sk.calvary.worship.jmf.Refresher;
+
+import javax.media.opengl.GL;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -24,20 +24,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.media.opengl.GL;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
 //import com.jogamp.opengl.GL;
-import sk.calvary.misc.GraphicsTools;
-import sk.calvary.misc.ui.FloatSlider;
-import sk.calvary.worship.App;
-import sk.calvary.worship.ClickButton;
-import sk.calvary.worship.MyImage;
-import sk.calvary.worship.jmf.Refresher;
-import de.humatic.dsj.DSFiltergraph;
 
 public class MultimediaChannel extends JPanel implements PropertyChangeListener {
     final String media;
@@ -188,7 +175,6 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
     /**
      * This method initializes this.setLayout(n this.add(getClickButton(),
      * gridBagConstraints); ew GridBagLayout()); this
-     * 
      */
     private void initialize() {
         GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
@@ -222,7 +208,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes clickButton
-     * 
+     *
      * @return sk.asc.worship.ClickButton
      */
     private ClickButton getStateButton() {
@@ -243,7 +229,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes videoComponent
-     * 
+     *
      * @return sk.asc.worship.panels.MultimediaChannel.VideoComponent
      */
     private MultimediaChannel.VideoComponent getVideoComponent() {
@@ -256,7 +242,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes jPanel
-     * 
+     *
      * @return javax.swing.JPanel
      */
     private JPanel getJPanel() {
@@ -275,7 +261,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes clickButtonOpen
-     * 
+     *
      * @return sk.asc.worship.ClickButton
      */
     private ClickButton getClickButtonOpen() {
@@ -314,22 +300,22 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
         boolean opened = isOpened();
         int state = getState();
         switch (state) {
-        case STATE_CLOSED:
-            stateIcon = iconClosed;
-            open = true;
-            break;
-        case STATE_OPENING:
-            stateIcon = iconOpening;
-            break;
-        case STATE_OPENED:
-            stateIcon = iconOpened;
-            break;
-        case STATE_PREPARED:
-            stateIcon = iconPrepared;
-            break;
-        case STATE_LIVE:
-            stateIcon = iconLive;
-            break;
+            case STATE_CLOSED:
+                stateIcon = iconClosed;
+                open = true;
+                break;
+            case STATE_OPENING:
+                stateIcon = iconOpening;
+                break;
+            case STATE_OPENED:
+                stateIcon = iconOpened;
+                break;
+            case STATE_PREPARED:
+                stateIcon = iconPrepared;
+                break;
+            case STATE_LIVE:
+                stateIcon = iconLive;
+                break;
         }
         if (opened) {
             if (isPlaying())
@@ -346,10 +332,10 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
     synchronized boolean isOpened() {
         int state = getState();
         switch (state) {
-        case STATE_OPENED:
-        case STATE_PREPARED:
-        case STATE_LIVE:
-            return true;
+            case STATE_OPENED:
+            case STATE_PREPARED:
+            case STATE_LIVE:
+                return true;
         }
         return false;
     }
@@ -367,7 +353,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes jPanel1
-     * 
+     *
      * @return javax.swing.JPanel
      */
     private JPanel getJPanel1() {
@@ -395,7 +381,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes clickButton
-     * 
+     *
      * @return sk.asc.worship.ClickButton
      */
     private ClickButton getClickButtonClose() {
@@ -453,7 +439,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes jPanel2
-     * 
+     *
      * @return javax.swing.JPanel
      */
     private JPanel getJPanel2() {
@@ -473,7 +459,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes clickButtonPlay
-     * 
+     *
      * @return sk.asc.worship.ClickButton
      */
     private ClickButton getClickButtonPlay() {
@@ -490,7 +476,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes sliderPosition
-     * 
+     *
      * @return sk.asc.misc.ui.FloatSlider
      */
     private FloatSlider getSliderPosition() {
@@ -555,7 +541,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     /**
      * This method initializes VUMeter
-     * 
+     *
      * @return sk.asc.worship.panels.VUMeter
      */
     private VUMeter getVUMeter() {
@@ -568,49 +554,49 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
     public void propertyChange(PropertyChangeEvent pe) {
         System.out.println(pe);
         switch (Integer.valueOf(pe.getNewValue().toString()).intValue()) {
-        case DSFiltergraph.ACTIVATING:
-            System.out.print(".");
-            updateButtons();
-            break;
-        case DSFiltergraph.DONE:
-            System.out.println("done playing");
-            updateButtons();
-            break;
-        case DSFiltergraph.LOOP:
-            System.out.println("loop");
-            updateButtons();
-            break;
-        case DSFiltergraph.EXIT_FS:
-            updateButtons();
-            break;
-        case DSFiltergraph.DV_STATE_CHANGED:
-            updateButtons();
-            break;
-        case DSFiltergraph.CAP_STATE_CHANGED:
-            updateButtons();
-            break;
-        case DSFiltergraph.FORMAT_CHANGED:
-            image = null;
-            updateButtons();
-            break;
-        case DSFiltergraph.EXPORT_PROGRESS:
-            System.out.println("% done: "
-                    + Integer.valueOf(pe.getOldValue().toString()).intValue());
-            updateButtons();
-            break;
-        case DSFiltergraph.FRAME_NOTIFY:
-            newFrame();
-            break;
-        case DSFiltergraph.GRAPH_EVENT:
-            System.out.println("Graph Event: " + pe.getOldValue().toString()
-                    + " (see DSFiltergraph event codes)");
-            updateButtons();
-            break;
-        case DSFiltergraph.GRAPH_ERROR:
-            System.out.println("Graph Error: " + pe.getOldValue().toString()
-                    + " (see DSFiltergraph error codes)");
-            updateButtons();
-            break;
+            case DSFiltergraph.ACTIVATING:
+                System.out.print(".");
+                updateButtons();
+                break;
+            case DSFiltergraph.DONE:
+                System.out.println("done playing");
+                updateButtons();
+                break;
+            case DSFiltergraph.LOOP:
+                System.out.println("loop");
+                updateButtons();
+                break;
+            case DSFiltergraph.EXIT_FS:
+                updateButtons();
+                break;
+            case DSFiltergraph.DV_STATE_CHANGED:
+                updateButtons();
+                break;
+            case DSFiltergraph.CAP_STATE_CHANGED:
+                updateButtons();
+                break;
+            case DSFiltergraph.FORMAT_CHANGED:
+                image = null;
+                updateButtons();
+                break;
+            case DSFiltergraph.EXPORT_PROGRESS:
+                System.out.println("% done: "
+                        + Integer.valueOf(pe.getOldValue().toString()).intValue());
+                updateButtons();
+                break;
+            case DSFiltergraph.FRAME_NOTIFY:
+                newFrame();
+                break;
+            case DSFiltergraph.GRAPH_EVENT:
+                System.out.println("Graph Event: " + pe.getOldValue().toString()
+                        + " (see DSFiltergraph event codes)");
+                updateButtons();
+                break;
+            case DSFiltergraph.GRAPH_ERROR:
+                System.out.println("Graph Error: " + pe.getOldValue().toString()
+                        + " (see DSFiltergraph error codes)");
+                updateButtons();
+                break;
         }
 
         // updateButtons();

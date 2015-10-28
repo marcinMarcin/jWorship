@@ -6,14 +6,13 @@
  */
 package sk.calvary.worship;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.*;
 
 /**
  * @author marsian
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ *         <p/>
+ *         TODO To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Style - Code Templates
  */
 public class TestTransition extends Transition {
 

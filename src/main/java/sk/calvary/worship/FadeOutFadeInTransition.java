@@ -6,18 +6,15 @@
  */
 package sk.calvary.worship;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
-
 import sk.calvary.misc.AscIntrospector;
+
+import java.awt.*;
 
 /**
  * @author marsian
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         <p/>
+ *         TODO To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Generation - Code and Comments
  */
 public class FadeOutFadeInTransition extends Transition {
 

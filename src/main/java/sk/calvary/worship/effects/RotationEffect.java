@@ -29,8 +29,11 @@ package sk.calvary.worship.effects;
  * redistribute the Software for such purposes.
  */
 
-import javax.media.*;
-import javax.media.format.*;
+import javax.media.Buffer;
+import javax.media.Effect;
+import javax.media.Format;
+import javax.media.format.RGBFormat;
+import javax.media.format.VideoFormat;
 import java.awt.*;
 
 public class RotationEffect implements Effect {
@@ -66,14 +69,14 @@ public class RotationEffect implements Effect {
         this.angle = 2.0 * 3.1415926 / this.num;
         buildTable();
 
-        inputFormats = new Format[] { new RGBFormat(null, Format.NOT_SPECIFIED,
+        inputFormats = new Format[]{new RGBFormat(null, Format.NOT_SPECIFIED,
                 Format.byteArray, Format.NOT_SPECIFIED, 24, 3, 2, 1, 3,
-                Format.NOT_SPECIFIED, Format.TRUE, Format.NOT_SPECIFIED) };
+                Format.NOT_SPECIFIED, Format.TRUE, Format.NOT_SPECIFIED)};
 
-        outputFormats = new Format[] { new RGBFormat(null,
+        outputFormats = new Format[]{new RGBFormat(null,
                 Format.NOT_SPECIFIED, Format.byteArray, Format.NOT_SPECIFIED,
                 24, 3, 2, 1, 3, Format.NOT_SPECIFIED, Format.TRUE,
-                Format.NOT_SPECIFIED) };
+                Format.NOT_SPECIFIED)};
 
     }
 
@@ -88,7 +91,7 @@ public class RotationEffect implements Effect {
         }
 
         if (matches(input, inputFormats) != null) {
-            return new Format[] { outputFormats[0].intersects(input) };
+            return new Format[]{outputFormats[0].intersects(input)};
         } else {
             return new Format[0];
         }

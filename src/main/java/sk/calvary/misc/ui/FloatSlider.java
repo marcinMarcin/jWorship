@@ -6,20 +6,20 @@
  */
 package sk.calvary.misc.ui;
 
-import javax.swing.JSlider;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
  * @author marsian
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         <p/>
+ *         TODO To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Generation - Code and Comments
  */
 public class FloatSlider extends JSlider {
-	private static final long serialVersionUID = 8445395338646104614L;
+    private static final long serialVersionUID = 8445395338646104614L;
 
-	float fMin = 0;
+    float fMin = 0;
 
     float fMax = 1;
 

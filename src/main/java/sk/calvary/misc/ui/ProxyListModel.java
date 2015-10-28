@@ -6,23 +6,21 @@
  */
 package sk.calvary.misc.ui;
 
-import java.lang.ref.WeakReference;
-
-import javax.swing.AbstractListModel;
-import javax.swing.ListModel;
+import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import java.lang.ref.WeakReference;
 
 /**
  * @author marsian
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ *         <p/>
+ *         TODO To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Generation - Code and Comments
  */
 public class ProxyListModel extends AbstractListModel implements ListModel {
-	private static final long serialVersionUID = -6790798180399590037L;
+    private static final long serialVersionUID = -6790798180399590037L;
 
-	public ProxyListModel(ListModel source) {
+    public ProxyListModel(ListModel source) {
         this.source = source;
         weakListener = new WeakListener(this);
     }
@@ -51,7 +49,7 @@ public class ProxyListModel extends AbstractListModel implements ListModel {
     }
 
     protected static class WeakListener implements ListDataListener {
-		WeakListener(ProxyListModel proxy) {
+        WeakListener(ProxyListModel proxy) {
             this.proxyRef = new WeakReference<ProxyListModel>(proxy);
             proxy.source.addListDataListener(this);
         }

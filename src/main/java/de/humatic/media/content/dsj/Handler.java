@@ -1,481 +1,481 @@
-
 /**
-* Custom JMF Player for dsj.
-* np, 11_2005
-* Most of this code is from "jmf_cd_rev2" (Core JMF ?).
-* I have never really used JMF, so I have no idea
-* if this is what a jmf guru would expect.
-* It seems to work though, but definetly
-* leaves a lot of controller options etc open.
-**/
+ * Custom JMF Player for dsj.
+ * np, 11_2005
+ * Most of this code is from "jmf_cd_rev2" (Core JMF ?).
+ * I have never really used JMF, so I have no idea
+ * if this is what a jmf guru would expect.
+ * It seems to work though, but definetly
+ * leaves a lot of controller options etc open.
+ **/
 
 package de.humatic.media.content.dsj;
 
+import de.humatic.dsj.DSFiltergraph;
+import de.humatic.dsj.SwingMovieController;
+
 import javax.media.*;
-import javax.media.protocol.*;
-
+import javax.media.protocol.BufferTransferHandler;
+import javax.media.protocol.DataSource;
+import javax.media.protocol.PushBufferStream;
 import java.util.Vector;
-
-import de.humatic.dsj.*;
 
 public class Handler implements javax.media.Player, ControllerListener, BufferTransferHandler {
 
-	private DSFiltergraph dsfg;
+    private DSFiltergraph dsfg;
 
-	public Time duration;
+    public Time duration;
 
-	TimeBase tb;
+    TimeBase tb;
 
-	DataSource dataSrc;
+    DataSource dataSrc;
 
-	// a Player must always track its previous, current and target states.
-	int previousState,
-		currentState,
-		targetState,
-		currentMediaTime;
+    // a Player must always track its previous, current and target states.
+    int previousState,
+            currentState,
+            targetState,
+            currentMediaTime;
 
-	private javax.media.Time startLatency;
+    private javax.media.Time startLatency;
 
-	boolean realizeCompleted,
-			prefetchCompleted;
+    boolean realizeCompleted,
+            prefetchCompleted;
 
-	private float rateFactor;
+    private float rateFactor;
 
-	Thread realizer,
-		   prefetcher;
+    Thread realizer,
+            prefetcher;
 
-	Control[] controls;
+    Control[] controls;
 
-	Vector controllerListeners; // vector of ControllerListeners
+    Vector controllerListeners; // vector of ControllerListeners
 
-	private Buffer buffer;
+    private Buffer buffer;
 
     private java.awt.Component controlPanelComp;
 
-	protected final TimeBase defaultTimeBase = Manager.getSystemTimeBase();
+    protected final TimeBase defaultTimeBase = Manager.getSystemTimeBase();
 
-	protected final ThreadGroup handlerThreadGroup = new ThreadGroup("DSJ ThreadGroup");
+    protected final ThreadGroup handlerThreadGroup = new ThreadGroup("DSJ ThreadGroup");
 
-	public Handler() {
+    public Handler() {
 
-		tb = defaultTimeBase;
+        tb = defaultTimeBase;
 
-		duration = Duration.DURATION_UNKNOWN;
+        duration = Duration.DURATION_UNKNOWN;
 
-		// set default state variables--we always track previous, current & track states
-		prefetchCompleted = false;
-		realizeCompleted = false;
-		rateFactor = 1.0f;
-		currentState = Controller.Unrealized;
-		targetState = Controller.Unrealized;
-		startLatency = Controller.LATENCY_UNKNOWN;
+        // set default state variables--we always track previous, current & track states
+        prefetchCompleted = false;
+        realizeCompleted = false;
+        rateFactor = 1.0f;
+        currentState = Controller.Unrealized;
+        targetState = Controller.Unrealized;
+        startLatency = Controller.LATENCY_UNKNOWN;
 
-		controllerListeners = new Vector();
+        controllerListeners = new Vector();
 
-		buffer = new Buffer();
+        buffer = new Buffer();
 
-	}
+    }
 
-	public void setSource(DataSource src) throws java.io.IOException, IncompatibleSourceException  {
+    public void setSource(DataSource src) throws java.io.IOException, IncompatibleSourceException {
 
-	   	if (!(src instanceof de.humatic.media.protocol.dsj.DataSource)) throw new IncompatibleSourceException();
+        if (!(src instanceof de.humatic.media.protocol.dsj.DataSource)) throw new IncompatibleSourceException();
 
-		controllerListeners.add((ControllerListener)this);
+        controllerListeners.add((ControllerListener) this);
 
-	   	this.dataSrc = src;
+        this.dataSrc = src;
 
-	}
+    }
 
 
+    public java.awt.Component getVisualComponent() {
+        return dsfg.asComponent();
+    }
 
+    public void controllerUpdate(ControllerEvent event) {
 
-	public java.awt.Component getVisualComponent() { return dsfg.asComponent(); }
+        if (event instanceof RealizeCompleteEvent) {
 
-	public void controllerUpdate(ControllerEvent event) {
+            TransitionEvent te = (TransitionEvent) event;
 
-		if (event instanceof RealizeCompleteEvent) {
+            if (te.getCurrentState() == te.getTargetState()) {
 
-			TransitionEvent te = (TransitionEvent)event;
+                dsfg = ((de.humatic.media.protocol.dsj.DataSource) dataSrc).getFiltergraph();
 
-			if (te.getCurrentState() == te.getTargetState()) {
+                controlPanelComp = new SwingMovieController(dsfg);
 
-				dsfg = ((de.humatic.media.protocol.dsj.DataSource)dataSrc).getFiltergraph();
+                duration = new javax.media.Time((long) (dsfg.getDuration() * 1000));
 
-				controlPanelComp = new SwingMovieController(dsfg);
+            }
 
-				duration = new javax.media.Time((long)(dsfg.getDuration()*1000));
+        }
 
-			}
+    }
 
-		}
+    public float setRate(float factor) {
 
-	}
+        if (getState() == Controller.Unrealized) {
+            // can't call this if we're not realized
+            throw new NotRealizedError("not realized");
+        }
 
-	public float setRate(float factor) {
+        //
+        // we only support a speed of 1.0
+        rateFactor = 1.0f;
 
-		if (getState() == Controller.Unrealized) {
-			// can't call this if we're not realized
-			throw new NotRealizedError("not realized");
-		}
+        // let everyone know about the requested rate change request
+        RateChangeEvent ratechange;
+        ratechange = new RateChangeEvent(this, rateFactor);
+        updateListeners(ratechange);
 
-		//
-		// we only support a speed of 1.0
-		rateFactor = 1.0f;
+        return rateFactor;
+    }
 
-		// let everyone know about the requested rate change request
-		RateChangeEvent ratechange;
-		ratechange = new RateChangeEvent(this, rateFactor);
-		updateListeners(ratechange);
+    // return playback rate (always 1.0 for now)
+    public float getRate() {
 
-		return rateFactor;
-	}
+        return this.rateFactor;
 
-	// return playback rate (always 1.0 for now)
-	public float getRate() {
+    }
 
-		return this.rateFactor;
+    // return the length of the Player's media
 
-	}
+    public Time getDuration() {
+        if (this.getState() == Controller.Unrealized) {
+            throw new NotRealizedError("DSJPlayer - not yet realized");
+        } else {
+            return (this.duration);
+        }
 
-	// return the length of the Player's media
+    }
 
-	public Time getDuration() {
-		if (this.getState() == Controller.Unrealized) {
-			throw new NotRealizedError("DSJPlayer - not yet realized");
-		} else {
-			return ( this.duration );
-		}
+    // handle Player realization
+    // this method will launch a thread if asynchronous work must be done.
 
-	}
+    public void realize() {
 
-	// handle Player realization
-	// this method will launch a thread if asynchronous work must be done.
+        if (realizeCompleted) {
+            // basically nothing to do--we're already realized
+            // just send an OK event to the caller
+            RealizeCompleteEvent rce = new RealizeCompleteEvent(this,
+                    getState(),
+                    getState(),
+                    getTargetState());
+            updateListeners(rce);
 
-	public void realize() {
+        } else if (realizer == null) {
 
-		if (realizeCompleted) {
-			// basically nothing to do--we're already realized
-			// just send an OK event to the caller
-			RealizeCompleteEvent rce = new RealizeCompleteEvent(this,
-										getState(),
-										getState(),
-										getTargetState());
-			updateListeners(rce);
+            // kick off a thread to handle the realization process
+            // basically this sets up the DSMovie. Since this
+            // can take a while, we must do it on a separate thread.
 
-		} else if (realizer == null) {
+            realizer = new DSJRealizer(this, dataSrc, handlerThreadGroup);
 
-			// kick off a thread to handle the realization process
-			// basically this sets up the DSMovie. Since this
-			// can take a while, we must do it on a separate thread.
+            realizer.start();
 
-			realizer = new DSJRealizer(this, dataSrc, handlerThreadGroup);
 
-			realizer.start();
+        }
 
+    }
 
-		}
+    public void prefetch() {
 
-	}
+        // nothing to prefetch. ie: prefetching is done in realizing
 
-   public void prefetch() {
+        PrefetchCompleteEvent pce = new PrefetchCompleteEvent(this,
+                getState(),
+                getState(),
+                getTargetState());
+        updateListeners(pce);
 
-		// nothing to prefetch. ie: prefetching is done in realizing
+    }
 
-		PrefetchCompleteEvent pce = new PrefetchCompleteEvent(this,
-										getState(),
-										getState(),
-										getTargetState());
-		updateListeners(pce);
+    public void start() {
 
-	}
+        ((PushBufferStream) dataSrc).setTransferHandler((BufferTransferHandler) this);
 
-	public void start() {
+        try {
+            dataSrc.start();
+        } catch (java.io.IOException ioe) {
+        }
 
-		((PushBufferStream)dataSrc).setTransferHandler((BufferTransferHandler)this);
 
-		try{ dataSrc.start(); }catch (java.io.IOException ioe){}
+        if (getState() != Controller.Started) {
 
+            StartEvent se = new StartEvent(this,
+                    Controller.Started,
+                    Controller.Started,
+                    Controller.Started,
+                    getMediaTime(),
+                    getTimeBase().getTime());
+            updateListeners(se);
 
 
-		if  (getState() != Controller.Started) {
+        } else if (getState() == Controller.Started) {
+            // the Player is already started.
+            // Just post a StartEvent
+            Time timeBaseTime = null;
+            timeBaseTime = getTimeBase().getTime();
 
-			StartEvent se = new StartEvent(this,
-										    Controller.Started,
-										    Controller.Started,
-										    Controller.Started,
-											getMediaTime(),
-											getTimeBase().getTime());
-			updateListeners(se);
+            StartEvent se = new StartEvent(this,
+                    Controller.Started,
+                    Controller.Started,
+                    Controller.Started,
+                    getMediaTime(),
+                    timeBaseTime);
+            updateListeners(se);
+        }
 
 
+    }
 
-		}
-		else if (getState() == Controller.Started) {
-			// the Player is already started.
-			// Just post a StartEvent
-			Time timeBaseTime = null;
-			timeBaseTime = getTimeBase().getTime();
 
-			StartEvent se = new StartEvent(this,
-									Controller.Started,
-									Controller.Started,
-									Controller.Started,
-									getMediaTime(),
-									timeBaseTime);
-			updateListeners(se);
-		}
+    // handle stopping of playback
+    // this method will launch a thread if asynchronous work must be done.
 
+    public void deallocate() {
+    }
 
-	}
+    public void stop() {
 
+        try {
+            dataSrc.stop();
+        } catch (Exception e) {
+        }
 
+        stopComplete();
 
-	// handle stopping of playback
-	// this method will launch a thread if asynchronous work must be done.
+    }
 
-	public void deallocate() {}
+    // this method gets called by the asynchronous thread when playback completes.
 
-	public void stop() {
+    public void stopComplete() {
+        setPreviousState(this.currentState);
 
-		try{ dataSrc.stop(); }catch (Exception e){}
+        // our target state after stop varies depending on the current state
+        // see Core JMF for specific state transition details
 
-		stopComplete();
+        if (prefetchCompleted) {
+            setCurrentState(Controller.Prefetched);
+            setTargetState(Controller.Started);
+        } else if (realizeCompleted) {
+            setCurrentState(Controller.Realized);
+            setTargetState(Controller.Prefetching);
+        } else {
+            setCurrentState(Controller.Unrealized);
+            setTargetState(Controller.Realizing);
+        }
 
-	}
+        StopByRequestEvent stopnow = new StopByRequestEvent(this,
+                previousState,
+                currentState,
+                targetState,
+                getMediaTime());
 
-	// this method gets called by the asynchronous thread when playback completes.
+        updateListeners(stopnow);
 
-	public void stopComplete() {
-		setPreviousState(this.currentState);
+    }
 
-		// our target state after stop varies depending on the current state
-		// see Core JMF for specific state transition details
+    public void transferData(PushBufferStream pb) {
 
-		if (prefetchCompleted) {
-			setCurrentState(Controller.Prefetched);
-			setTargetState(Controller.Started);
-		}
-		else if (realizeCompleted) {
-			setCurrentState(Controller.Realized);
-			setTargetState(Controller.Prefetching);
-		}
-		else {
-			setCurrentState(Controller.Unrealized);
-			setTargetState(Controller.Realizing);
-		}
+        try {
 
-		StopByRequestEvent stopnow = new StopByRequestEvent(this,
-									previousState,
-									currentState,
-									targetState,
-									getMediaTime());
+            ((PushBufferStream) dataSrc).read(buffer);
 
-		updateListeners(stopnow);
+        } catch (Exception ioe) {
+        }
 
-	}
+    }
 
-	public void transferData(PushBufferStream pb) {
+    // grab a copy of the UI control panel
+    public java.awt.Component getControlPanelComponent() {
 
-		try{
+        if (this.getState() == Controller.Unrealized) {
 
-			((PushBufferStream)dataSrc).read(buffer);
+            throw new NotRealizedError("not realized");
 
-		} catch (Exception ioe){}
+        } else {
 
-	}
+            return this.controlPanelComp;
+        }
+    }
 
-	// grab a copy of the UI control panel
-	public java.awt.Component getControlPanelComponent() {
+    // handle closing Player resources
+    public void close() {
+        // mere formality--disconnect from the DataSource
+        try {
+            dataSrc.stop();
+        } catch (Exception ex) {
+            // ignore
+        }
 
-		if (this.getState() == Controller.Unrealized) {
+        dataSrc.disconnect();
+        dataSrc = null;
 
-			throw new NotRealizedError("not realized");
+        // alert all devices that the device is closed
+        ControllerClosedEvent cce;
+        cce = new ControllerClosedEvent(this);
+        updateListeners(cce);
 
-		} else {
+    }
 
-			return this.controlPanelComp;
-		}
-	}
+    public void addEvent(ControllerEvent ce) {
+        updateListeners(ce);
+    }
 
-	// handle closing Player resources
-	public void close() {
-		// mere formality--disconnect from the DataSource
-		try
-		{
-			dataSrc.stop();
-		}
-		catch (Exception ex)
-		{
-			// ignore
-		}
+    // return current state--required by JMF
 
-		dataSrc.disconnect();
-		dataSrc = null;
+    public int getState() {
+        return (this.currentState);
+    }
 
-		// alert all devices that the device is closed
-		ControllerClosedEvent cce;
-		cce = new ControllerClosedEvent(this);
-		updateListeners(cce);
+    // return target state--required by JMF
 
-	}
+    public int getTargetState() {
+        return (this.targetState);
+    }
 
-	public void addEvent(ControllerEvent ce) { updateListeners(ce); }
+    // causes events to be posted by the listener specified by listener
+    public synchronized void addControllerListener(ControllerListener listener) {
+        controllerListeners.addElement(listener);
+    }
 
-	// return current state--required by JMF
+    // prevents listener from retrieving events
 
-	public int getState() {
-		return (this.currentState);
-	}
+    public synchronized void removeControllerListener(ControllerListener listener) {
+        controllerListeners.removeElement(listener);
+    }
 
-	// return target state--required by JMF
+    public void addController(Controller c) {
 
-	public int getTargetState() {
-		return (this.targetState);
-	}
+        return;
+    }
 
-	// causes events to be posted by the listener specified by listener
-	public synchronized void addControllerListener(ControllerListener listener) {
-		controllerListeners.addElement(listener);
-	}
+    public void removeController(Controller c) {
+        // not implemented
+        return;
+    }
 
-	// prevents listener from retrieving events
+    // we have no way to report latency right now...
+    public Time getStartLatency() {
+        return startLatency;
+    }
 
-	public synchronized void removeControllerListener(ControllerListener listener) {
-		controllerListeners.removeElement(listener);
-	}
 
-	public void addController(Controller c) {
+    public Control[] getControls() {
+        return controls;
+    }
 
-		return;
-	}
 
-	public void removeController(Controller c) {
-		// not implemented
-		return;
-	}
-	// we have no way to report latency right now...
-	public Time getStartLatency()  {
-		return startLatency;
-	}
+    public Control getControl(String forName) {
+        return null;
 
+    }
 
-	public Control[] getControls() {
-		return controls;
-	}
+    // we don't support setting a new time base
+    // this would be required if we were to allow this handler to
+    // be a slave.
+    public void setTimeBase(TimeBase master) throws IncompatibleTimeBaseException {
+        throw new IncompatibleTimeBaseException();
+    }
 
 
-	public Control getControl(String forName)
-	{
-		return null;
+    public void syncStart(Time tbTime) {
+        return;
+    }
 
-	}
 
-	// we don't support setting a new time base
-	// this would be required if we were to allow this handler to
-	// be a slave.
-	public void setTimeBase(TimeBase master) throws IncompatibleTimeBaseException  {
-		throw new IncompatibleTimeBaseException();
-	}
+    public void setStopTime(Time t) {
+        return;
+    }
 
 
-	public void syncStart(Time tbTime) {
-		return;
-	}
+    public Time getStopTime() {
+        return null;
+    }
 
+    // changes the Player's mediatime
 
-	public void setStopTime(Time t) {
-		return;
-	}
 
+    public void setMediaTime(Time now) {
+        // need to add code for managed controller's here........
 
-	public Time getStopTime() {
-		return null;
-	}
+        // wait for thread to complete......
+        System.out.println("Setting media time.......");
 
-	// changes the Player's mediatime
+    }
 
 
-	public void setMediaTime(Time now) {
-		// need to add code for managed controller's here........
+    // this method lets applications control how frequently the Player reports
+    // media time events.
 
-		// wait for thread to complete......
-		System.out.println("Setting media time.......");
+    public void setPosAdvise(Time frequency) {
+        int advisefrequency = (int) frequency.getSeconds() * 1000;
+    }
 
-	}
+    // reports the current media time
+    public Time getMediaTime() {
 
+        Time curr = new Time((double) (currentMediaTime / 1000));
+        return (curr);
+    }
 
-	// this method lets applications control how frequently the Player reports
-	// media time events.
+    // returns the current time in nano-seconds
 
-	public void setPosAdvise(Time frequency) {
-		int advisefrequency = (int) frequency.getSeconds() * 1000;
-	}
+    public long getMediaNanoseconds() {
+        return 0L;
+    }
 
-	// reports the current media time
-	public Time getMediaTime() {
 
-		Time curr = new Time( (double) ( currentMediaTime / 1000 ) );
-		return ( curr );
-	}
+    public Time getSyncTime() {
+        // not implemented
+        return null;
+    }
 
-	// returns the current time in nano-seconds
+    public Time mapToTimeBase(Time mt) {
+        // not implemented
+        return null;
+    }
 
-	public long getMediaNanoseconds() {
-		return 0L;
-	}
 
+    public TimeBase getTimeBase() {
+        return tb;
+    }
 
-	public Time getSyncTime() {
-		// not implemented
-		return null;
-	}
+    void setCurrentState(int state) {
+        this.currentState = state;
+    }
 
-	public Time mapToTimeBase(Time mt) {
-		// not implemented
-		return null;
-	}
+    void setTargetState(int state) {
+        this.targetState = state;
+    }
 
 
-	public TimeBase getTimeBase() {
-		return tb;
-	}
+    void setPreviousState(int state) {
+        this.previousState = state;
+    }
 
-	void setCurrentState(int state) {
-		this.currentState = state;
-	}
+    // we don't support gain controls
+    public GainControl getGainControl() {
+        return null;
+    }
 
-	void setTargetState(int state) {
-		this.targetState = state;
-	}
+    // this method posts events to listeners
+    // it is called by dedicated threads to prevent worker threads
+    // from being captured by poorly written applications
+    void updateListeners(ControllerEvent evt) {
 
+        Vector v = null;
+        ControllerListener cl = null;
+        synchronized (this) {
+            v = (Vector) controllerListeners.clone();
+        }
 
-	void setPreviousState(int state) {
-		this.previousState = state;
-	}
 
-	// we don't support gain controls
-	public GainControl getGainControl() {
-		return null;
-	}
-
-	// this method posts events to listeners
-	// it is called by dedicated threads to prevent worker threads
-	// from being captured by poorly written applications
-	void updateListeners(ControllerEvent evt)
-	{
-
-		Vector v = null;
-		ControllerListener cl = null;
-		synchronized (this) {
-			v = (Vector) controllerListeners.clone();
-		}
-
-
-		for (int loop = 0; loop < v.size(); loop++)
-		{
-			cl = (ControllerListener) v.elementAt(loop);
-			cl.controllerUpdate(evt);
-		}
-	}
+        for (int loop = 0; loop < v.size(); loop++) {
+            cl = (ControllerListener) v.elementAt(loop);
+            cl.controllerUpdate(evt);
+        }
+    }
 
 }
