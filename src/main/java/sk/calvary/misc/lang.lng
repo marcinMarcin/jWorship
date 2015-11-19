@@ -12,22 +12,22 @@ pl [Z rzutnika na ekran]
 
 #1002
 en [Go text]
-sk [Posla text]
-pl [Odœwie¿ tekst]
+sk [Poslaï¿½ text]
+pl [OdÅ›wieÅ¼ tekst]
 
 #1003
 en [Go background]
 sk [Poslat pozadie]
-pl [Odœwie¿ t³o]
+pl [OdÅ›wieÅ¼ tÅ‚o]
 
 #1004
 en [Search song]
-sk [H¾adaj pieseò]
-pl [Szukaj utwór]
+sk [Hï¿½adaj pieseï¿½]
+pl [Szukaj utworu]
 
 #1005
 en [Save all]
-sk [Uloi všetko]
+sk [Uloï¿½iï¿½ vï¿½etko]
 pl [Zapisz wszystko]
 
 #1006
@@ -42,17 +42,17 @@ pl [Rzutnik]
 
 #1008
 en [This screen]
-sk [Táto obrazovka]
+sk [Tï¿½to obrazovka]
 pl [Ten ekran]
 
 #1009
 en [Test screen]
-sk [Skúšobná obrazovka]
+sk [Skï¿½ï¿½obnï¿½ obrazovka]
 pl [Ekran testowy]
 
 #1010
 en [Cancel all]
-sk [Zruši všetky]
+sk [Zruï¿½iï¿½ vï¿½etky]
 pl [Cofnij wszystkie]
 
 #1011
@@ -62,13 +62,13 @@ pl [Akcje]
 
 #1012
 en [File]
-sk [Súbor]
+sk [Sï¿½bor]
 pl [Plik]
 
 #1013
 en [Please connect your computer to a projector first!]
-sk [Najprv nastav pripojenie poèítaèa k projektoru!]
-pl [Na pocz¹tku ustaw po³¹czenie komputera na rzutnik!]
+sk [Najprv nastav pripojenie poï¿½ï¿½taï¿½a k projektoru!]
+pl [Na poczÄ…tku ustaw podÅ‚czenie komputera na rzutnik!]
 
 #1014
 en [Settings]
@@ -82,62 +82,62 @@ pl [Tekst]
 
 #1016
 en [font size]
-sk [ve¾kos fontu]
+sk [veï¿½kosï¿½ fontu]
 pl [rozmiar czcionki]
 
 #1017
 en [wrap text]
-sk [zalamova text]
+sk [zalamovaï¿½ text]
 pl [zawijanie tekstu]
 
 #1018
 en [decrease text size]
-sk [zmenši text]
-pl [zmniejszaæ rozmiar tekstu]
+sk [zmenï¿½iï¿½ text]
+pl [zmniejsz rozmiar tekstu]
 
 #1019
 en [Application]
-sk [Aplikácia]
+sk [Aplikï¿½cia]
 pl [Aplikacja]
 
 #1020
 en [immediately to screen]
-sk [hneï na celú obrazovku]
+sk [hneï¿½ na celï¿½ obrazovku]
 pl [od razu na ekran]
 
 #1021
 en [Background]
 sk [Pozadie]
-pl [T³o]
+pl [TÅ‚o]
 
 #1022
 en [the background fully fills the screen]
-sk [pozadie vypåòa celú obrazovku]
-pl [t³o wype³nia ca³y ekran]
+sk [pozadie vypï¿½ï¿½a celï¿½ obrazovku]
+pl [tÅ‚o wypeÅ‚nia caÅ‚y ekran]
 
 #1023
 en [shadow]
-sk [tieò]
-pl [cieñ]
+sk [tieï¿½]
+pl [cieÅ„]
 
 #1024
 en [alignment]
 sk [zarovnanie]
-pl [wyrównianie]
+pl [wyrÃ³wnianie]
 
 #1025
 en [aspect ratio]
-sk [pomer strán]
+sk [pomer strï¿½n]
 pl [proporcje ekranu]
 
 #1026
 en [Transition]
 sk [Prechod]
-pl [Przejœcie]
+pl [PrzejÅ›cie]
 
 #1027
 en [Advanced]
-sk [Rozšírené]
+sk [Rozï¿½ï¿½renï¿½]
 pl [Zaawansowane]
 
 #1028
@@ -147,38 +147,38 @@ pl [Autor]
 
 #1029
 en [Title 2]
-sk [Názov 2]
+sk [Nï¿½zov 2]
 pl [Nawza 2]
 
 #1030
 en [Title]
-sk [Názov]
+sk [Nï¿½zov]
 pl [Nazwa]
 
 #1031
 en [Song]
-sk [Pieseò]
-pl [Utwór]
+sk [Pieseï¿½]
+pl [UtwÃ³r]
 
 #1032
 en [Do You really want to save the song?]
-sk [Naozaj uloi pieseò?]
-pl [Czy naprawdê zapisaæ utwór?]
+sk [Naozaj uloï¿½iï¿½ pieseï¿½?]
+pl [Czy naprawdÄ™ zapisaÄ‡ utwï¿½r?]
 
 #1033
 en [Cancel]
-sk [Zruši]
-pl [Cofn¹æ]
+sk [Zruï¿½iï¿½]
+pl [Anuluj]
 
 #1034
 en [Do You want to enlarge the letters in the title?]
-sk [Zväèši písmenká v názve?]
-pl [Powiêkszyæ litery w nazwie?]
+sk [Zvï¿½ï¿½iï¿½ pï¿½smenkï¿½ v nï¿½zve?]
+pl [PowiÄ™kszyÄ‡ litery w tytule?]
 
 #1035
 en [Do You want to enlarge the letters in the text?]
-sk [Zväèši písmenká v texte?]
-pl [Powiêkszyæ litery w tekscie?]
+sk [Zvï¿½ï¿½iï¿½ pï¿½smenkï¿½ v texte?]
+pl [PowiÄ™kszyÄ‡ litery w tekscie?]
 
 #1036
 en [fullscreen]
@@ -187,73 +187,73 @@ pl [ekran]
 
 #1037
 en [Delete]
-sk [Zmaza]
-pl [Usun¹æ]
+sk [Zmazaï¿½]
+pl [UsuÅ„]
 
 #1038
 en [Add bookmark]
-sk [Prida záloku]
-pl [Dodaæ zak³adkê]
+sk [Pridaï¿½ zï¿½loï¿½ku]
+pl [Dodaj zakÅ‚adkÄ™]
 
 #1039
 en [Add to history]
-sk [Prida do histórie]
-pl [Dodaæ do historii]
+sk [Pridaï¿½ do histï¿½rie]
+pl [Dodaj do historii]
 
 #1040
 en [Delete bookmarks]
-sk [Vymaza záloky]
-pl [Usun¹æ zak³¹dki]
+sk [Vymazaï¿½ zï¿½loï¿½ky]
+pl [UsuÅ„ zakï¿½ï¿½dki]
 
 #1041
 en [Are You sure?]
 sk [Naozaj?]
-pl [Czy naprawdê?]
+pl [Czy naprawdÄ™?]
 
 #1042
 en [Rename bookmarks]
-sk [Premenova záloky]
-pl [Zmieniæ nazwê zak³adki]
+sk [Premenovaï¿½ zï¿½loï¿½ky]
+pl [ZmieniÅ„ nazwÄ™ zakÅ‚adki]
 
 #1043
 en [Set default bookmarks]
-sk [Predvoli záloky]
-pl [Ustaw domyœlne zak³adki]
+sk [Predvoliï¿½ zï¿½loï¿½ky]
+pl [Ustaw domyÅ›lne zakÅ‚adki]
 
 #1044
 en [New bookmarks]
-sk [Nové záloky]
-pl [Nowe zak³adki]
+sk [Novï¿½ zï¿½loï¿½ky]
+pl [Nowe zakÅ‚adki]
 
 #1045
 en [Do You really want to delete it?]
-sk [Naozaj vymaza?]
-pl [Czy naprawdê usun¹æ?]
+sk [Naozaj vymazaï¿½?]
+pl [Czy naprawdÄ™ usunÄ…Ä‡?]
 
 #1046
 en [Empty backgound]
-sk [Prázdne pozadie]
-pl [Puste t³o]
+sk [Prï¿½zdne pozadie]
+pl [Puste tÅ‚o]
 
 #1047
 en [All]
-sk [Všetko]
+sk [Vï¿½etko]
 pl [Wszystko]
 
 #1048
 en [Bookmarks]
-sk [Záloky]
-pl [Zak³adki]
+sk [Zï¿½loï¿½ky]
+pl [ZakÅ‚adki]
 
 #1049
 en [History]
-sk [História]
+sk [Histï¿½ria]
 pl [Historia]
 
 #1050
 en [default]
-sk [predvolené]
-pl [domyœlne]
+sk [predvolenï¿½]
+pl [domyÅ›lne]
 
 #1051
 en [Songs]
@@ -262,7 +262,7 @@ pl [Utwory]
 
 #1052
 en [Empty text]
-sk [Prázdny text]
+sk [Prï¿½zdny text]
 pl [Pusty tekst]
 
 #1053
@@ -272,6 +272,6 @@ pl [Edytuj]
 
 #1054
 en [New]
-sk [Nová]
+sk [Novï¿½]
 pl [Nowa]
 
