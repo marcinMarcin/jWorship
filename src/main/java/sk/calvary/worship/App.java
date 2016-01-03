@@ -242,13 +242,13 @@ public class App extends JFrame implements ActionListener {
 
     Transition currentTransition;
 
-    File dirPictures = new File("pictures"); // @jve:decl-index=0:
+    File dirPictures = new File(getApplicationDataFolderPath() + "pictures"); // @jve:decl-index=0:
 
-    File dirSongs = new File("songs");
+    File dirSongs = new File(getApplicationDataFolderPath() + "songs");
 
-    File dirVideos = new File("videos");
+    File dirVideos = new File(getApplicationDataFolderPath() + "videos");
 
-    File dirSettings = new File("settings"); // @jve:decl-index=0:
+    File dirSettings = new File(getApplicationDataFolderPath() + "settings"); // @jve:decl-index=0:
 
     public boolean immediateFullScreen = false;
 
@@ -595,8 +595,8 @@ public class App extends JFrame implements ActionListener {
             gridBagConstraints3.gridy = 1;
             gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
             gridBagConstraints3.weightx = 1.0D;
-            jPanel.add((Component) getScreenViewPrepared(), gridBagConstraints1);
-            jPanel.add((Component) getScreenViewLive(), gridBagConstraints2);
+            jPanel.add(getScreenViewPrepared(), gridBagConstraints1);
+            jPanel.add(getScreenViewLive(), gridBagConstraints2);
             jPanel.add(getJPanel2(), gridBagConstraints3);
         }
         return jPanel;
@@ -668,7 +668,7 @@ public class App extends JFrame implements ActionListener {
             screenViewPrepared.setName("screenViewPrepared");
             screenViewPrepared.setScreen(screenPrepared);
             if (screenViewPrepared instanceof ScreenViewSwing)
-                ((ScreenViewSwing) screenViewPrepared).refresher
+                screenViewPrepared.refresher
                         .setMaxFrameRate(4);
         }
         return screenViewPrepared;
@@ -1035,9 +1035,7 @@ public class App extends JFrame implements ActionListener {
             return false;
         if (screenPrepared.isMediaNeeded(media))
             return true;
-        if (screenLive.isMediaNeeded(media))
-            return true;
-        return false;
+        return screenLive.isMediaNeeded(media);
     }
 
     /**
@@ -1118,4 +1116,29 @@ public class App extends JFrame implements ActionListener {
         if (bs == pictureHistoryList)
             pictureHistoryChanged();
     }
+
+    private String getApplicationDataFolderPath()
+    {
+         String workingDirectory;
+         String OS = (System.getProperty("os.name")).toUpperCase();
+
+        if (OS.contains("WIN"))
+        {
+            workingDirectory = System.getenv("AppData");
+        }
+        else
+        {
+            //in either case, we would start in the user's home directory
+            workingDirectory = System.getProperty("user.home");
+            if(OS.contains("MAC"))
+            {
+                //if we are on a Mac, we are not done, we look for "Application Support"
+                workingDirectory += "/Library/Application Support";
+            }
+        }
+        workingDirectory+="/jWorship/";
+        return workingDirectory;
+    }
 } // @jve:decl-index=0:visual-constraint="10,10"
+
+
