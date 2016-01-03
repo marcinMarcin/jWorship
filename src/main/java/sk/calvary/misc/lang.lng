@@ -3,7 +3,7 @@
 #1000
 en [Go!]
 sk [Na projektor!]
-pl [Na rzutnik!]
+pl [Wyświetl!]
 
 #1001
 en [Reverse Go!]
@@ -53,7 +53,7 @@ pl [Ekran testowy]
 #1010
 en [Cancel all]
 sk [Zru�i� v�etky]
-pl [Cofnij wszystkie]
+pl [Wyłącz ekrany]
 
 #1011
 en [Actions]
@@ -68,7 +68,7 @@ pl [Plik]
 #1013
 en [Please connect your computer to a projector first!]
 sk [Najprv nastav pripojenie po��ta�a k projektoru!]
-pl [Na początku ustaw podłczenie komputera na rzutnik!]
+pl [Proszę podłączyć komputer do rzutnika!]
 
 #1014
 en [Settings]
@@ -148,12 +148,12 @@ pl [Autor]
 #1029
 en [Title 2]
 sk [N�zov 2]
-pl [Nawza 2]
+pl [Tytuł 2]
 
 #1030
 en [Title]
 sk [N�zov]
-pl [Nazwa]
+pl [Tytuł]
 
 #1031
 en [Song]
@@ -163,7 +163,7 @@ pl [Utwór]
 #1032
 en [Do You really want to save the song?]
 sk [Naozaj ulo�i� piese�?]
-pl [Czy naprawdę zapisać utw�r?]
+pl [Czy na pewno zapisać utwór?]
 
 #1033
 en [Cancel]
@@ -178,7 +178,7 @@ pl [Powiększyć litery w tytule?]
 #1035
 en [Do You want to enlarge the letters in the text?]
 sk [Zv��i� p�smenk� v texte?]
-pl [Powiększyć litery w tekscie?]
+pl [Powiększyć litery w tekście?]
 
 #1036
 en [fullscreen]
@@ -203,12 +203,12 @@ pl [Dodaj do historii]
 #1040
 en [Delete bookmarks]
 sk [Vymaza� z�lo�ky]
-pl [Usuń zak��dki]
+pl [Usuń zakładki]
 
 #1041
 en [Are You sure?]
 sk [Naozaj?]
-pl [Czy naprawdę?]
+pl [Czy na pewno?]
 
 #1042
 en [Rename bookmarks]
@@ -228,7 +228,7 @@ pl [Nowe zakładki]
 #1045
 en [Do You really want to delete it?]
 sk [Naozaj vymaza�?]
-pl [Czy naprawdę usunąć?]
+pl [Czy na pewno usunąć?]
 
 #1046
 en [Empty backgound]
