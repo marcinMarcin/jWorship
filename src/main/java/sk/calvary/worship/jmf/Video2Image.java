@@ -22,7 +22,7 @@ import java.util.Vector;
 public class Video2Image implements ControllerListener {
     final Renderer renderer = new MyRenderer();
     private final Vector<Video2ImageListener> listeners = new Vector<Video2ImageListener>();
-    private MediaLocator mediaLocator;
+    private final MediaLocator mediaLocator;
     private DataSource dataSource;
     private Processor p;
     private BufferedImage image;
@@ -209,8 +209,7 @@ public class Video2Image implements ControllerListener {
         } else if (evt instanceof PrefetchCompleteEvent) {
             p.start();
         } else if (evt instanceof ResourceUnavailableEvent) {
-            errorMessage = "resource unavaliable";
-            return;
+            errorMessage = "resource unavailable";
         } else if (evt instanceof EndOfMediaEvent) {
             p.setMediaTime(new Time(0));
             p.start();
@@ -268,13 +267,13 @@ public class Video2Image implements ControllerListener {
     class MyRenderer implements VideoRenderer {
         private static final String name = "Video2Image";
 
-        protected Format[] supportedFormats;
+        protected final Format[] supportedFormats;
         protected RGBFormat inputFormat;
         protected int inHeight = 0;
         protected int inWidth = 0;
         protected boolean started = false;
         int rowBuffer[];
-        private RGBFormat supportedRGB;
+        private final RGBFormat supportedRGB;
         private WritableRaster raster;
 
         public MyRenderer() {
@@ -386,7 +385,7 @@ public class Video2Image implements ControllerListener {
         }
 
         public Object[] getControls() {
-            return (Object[]) new Control[0];
+            return new Control[0];
         }
 
         public Object getControl(String arg0) {

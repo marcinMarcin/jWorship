@@ -7,5 +7,5 @@
 package sk.calvary.worship.jmf;
 
 public interface Video2ImageListener {
-    public void newFrame(Video2Image src);
+    void newFrame(Video2Image src);
 }

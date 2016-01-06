@@ -12,9 +12,9 @@ public class MarsianEffect implements Effect {
 
     Format outputFormat;
 
-    Format[] inputFormats;
+    final Format[] inputFormats;
 
-    Format[] outputFormats;
+    final Format[] outputFormats;
 
     double angle = 0.0;
 
@@ -25,7 +25,7 @@ public class MarsianEffect implements Effect {
     double[] rateTable;
     int rowBuf[], rowBuf2[], rowBuf3[];
     private int count = 0;
-    private int num;
+    private final int num;
 
     public MarsianEffect() {
         this(20);

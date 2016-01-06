@@ -14,9 +14,9 @@ import java.io.File;
 public class ImageListCellRenderer extends DefaultListCellRenderer {
     private static final long serialVersionUID = -9063091792011363300L;
     private final App app;
-    JLabel jLabelImage = new JLabel();
-    JPanel jPanel = new JPanel();
-    Font myFont = Font.decode("Arial-PLAIN-10");
+    final JLabel jLabelImage = new JLabel();
+    final JPanel jPanel = new JPanel();
+    final Font myFont = Font.decode("Arial-PLAIN-10");
 
     public ImageListCellRenderer(App app) {
         this.app = app;

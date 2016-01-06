@@ -37,7 +37,7 @@ public class dsjPullDataSource extends PullBufferDataSource implements PullBuffe
             flags,
             counter;
 
-    private Object myRestartLock = new Object();
+    private final Object myRestartLock = new Object();
 
     public dsjPullDataSource() {
 
@@ -79,7 +79,7 @@ public class dsjPullDataSource extends PullBufferDataSource implements PullBuffe
         myPath = tok[0];
 
         try {
-            flags = Integer.valueOf(tok[1]).intValue();
+            flags = Integer.valueOf(tok[1]);
         } catch (Exception e) {
         }
 
@@ -106,7 +106,7 @@ public class dsjPullDataSource extends PullBufferDataSource implements PullBuffe
     }
 
     public PullBufferStream[] getStreams() {
-        return new PullBufferStream[]{(PullBufferStream) this};
+        return new PullBufferStream[]{this};
     }
 
     /**

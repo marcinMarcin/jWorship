@@ -20,7 +20,7 @@ public class FadeOutFadeInTransition extends Transition {
 
     transient Image buf1, buf2, buf3;
 
-    Color midColor = Color.BLACK;
+    final Color midColor = Color.BLACK;
 
     public void prepare() {
         Screen s1 = getPreviousScreen();

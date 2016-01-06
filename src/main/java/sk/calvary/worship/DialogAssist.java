@@ -32,20 +32,20 @@ public class DialogAssist implements PropertyChangeListener {
     public static final int ACTION_OK = 2;
     public static final int ACTION_CANCEL = 3;
     public static final int ACTION_BEFORE_OK = 4;
-    protected EventListenerList listenerList = new EventListenerList();
+    protected final EventListenerList listenerList = new EventListenerList();
     JDialog dialog;
     boolean changed = false;
-    boolean immediateMode = true;
+    final boolean immediateMode = true;
     Object object;
-    private Vector<Link> links = new Vector<Link>();
+    private final Vector<Link> links = new Vector<Link>();
 
     public static Object getComponentValue(Object component) {
         if (component instanceof JTextComponent)
             return ((JTextComponent) component).getText();
         if (component instanceof AbstractButton)
-            return new Boolean(((AbstractButton) component).isSelected());
+            return Boolean.valueOf(((AbstractButton) component).isSelected());
         if (component instanceof FloatSlider)
-            return new Float(((FloatSlider) component).getFValue());
+            return ((FloatSlider) component).getFValue();
         if (component instanceof JComboBox)
             return ((JComboBox) component).getSelectedItem();
         throw new IllegalArgumentException();
@@ -57,12 +57,11 @@ public class DialogAssist implements PropertyChangeListener {
             return;
         }
         if (component instanceof AbstractButton) {
-            ((AbstractButton) component).setSelected(((Boolean) value)
-                    .booleanValue());
+            ((AbstractButton) component).setSelected((Boolean) value);
             return;
         }
         if (component instanceof FloatSlider) {
-            ((FloatSlider) component).setFValue(((Float) value).floatValue());
+            ((FloatSlider) component).setFValue((Float) value);
             return;
         }
         if (component instanceof JComboBox) {
@@ -86,10 +85,9 @@ public class DialogAssist implements PropertyChangeListener {
 
     protected void fireActionPerformed(ActionEvent event) {
         Object[] listeners = listenerList.getListenerList();
-        ActionEvent e = event;
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == ActionListener.class) {
-                ((ActionListener) listeners[i + 1]).actionPerformed(e);
+                ((ActionListener) listeners[i + 1]).actionPerformed(event);
             }
         }
     }
@@ -220,8 +218,8 @@ public class DialogAssist implements PropertyChangeListener {
             try {
                 Method m = object.getClass().getMethod(
                         "removePropertyChangeListener",
-                        new Class[]{PropertyChangeListener.class});
-                m.invoke(object, new Object[]{this});
+                        PropertyChangeListener.class);
+                m.invoke(object, this);
             } catch (SecurityException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
@@ -238,8 +236,8 @@ public class DialogAssist implements PropertyChangeListener {
         // add property change listener
         try {
             Method m = object.getClass().getMethod("addPropertyChangeListener",
-                    new Class[]{PropertyChangeListener.class});
-            m.invoke(object, new Object[]{this});
+                    PropertyChangeListener.class);
+            m.invoke(object, this);
         } catch (SecurityException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
@@ -253,7 +251,7 @@ public class DialogAssist implements PropertyChangeListener {
 
         // read data from object
         for (int i = 0; i < links.size(); i++) {
-            Link l = (Link) links.elementAt(i);
+            Link l = links.elementAt(i);
             l.read();
         }
     }
@@ -330,9 +328,9 @@ public class DialogAssist implements PropertyChangeListener {
             try {
                 if (buttonMode == BUTTONMODE_TRUEVALUE
                         || buttonMode == BUTTONMODE_TRUEFALSEVALUE) {
-                    setComponentValue(component, new Boolean(radioValue
+                    setComponentValue(component, radioValue
                             .equals(AscIntrospector.getPropertyValue(object,
-                                    property))));
+                                    property)));
 
                 } else {
                     setComponentValue(component, AscIntrospector

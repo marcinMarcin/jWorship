@@ -455,7 +455,7 @@ public class SettingsPanel extends AppPanel {
             jToggleButton.setIcon(new ImageIcon(getClass().getResource(
                     "/sk/calvary/worship/alignLeft.png")));
             jToggleButton.setPreferredSize(new java.awt.Dimension(22, 22));
-            da.link("textAlign", jToggleButton, new Integer(Screen.ALIGN_LEFT));
+            da.link("textAlign", jToggleButton, Screen.ALIGN_LEFT);
         }
         return jToggleButton;
     }
@@ -471,8 +471,7 @@ public class SettingsPanel extends AppPanel {
             jToggleButton1.setIcon(new ImageIcon(getClass().getResource(
                     "/sk/calvary/worship/alignCenter.png")));
             jToggleButton1.setPreferredSize(new java.awt.Dimension(22, 22));
-            da.link("textAlign", jToggleButton1, new Integer(
-                    Screen.ALIGN_CENTER));
+            da.link("textAlign", jToggleButton1, Screen.ALIGN_CENTER);
         }
         return jToggleButton1;
     }
@@ -489,7 +488,7 @@ public class SettingsPanel extends AppPanel {
                     "/sk/calvary/worship/alignRight.png")));
             jToggleButton2.setPreferredSize(new java.awt.Dimension(22, 22));
             da.link("textAlign", jToggleButton2,
-                    new Integer(Screen.ALIGN_RIGHT));
+                    Screen.ALIGN_RIGHT);
         }
         return jToggleButton2;
     }
@@ -622,7 +621,7 @@ public class SettingsPanel extends AppPanel {
             jButton = new JToggleButton();
             jButton.setText("4:3");
             jButton.setPreferredSize(new java.awt.Dimension(60, 20));
-            da.link("height", jButton, new Float(3f / 4));
+            da.link("height", jButton, 3f / 4);
         }
         return jButton;
     }
@@ -637,7 +636,7 @@ public class SettingsPanel extends AppPanel {
             jButton1 = new JToggleButton();
             jButton1.setText("16:9");
             jButton1.setPreferredSize(new java.awt.Dimension(60, 20));
-            da.link("height", jButton1, new Float(9f / 16));
+            da.link("height", jButton1, 9f / 16);
         }
         return jButton1;
     }
@@ -652,7 +651,7 @@ public class SettingsPanel extends AppPanel {
             jToggleButton3 = new JToggleButton();
             jToggleButton3.setPreferredSize(new Dimension(60, 20));
             jToggleButton3.setText("8:7");
-            da.link("height", jToggleButton3, new Float(7f / 8));
+            da.link("height", jToggleButton3, 7f / 8);
         }
         return jToggleButton3;
     }

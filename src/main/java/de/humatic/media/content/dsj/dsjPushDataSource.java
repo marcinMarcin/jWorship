@@ -37,7 +37,7 @@ public class dsjPushDataSource extends PushBufferDataSource implements PushBuffe
             flags,
             counter;
 
-    private Object myRestartLock = new Object();
+    private final Object myRestartLock = new Object();
 
     public dsjPushDataSource() {
 
@@ -79,7 +79,7 @@ public class dsjPushDataSource extends PushBufferDataSource implements PushBuffe
         myPath = tok[0];
 
         try {
-            flags = Integer.valueOf(tok[1]).intValue();
+            flags = Integer.valueOf(tok[1]);
         } catch (Exception e) {
         }
 
@@ -104,7 +104,7 @@ public class dsjPushDataSource extends PushBufferDataSource implements PushBuffe
     }
 
     public PushBufferStream[] getStreams() {
-        return new PushBufferStream[]{(PushBufferStream) this};
+        return new PushBufferStream[]{this};
     }
 
     /**

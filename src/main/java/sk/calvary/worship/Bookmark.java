@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 public abstract class Bookmark implements Serializable {
     private static final long serialVersionUID = -4312647974140157742L;
-    protected Calendar created;
+    protected final Calendar created;
 
     protected Bookmark() {
         created = Calendar.getInstance();

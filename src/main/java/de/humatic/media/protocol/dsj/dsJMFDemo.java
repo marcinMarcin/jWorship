@@ -132,7 +132,7 @@ public class dsJMFDemo extends Frame {
 
             dspb = new de.humatic.media.protocol.dsj.DataSource(ml);
 
-            player = Manager.createRealizedPlayer((PushBufferDataSource) dspb);
+            player = Manager.createRealizedPlayer(dspb);
 
             if (player != null) {
 

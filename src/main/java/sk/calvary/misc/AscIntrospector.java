@@ -111,7 +111,7 @@ public class AscIntrospector {
             throws NoSuchFieldException {
         Class c = o.getClass();
         try {
-            Method m = c.getMethod("get" + capitalize(name), new Class[0]);
+            Method m = c.getMethod("get" + capitalize(name));
             return m.getReturnType();
         } catch (NoSuchMethodException e) {
         }
@@ -147,7 +147,7 @@ public class AscIntrospector {
     public static Class getPropertyType(Class c, String name)
             throws NoSuchFieldException {
         try {
-            Method m = c.getMethod("get" + capitalize(name), new Class[0]);
+            Method m = c.getMethod("get" + capitalize(name));
             return m.getReturnType();
         } catch (NoSuchMethodException e) {
         }
@@ -173,16 +173,16 @@ public class AscIntrospector {
             throws NoSuchFieldException {
         Class c = o.getClass();
         try {
-            Method m = c.getMethod("get" + capitalize(name), new Class[0]);
-            return m.invoke(o, new Object[0]);
+            Method m = c.getMethod("get" + capitalize(name));
+            return m.invoke(o);
         } catch (NoSuchMethodException e) {
         } catch (IllegalAccessException e) {
         } catch (InvocationTargetException e) {
         }
         try {
-            Method m = c.getMethod("is" + capitalize(name), new Class[0]);
+            Method m = c.getMethod("is" + capitalize(name));
             if (m.getReturnType() == Boolean.TYPE)
-                return m.invoke(o, new Object[0]);
+                return m.invoke(o);
         } catch (NoSuchMethodException e) {
         } catch (IllegalAccessException e) {
         } catch (InvocationTargetException e) {

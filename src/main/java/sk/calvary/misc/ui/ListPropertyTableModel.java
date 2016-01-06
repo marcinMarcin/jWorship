@@ -27,9 +27,9 @@ import java.util.Vector;
  */
 public class ListPropertyTableModel extends AbstractTableModel {
     private static final long serialVersionUID = -5852131851499438176L;
-    static SimpleDateFormat csvDateFormat = new SimpleDateFormat(
+    static final SimpleDateFormat csvDateFormat = new SimpleDateFormat(
             "yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
-    ProxyListModel proxyList;
+    final ProxyListModel proxyList;
     Class<?> rowClass;
     String columns[] = new String[0];
     String columnsAsString = "";

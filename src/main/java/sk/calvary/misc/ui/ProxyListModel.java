@@ -19,8 +19,8 @@ import java.lang.ref.WeakReference;
  */
 public class ProxyListModel extends AbstractListModel implements ListModel {
     private static final long serialVersionUID = -6790798180399590037L;
-    protected WeakListener weakListener;
-    ListModel source;
+    protected final WeakListener weakListener;
+    final ListModel source;
 
     public ProxyListModel(ListModel source) {
         this.source = source;
@@ -47,7 +47,7 @@ public class ProxyListModel extends AbstractListModel implements ListModel {
     }
 
     protected static class WeakListener implements ListDataListener {
-        WeakReference<ProxyListModel> proxyRef;
+        final WeakReference<ProxyListModel> proxyRef;
 
         WeakListener(ProxyListModel proxy) {
             this.proxyRef = new WeakReference<ProxyListModel>(proxy);
@@ -59,7 +59,7 @@ public class ProxyListModel extends AbstractListModel implements ListModel {
          * @return
          */
         private ProxyListModel getProxy(ListDataEvent e) {
-            ProxyListModel proxy = (ProxyListModel) proxyRef.get();
+            ProxyListModel proxy = proxyRef.get();
             if (proxy == null) {
                 ((ListModel) e.getSource()).removeListDataListener(this);
             }

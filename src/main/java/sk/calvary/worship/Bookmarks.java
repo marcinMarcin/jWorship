@@ -15,8 +15,8 @@ import static java.util.Calendar.*;
 public abstract class Bookmarks<B extends Bookmark> implements Serializable {
     private static final long serialVersionUID = 6742480998433942978L;
     protected String name;
-    protected Calendar created;
-    Vector<B> bookmarks = new Vector<B>();
+    protected final Calendar created;
+    final Vector<B> bookmarks = new Vector<B>();
     transient BookmarksList<?> owner;
 
     protected Bookmarks(String name) {

@@ -14,13 +14,13 @@ import java.awt.image.WritableRaster;
 public class ImageRenderer implements VideoRenderer {
     private static final String name = "Video2Image";
 
-    protected Format[] supportedFormats;
+    protected final Format[] supportedFormats;
     protected RGBFormat inputFormat;
     protected int inHeight = 0;
     protected int inWidth = 0;
     protected boolean started = false;
     int rowBuffer[];
-    private RGBFormat supportedRGB;
+    private final RGBFormat supportedRGB;
     private WritableRaster raster;
     private BufferedImage image;
     private NewFrameListener listener;
@@ -139,7 +139,7 @@ public class ImageRenderer implements VideoRenderer {
     }
 
     public Object[] getControls() {
-        return (Object[]) new Control[0];
+        return new Control[0];
     }
 
     public Object getControl(String arg0) {
@@ -154,7 +154,7 @@ public class ImageRenderer implements VideoRenderer {
         return image;
     }
 
-    public static interface NewFrameListener {
+    public interface NewFrameListener {
         void newFrame(ImageRenderer renderer);
     }
 }

@@ -12,7 +12,7 @@ import java.util.Vector;
 public abstract class BookmarksList<B extends Bookmarks<?>> implements Serializable {
     private static final long serialVersionUID = -2643552839035963798L;
 
-    Vector<B> bookmarks = new Vector<B>();
+    final Vector<B> bookmarks = new Vector<B>();
 
     transient B selectedForAdd;
     transient boolean modified;

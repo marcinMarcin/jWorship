@@ -36,13 +36,13 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
     private final MultimediaPanel panel;
     private final App app;
     boolean positionAligning = false;
-    ImageIcon iconClosed = icon("mediaClosed.png");
-    ImageIcon iconOpening = icon("mediaOpening.png");
-    ImageIcon iconOpened = icon("mediaOpened.png");
-    ImageIcon iconPrepared = icon("mediaPrepared.png");
-    ImageIcon iconLive = icon("mediaLive.png");
-    ImageIcon iconPlay = icon("play.png");
-    ImageIcon iconPause = icon("pause.png");
+    final ImageIcon iconClosed = icon("mediaClosed.png");
+    final ImageIcon iconOpening = icon("mediaOpening.png");
+    final ImageIcon iconOpened = icon("mediaOpened.png");
+    final ImageIcon iconPrepared = icon("mediaPrepared.png");
+    final ImageIcon iconLive = icon("mediaLive.png");
+    final ImageIcon iconPlay = icon("play.png");
+    final ImageIcon iconPause = icon("pause.png");
     private volatile DSFiltergraph dsfg;
     private volatile MyImage image;
     private ClickButton stateButton = null;
@@ -464,7 +464,6 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
         }
         if (isPlaying()) {
             pause();
-            return;
         }
     }
 
@@ -497,7 +496,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
     public void propertyChange(PropertyChangeEvent pe) {
         System.out.println(pe);
-        switch (Integer.valueOf(pe.getNewValue().toString()).intValue()) {
+        switch (Integer.valueOf(pe.getNewValue().toString())) {
             case DSFiltergraph.ACTIVATING:
                 System.out.print(".");
                 updateButtons();
@@ -525,7 +524,7 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
                 break;
             case DSFiltergraph.EXPORT_PROGRESS:
                 System.out.println("% done: "
-                        + Integer.valueOf(pe.getOldValue().toString()).intValue());
+                        + Integer.valueOf(pe.getOldValue().toString()));
                 updateButtons();
                 break;
             case DSFiltergraph.FRAME_NOTIFY:

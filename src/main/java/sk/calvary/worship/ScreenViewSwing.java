@@ -58,7 +58,7 @@ public class ScreenViewSwing extends JComponent implements ScreenView, Runnable 
 
     private boolean fullScreenChangedFlag = false;
     private int fullScreenMode = MODE_FLIP;
-    Refresher refresher = new Refresher() {
+    final Refresher refresher = new Refresher() {
         public void refresh() {
             ScreenViewSwing.this.refresh();
         }
@@ -223,7 +223,7 @@ public class ScreenViewSwing extends JComponent implements ScreenView, Runnable 
         g2.setClip(targetRect);
         g2.translate(targetRect.x, targetRect.y);
         g2.scale(targetScale, targetScale);
-        screen.paint((Graphics2D) g2);
+        screen.paint(g2);
         g2.dispose();
     }
 

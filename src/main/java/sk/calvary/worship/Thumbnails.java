@@ -30,8 +30,8 @@ public class Thumbnails {
     private final int maxWidth;
     private final int maxHeight;
     private final Vector<File> todo = new Vector<File>();
-    private boolean immediateLoadThunbnail = false;
-    private Thread generator;
+    private final boolean immediateLoadThunbnail = false;
+    private final Thread generator;
 
     public Thumbnails(ImageLoader imageLoader, int maxWidth, int maxHeight) {
         this.imageLoader = imageLoader;

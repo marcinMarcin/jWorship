@@ -47,7 +47,7 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
 
     private JScrollPane jScrollPane1 = null;
 
-    private ObjectListModel verses = new ObjectListModel();
+    private final ObjectListModel verses = new ObjectListModel();
 
     private JPanel jPanel = null;
 
@@ -557,8 +557,7 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
             formatButton = new FormatButton();
             formatButton.setIcon(new ImageIcon(getClass().getResource(
                     "/sk/calvary/worship/alignLeft.png")));
-            daScreen.link("textAlign", formatButton, new Integer(
-                    Screen.ALIGN_LEFT));
+            daScreen.link("textAlign", formatButton, Screen.ALIGN_LEFT);
         }
         return formatButton;
     }
@@ -573,8 +572,7 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
             formatButton1 = new FormatButton();
             formatButton1.setIcon(new ImageIcon(getClass().getResource(
                     "/sk/calvary/worship/alignCenter.png")));
-            daScreen.link("textAlign", formatButton1, new Integer(
-                    Screen.ALIGN_CENTER));
+            daScreen.link("textAlign", formatButton1, Screen.ALIGN_CENTER);
         }
         return formatButton1;
     }
@@ -589,8 +587,7 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
             formatButton2 = new FormatButton();
             formatButton2.setIcon(new ImageIcon(getClass().getResource(
                     "/sk/calvary/worship/alignRight.png")));
-            daScreen.link("textAlign", formatButton2, new Integer(
-                    Screen.ALIGN_RIGHT));
+            daScreen.link("textAlign", formatButton2, Screen.ALIGN_RIGHT);
         }
         return formatButton2;
     }
@@ -688,8 +685,7 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
             formatButton6 = new FormatButton();
             formatButton6.setIcon(new ImageIcon(getClass().getResource(
                     "/sk/calvary/worship/textPartAll.png")));
-            daScreen.link("textAreaPart", formatButton6, new Integer(
-                    Screen.PART_ALL));
+            daScreen.link("textAreaPart", formatButton6, Screen.PART_ALL);
         }
         return formatButton6;
     }
@@ -704,8 +700,7 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
             formatButton7 = new FormatButton();
             formatButton7.setIcon(new ImageIcon(getClass().getResource(
                     "/sk/calvary/worship/textPartTop.png")));
-            daScreen.link("textAreaPart", formatButton7, new Integer(
-                    Screen.PART_TOP));
+            daScreen.link("textAreaPart", formatButton7, Screen.PART_TOP);
         }
         return formatButton7;
     }
@@ -715,8 +710,7 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
             formatButton10 = new FormatButton();
             formatButton10.setIcon(new ImageIcon(getClass().getResource(
                     "/sk/calvary/worship/textPartTop2Thirds.png")));
-            daScreen.link("textAreaPart", formatButton10, new Integer(
-                    Screen.PART_TOP_2THIRDS));
+            daScreen.link("textAreaPart", formatButton10, Screen.PART_TOP_2THIRDS);
         }
         return formatButton10;
     }
@@ -731,8 +725,7 @@ public class SongsPanel extends AppPanel implements PropertyChangeListener {
             formatButton8 = new FormatButton();
             formatButton8.setIcon(new ImageIcon(getClass().getResource(
                     "/sk/calvary/worship/textPartBottom.png")));
-            daScreen.link("textAreaPart", formatButton8, new Integer(
-                    Screen.PART_BOTTOM));
+            daScreen.link("textAreaPart", formatButton8, Screen.PART_BOTTOM);
         }
         return formatButton8;
     }

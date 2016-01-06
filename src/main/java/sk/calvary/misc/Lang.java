@@ -19,8 +19,8 @@ public class Lang {
     /**
      * stringy
      */
-    Vector<LangString> strings = new Vector<LangString>();
-    Vector<String> langs = new Vector<String>();
+    final Vector<LangString> strings = new Vector<LangString>();
+    final Vector<String> langs = new Vector<String>();
     File filename = null;
     private boolean changed = false;
 
@@ -177,14 +177,14 @@ public class Lang {
      * @return Returns the langs.
      */
     public String[] getLangs() {
-        return (String[]) langs.toArray(new String[0]);
+        return langs.toArray(new String[0]);
     }
 
     /**
      * @return Returns the strings.
      */
     public LangString[] getStrings() {
-        return (LangString[]) strings.toArray(new LangString[0]);
+        return strings.toArray(new LangString[0]);
     }
 
     /**
@@ -311,10 +311,10 @@ public class Lang {
     }
 
     class LangString {
-        String key;
+        final String key;
         String introComment = "";
         String link = null;
-        Hashtable<String, String> strings = new Hashtable<String, String>();
+        final Hashtable<String, String> strings = new Hashtable<String, String>();
         LangString(String key) {
             this.key = key;
         }
@@ -380,7 +380,7 @@ public class Lang {
         }
 
         /**
-         * @param l
+         * @param lang
          * @return
          */
         public String get(String lang) {

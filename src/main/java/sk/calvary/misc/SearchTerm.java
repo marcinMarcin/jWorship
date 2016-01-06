@@ -20,7 +20,7 @@ import java.util.Vector;
  *         Preferences - Java - Code Style - Code Templates
  */
 public class SearchTerm {
-    String words[];
+    final String[] words;
 
     public SearchTerm(String s) {
         Vector v = new Vector();

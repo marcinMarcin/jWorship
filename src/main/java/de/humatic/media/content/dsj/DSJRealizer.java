@@ -8,9 +8,9 @@ import javax.media.protocol.DataSource;
 
 
 class DSJRealizer extends Thread {
-    private Handler handler;
+    private final Handler handler;
 
-    private DataSource dataSrc;
+    private final DataSource dataSrc;
 
     public DSJRealizer(Handler h, DataSource ds, ThreadGroup tg) {
         super(tg, "DSJRealizer");

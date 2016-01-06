@@ -275,8 +275,8 @@ public class JMFUtils {
         int nTtl;
         RTPSessionMgr mngrSession;
 
-        nPort = Integer.valueOf(strPort).intValue();
-        nTtl = Integer.valueOf(strTtl).intValue();
+        nPort = Integer.valueOf(strPort);
+        nTtl = Integer.valueOf(strTtl);
         mngrSession = createSessionManager(strAddress, nPort, nTtl, listener);
         return (mngrSession);
     }

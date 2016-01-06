@@ -30,7 +30,7 @@ public class Song implements Serializable, ObjectInputValidation {
 
     private String author = "";
 
-    private Vector<String> verses = new Vector<String>();
+    private final Vector<String> verses = new Vector<String>();
 
     private transient File file;
 

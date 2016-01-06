@@ -24,23 +24,23 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
     protected final TimeBase defaultTimeBase = Manager.getSystemTimeBase();
     protected final ThreadGroup handlerThreadGroup = new ThreadGroup("DSJ ThreadGroup");
     public Time duration;
-    TimeBase tb;
+    final TimeBase tb;
     DataSource dataSrc;
     // a Player must always track its previous, current and target states.
     int previousState,
             currentState,
             targetState,
             currentMediaTime;
-    boolean realizeCompleted,
-            prefetchCompleted;
+    boolean realizeCompleted;
+    final boolean prefetchCompleted;
     Thread realizer,
             prefetcher;
     Control[] controls;
-    Vector controllerListeners; // vector of ControllerListeners
+    final Vector controllerListeners; // vector of ControllerListeners
     private DSFiltergraph dsfg;
-    private javax.media.Time startLatency;
+    private final javax.media.Time startLatency;
     private float rateFactor;
-    private Buffer buffer;
+    private final Buffer buffer;
     private java.awt.Component controlPanelComp;
 
     public Handler() {
@@ -67,7 +67,7 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
 
         if (!(src instanceof de.humatic.media.protocol.dsj.DataSource)) throw new IncompatibleSourceException();
 
-        controllerListeners.add((ControllerListener) this);
+        controllerListeners.add(this);
 
         this.dataSrc = src;
 
@@ -178,7 +178,7 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
 
     public void start() {
 
-        ((PushBufferStream) dataSrc).setTransferHandler((BufferTransferHandler) this);
+        ((PushBufferStream) dataSrc).setTransferHandler(this);
 
         try {
             dataSrc.start();
@@ -337,13 +337,10 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
     }
 
     public void addController(Controller c) {
-
-        return;
     }
 
     public void removeController(Controller c) {
         // not implemented
-        return;
     }
 
     // we have no way to report latency right now...
@@ -361,7 +358,6 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
     }
 
     public void syncStart(Time tbTime) {
-        return;
     }
 
     public Time getStopTime() {
@@ -369,7 +365,6 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
     }
 
     public void setStopTime(Time t) {
-        return;
     }
 
     // changes the Player's mediatime
@@ -384,9 +379,7 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
 
     // reports the current media time
     public Time getMediaTime() {
-
-        Time curr = new Time((double) (currentMediaTime / 1000));
-        return (curr);
+        return new Time((double) (currentMediaTime / 1000));
     }
 
     public void setMediaTime(Time now) {

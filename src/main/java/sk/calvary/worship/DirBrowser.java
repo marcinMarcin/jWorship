@@ -30,8 +30,8 @@ public class DirBrowser extends JPanel {
     private static final long serialVersionUID = 21096700074897497L;
     private final App app;
     File base;
-    Set<String> extensions = new HashSet<String>();
-    DefaultTreeModel treeModel = new DefaultTreeModel(null);
+    final Set<String> extensions = new HashSet<String>();
+    final DefaultTreeModel treeModel = new DefaultTreeModel(null);
     private JScrollPane jScrollPane = null;
     private JTree jTree = null;
     private DefaultTreeCellRenderer defaultTreeCellRenderer = null;

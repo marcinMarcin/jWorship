@@ -1,6 +1,7 @@
 package sk.calvary.misc;
 
 import javax.swing.*;
+import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -19,7 +20,7 @@ public class ObjectPropertyTableModel extends
 
     String columns[] = new String[0];
 
-    Vector objects = new Vector();
+    final Vector objects = new Vector();
 
     Object source = null;
 
@@ -148,9 +149,7 @@ public class ObjectPropertyTableModel extends
 
         // addData
         if (o.length > 0) {
-            for (int i = 0; i < o.length; i++) {
-                objects.add(o[i]);
-            }
+            Collections.addAll(objects, o);
             fireTableRowsInserted(0, o.length - 1);
         }
     }
@@ -212,7 +211,6 @@ public class ObjectPropertyTableModel extends
                     columns[column], value);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
-            return;
         }
     }
 

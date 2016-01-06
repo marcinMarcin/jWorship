@@ -19,7 +19,7 @@ import java.util.Hashtable;
  *         Preferences - Java - Code Style - Code Templates
  */
 public class ImageLoader {
-    Hashtable<File, SoftReference<Image>> cache = new Hashtable<File, SoftReference<Image>>();
+    final Hashtable<File, SoftReference<Image>> cache = new Hashtable<File, SoftReference<Image>>();
 
     public ImageLoader() {
 
@@ -28,7 +28,7 @@ public class ImageLoader {
     public Image getImage(File f) {
         Image i = null;
         synchronized (cache) {
-            Reference<?> ref = (Reference<?>) cache.get(f);
+            Reference<?> ref = cache.get(f);
             if (ref != null) {
                 i = (Image) ref.get();
             }

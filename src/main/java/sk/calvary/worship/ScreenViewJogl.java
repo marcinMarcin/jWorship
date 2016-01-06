@@ -16,7 +16,7 @@ public class ScreenViewJogl extends GLCanvas implements ScreenView,
 
     final App app;
 
-    private Frame fullScreenFrame;
+    private final Frame fullScreenFrame;
 
     private Screen screen;
     private float view_rotx = 20.0f, view_roty = 30.0f, view_rotz = 0.0f;

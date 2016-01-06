@@ -19,7 +19,7 @@ public class ThumbnailList extends JList {
     public final ObjectListModel files = new ObjectListModel();
     private final App app;
     public Bookmarks<?> selectedBookmarks;
-    MyListener listener = new MyListener();
+    final MyListener listener = new MyListener();
     private Object selector;
 
     public ThumbnailList() {

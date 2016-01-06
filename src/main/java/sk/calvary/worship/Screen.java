@@ -305,8 +305,7 @@ public final class Screen extends Freezable implements Cloneable {
 	 */
 
     public Screen clone() {
-        Screen o = (Screen) super.clone();
-        return o;
+        return (Screen) super.clone();
     }
 
     public Screen getFrozenInstance() {
@@ -334,8 +333,7 @@ public final class Screen extends Freezable implements Cloneable {
         checkFreeze();
         float old = this.height;
         this.height = height;
-        changeSupport.firePropertyChange("height", new Float(old), new Float(
-                height));
+        changeSupport.firePropertyChange("height", old, height);
     }
 
     public AttributedString getText() {

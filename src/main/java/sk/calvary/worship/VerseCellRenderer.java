@@ -25,9 +25,9 @@ public class VerseCellRenderer extends JTextArea implements ListCellRenderer {
 
     SearchTerm highlight;
 
-    Color exactMatch = new Color(255, 255, 180);
+    final Color exactMatch = new Color(255, 255, 180);
 
-    Color substringMatch = null;
+    final Color substringMatch = null;
 
     int index;
 

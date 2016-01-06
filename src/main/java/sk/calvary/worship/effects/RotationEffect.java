@@ -41,9 +41,9 @@ public class RotationEffect implements Effect {
 
     Format outputFormat;
 
-    Format[] inputFormats;
+    final Format[] inputFormats;
 
-    Format[] outputFormats;
+    final Format[] outputFormats;
 
     double angle = 0.0;
 
@@ -55,7 +55,7 @@ public class RotationEffect implements Effect {
 
     private int count = 0;
 
-    private int num;
+    private final int num;
 
     public RotationEffect() {
         this(20);

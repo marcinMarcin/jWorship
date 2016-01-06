@@ -13,9 +13,9 @@ package sk.calvary.misc;
  *         Preferences - Java - Code Style - Code Templates
  */
 public class SearchInfo {
-    String text;
+    final String text;
 
-    String title;
+    final String title;
 
     public SearchInfo(String title, String text) {
         this.title = prepare(title);
@@ -80,7 +80,7 @@ public class SearchInfo {
             res += 1 + ((float) c2 - 1) / (maxc - 1);
         else
             res += 0.2f * (1 + ((float) c1 - 1) / (maxc - 1));
-        if (nw != null && text.indexOf(w + " " + nw) >= 0)
+        if (nw != null && text.contains(w + " " + nw))
             res += 3;
         return res;
     }
@@ -91,9 +91,9 @@ public class SearchInfo {
      */
     public boolean matchWord(String s) {
         String w = " " + s;
-        if (title != null && title.indexOf(w) >= 0)
+        if (title != null && title.contains(w))
             return true;
-        if (text != null && text.indexOf(w) >= 0)
+        if (text != null && text.contains(w))
             return true;
         return false;
     }

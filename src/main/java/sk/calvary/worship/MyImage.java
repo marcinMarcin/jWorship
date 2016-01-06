@@ -104,14 +104,14 @@ public class MyImage extends BufferedImage {
         return raster().buffer;
     }
 
-    public static interface NewFrameListener {
+    public interface NewFrameListener {
         void newFrame(MyImage i);
     }
 
     public static class MyRaster extends WritableRaster {
-        byte data[];
-        ByteBuffer buffer;
-        private int glType;
+        final byte[] data;
+        final ByteBuffer buffer;
+        private final int glType;
 
         public MyRaster(int width, int height, int glType) {
             this(width, height, glType, null);

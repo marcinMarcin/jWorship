@@ -19,9 +19,9 @@ public abstract class RGBEffect implements Effect {
 
     protected Format outputFormat;
 
-    protected Format[] inputFormats;
+    protected final Format[] inputFormats;
 
-    protected Format[] outputFormats;
+    protected final Format[] outputFormats;
 
     protected int inWidth;
 

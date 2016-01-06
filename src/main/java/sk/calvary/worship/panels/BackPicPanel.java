@@ -375,7 +375,6 @@ public class BackPicPanel extends AppPanel {
         getThumbnailList().setSelectedIndex(i);
         getThumbnailList().ensureIndexIsVisible(i);
         go();
-        return;
     }
 
     protected void nextImage() {
@@ -389,7 +388,6 @@ public class BackPicPanel extends AppPanel {
         getThumbnailList().setSelectedIndex(i);
         getThumbnailList().ensureIndexIsVisible(i);
         go();
-        return;
     }
 
     /**

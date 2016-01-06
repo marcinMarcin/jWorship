@@ -12,9 +12,9 @@ public class RGBEffect2 implements Effect {
 
     Format outputFormat;
 
-    Format[] inputFormats;
+    final Format[] inputFormats;
 
-    Format[] outputFormats;
+    final Format[] outputFormats;
 
     public RGBEffect2() {
         inputFormats = new Format[]{new RGBFormat(null, Format.NOT_SPECIFIED,

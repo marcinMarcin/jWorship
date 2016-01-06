@@ -19,7 +19,7 @@ public class PanelSelector extends JPanel {
     private static final long serialVersionUID = 1L;
 
     App app;
-    JTabbedPane tabs = new JTabbedPane();
+    final JTabbedPane tabs = new JTabbedPane();
 
     public PanelSelector() {
 
@@ -114,7 +114,7 @@ public class PanelSelector extends JPanel {
             v.add(new AppPanel[]{panels[i]});
         }
 
-        return (AppPanel[][]) v.toArray(new AppPanel[0][0]);
+        return v.toArray(new AppPanel[0][0]);
     }
 
     public void ensureVisible(SongsPanel panel) {

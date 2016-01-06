@@ -7,7 +7,7 @@ public class VolumeEffect implements Effect {
     /**
      * The effect name *
      */
-    private static String EffectName = "GainEffect";
+    private static final String EffectName = "GainEffect";
     /**
      * chosen input Format *
      */
@@ -28,7 +28,7 @@ public class VolumeEffect implements Effect {
      * selected Gain *
      */
     protected float gain = 1F;
-    int maxSample[] = new int[2];
+    final int[] maxSample = new int[2];
 
     /**
      * initialize the formats
@@ -69,7 +69,7 @@ public class VolumeEffect implements Effect {
      * no controls for this simple effect
      */
     public Object[] getControls() {
-        return (Object[]) new Control[0];
+        return new Control[0];
     }
 
     /**
@@ -97,7 +97,7 @@ public class VolumeEffect implements Effect {
     public Format setInputFormat(Format input) {
         // the following code assumes valid Format
         inputFormat = (AudioFormat) input;
-        return (Format) inputFormat;
+        return inputFormat;
     }
 
     /**
@@ -106,7 +106,7 @@ public class VolumeEffect implements Effect {
     public Format setOutputFormat(Format output) {
         // the following code assumes valid Format
         outputFormat = (AudioFormat) output;
-        return (Format) outputFormat;
+        return outputFormat;
     }
 
     /**

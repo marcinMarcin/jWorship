@@ -40,13 +40,13 @@ public class App extends JFrame implements ActionListener {
     private static final int SCREEN_FULLSCREEN_OTHER = 2;
     private static final int SCREEN_PREVIEW = 0;
     private static final int SCREEN_TESTSCREEN = 3;
-    public static ImageLoader imageLoader = new ImageLoader();
-    public static Thumbnails thumbnails = new Thumbnails(imageLoader, 60, 45);
-    public static Timer timer = new Timer(App.class + " timer", true);
+    public static final ImageLoader imageLoader = new ImageLoader();
+    public static final Thumbnails thumbnails = new Thumbnails(imageLoader, 60, 45);
+    public static final Timer timer = new Timer(App.class + " timer", true);
     public static boolean testMode = false;
-    public static boolean debugmarsian = new File("debugmarsian.txt").isFile();
+    public static final boolean debugmarsian = new File("debugmarsian.txt").isFile();
     public static boolean dump = debugmarsian;
-    public static String version = "3.0.1";
+    public static final String version = "3.0.1";
     public final Action actionGo;
     public final Action actionReverseGo;
     public final Action actionGoText;
@@ -59,24 +59,24 @@ public class App extends JFrame implements ActionListener {
     final Screen screenPrepared = new Screen(this);
     private final Object lock = new Object();
     public String language = null;
-    public boolean immediateFullScreen = false;
-    public boolean autoInitProjector = true;
+    public final boolean immediateFullScreen = false;
+    public final boolean autoInitProjector = true;
     Transition currentTransition;
-    File dirPictures = new File(getApplicationDataFolderPath() + "pictures"); // @jve:decl-index=0:
-    File dirSongs = new File(getApplicationDataFolderPath() + "songs");
-    File dirVideos = new File(getApplicationDataFolderPath() + "videos");
-    File dirSettings = new File(getApplicationDataFolderPath() + "settings"); // @jve:decl-index=0:
-    ScreenView[] liveScreens = new ScreenView[4];
+    final File dirPictures = new File(getApplicationDataFolderPath() + "pictures"); // @jve:decl-index=0:
+    final File dirSongs = new File(getApplicationDataFolderPath() + "songs");
+    final File dirVideos = new File(getApplicationDataFolderPath() + "videos");
+    final File dirSettings = new File(getApplicationDataFolderPath() + "settings"); // @jve:decl-index=0:
+    final ScreenView[] liveScreens = new ScreenView[4];
     Screen screenLive = new Screen(this); // @jve:decl-index=0:
     Song selectedSong = new Song();
-    Vector<Song> songs = new Vector<Song>();
-    ObjectListModel songsLM = new ObjectListModel(songs, true);
-    Vector<Transition> transitions = new Vector<Transition>();
-    ObjectListModel transitionsLM = new ObjectListModel(transitions, true);
+    final Vector<Song> songs = new Vector<Song>();
+    final ObjectListModel songsLM = new ObjectListModel(songs, true);
+    final Vector<Transition> transitions = new Vector<Transition>();
+    final ObjectListModel transitionsLM = new ObjectListModel(transitions, true);
     PictureBookmarksList pictureBookmarksList = new PictureBookmarksList(this); // @jve:decl-index=0:
     ObjectListModel pictureBookmarksListLM = new ObjectListModel();
     PictureBookmarksList pictureHistoryList = new PictureBookmarksList(this);
-    ObjectListModel pictureHistoryListLM = new ObjectListModel();
+    final ObjectListModel pictureHistoryListLM = new ObjectListModel();
     HashMap<Integer, String> generalSettings = new HashMap<Integer, String>();
     private Lang langObj = null;
     private boolean separateVersesWithBlankLine = true;
@@ -663,9 +663,7 @@ public class App extends JFrame implements ActionListener {
     }
 
     private boolean isPictureMedia(String s) {
-        if (s == null)
-            return false;
-        return s.startsWith(dirPictures.getName());
+        return s != null && s.startsWith(dirPictures.getName());
     }
 
     /**

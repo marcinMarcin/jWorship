@@ -12,10 +12,10 @@ public class MyBreakIterator extends BreakIterator {
 
     static final StringCharacterIterator EMPTYTEXT = new StringCharacterIterator(
             "");
-    static BreakIterator bi = BreakIterator.getLineInstance();
-    static HashSet<String> prefixes = new HashSet<String>();
-    static HashSet<String> suffixes = new HashSet<String>();
-    static HashSet<String> prefixOrSuffix = new HashSet<String>();
+    static final BreakIterator bi = BreakIterator.getLineInstance();
+    static final HashSet<String> prefixes = new HashSet<String>();
+    static final HashSet<String> suffixes = new HashSet<String>();
+    static final HashSet<String> prefixOrSuffix = new HashSet<String>();
 
     static {
         prefixes.add("/:");
@@ -305,7 +305,7 @@ public class MyBreakIterator extends BreakIterator {
             }
             if (i == len)
                 break;
-            sb.append((char) c);
+            sb.append(c);
             c = text.next();
         }
         breaks[0] = true;
