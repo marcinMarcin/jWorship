@@ -82,13 +82,13 @@ public class Song implements Serializable, ObjectInputValidation {
             int i;
             while ((i = r.read()) > 0) {
                 if (i == '@') {
-                    s.addPotentionalVerse(sb);
+                    s.addPotentialVerse(sb);
                     sb.setLength(0);
                     continue;
                 }
                 sb.append((char) i);
             }
-            s.addPotentionalVerse(sb);
+            s.addPotentialVerse(sb);
         } finally {
             r.close();
         }
@@ -98,7 +98,7 @@ public class Song implements Serializable, ObjectInputValidation {
     /**
      * @param s
      */
-    void addPotentionalVerse(String s) {
+    void addPotentialVerse(String s) {
         if (s.equals(""))
             return;
         verses.add(s);
@@ -107,9 +107,9 @@ public class Song implements Serializable, ObjectInputValidation {
     /**
      * @param sb
      */
-    private void addPotentionalVerse(StringBuffer sb) {
+    private void addPotentialVerse(StringBuffer sb) {
         String s = sb.toString().trim();
-        addPotentionalVerse(s);
+        addPotentialVerse(s);
     }
 
     public String getPlainText() {
@@ -130,10 +130,10 @@ public class Song implements Serializable, ObjectInputValidation {
         while (true) {
             int j = text.indexOf("\n@", i);
             if (j < 0) {
-                addPotentionalVerse(text.substring(i));
+                addPotentialVerse(text.substring(i));
                 break;
             }
-            addPotentionalVerse(text.substring(i, j));
+            addPotentialVerse(text.substring(i, j));
             i = j + 2;
         }
         searchInfo = null;

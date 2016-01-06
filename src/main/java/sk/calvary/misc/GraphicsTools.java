@@ -33,7 +33,7 @@ public class GraphicsTools {
         double rw = r.getWidth();
         double rh = r.getHeight();
 
-        boolean vertical = false;
+        boolean vertical;
         if (rw / rh > (double) iw / ih) {
             vertical = fill;
         } else {
@@ -75,7 +75,7 @@ public class GraphicsTools {
         double rw = r.getWidth();
         double rh = r.getHeight();
 
-        boolean vertical = false;
+        boolean vertical;
         if (rw / rh > iw / ih) {
             vertical = fill;
         } else {

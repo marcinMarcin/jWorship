@@ -277,6 +277,7 @@ public class Lang {
     }
 
     public String defaultReplaceLang(String lang) {
+        //TODO create enum
         String replace = "en";
 
         if (lang.equals("cz"))

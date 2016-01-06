@@ -50,7 +50,6 @@ public class SongConverter extends JFrame {
     private void initialize() {
         this.setContentPane(getJContentPane());
         this.setSize(330, 170);
-
     }
 
     /**

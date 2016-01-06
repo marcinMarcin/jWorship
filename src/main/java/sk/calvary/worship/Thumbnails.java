@@ -30,7 +30,7 @@ public class Thumbnails {
     private final int maxWidth;
     private final int maxHeight;
     private final Vector<File> todo = new Vector<File>();
-    private final boolean immediateLoadThunbnail = false;
+    private final boolean immediateLoadThumbnail = false;
     private final Thread generator;
 
     public Thumbnails(ImageLoader imageLoader, int maxWidth, int maxHeight) {
@@ -75,7 +75,7 @@ public class Thumbnails {
             Image th = null;
 
             // skusime nacitat uz vygenerovany
-            if (!immediateLoadThunbnail) {
+            if (!immediateLoadThumbnail) {
                 th = readThumbnail(f);
             }
 
@@ -136,7 +136,7 @@ public class Thumbnails {
             addToRecent(i);
             return i;
         }
-        if (immediateLoadThunbnail) {
+        if (immediateLoadThumbnail) {
             i = readThumbnail(f);
             if (i != null) {
                 cache.put(f, new SoftReference<Image>(i));

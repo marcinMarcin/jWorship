@@ -246,12 +246,12 @@ public class ScreenViewJogl extends GLCanvas implements ScreenView,
                 (byte) 0xc0, 0x00, (byte) 0xc0, 0x00, (byte) 0xff, (byte) 0xc0,
                 (byte) 0xff, (byte) 0xc0};
 
-        gl.glShadeModel(gl.GL_FLAT);
+        gl.glShadeModel(GL.GL_FLAT);
         // gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, new float[] {
         // 0, 0, 0, 0 }, 0);
         // gl.glMaterialfv(GL.GL_FRONT, GL.GL_EMISSION,
         // new float[] { 1, 1, 1, 1 }, 0);
-        gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1);
+        gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
         gl.glColor3f(1.0f, 0.0f, 1.0f);
         gl.glRasterPos3f(-8, 4, 0);
         // gl.glBitmap(0, 0, 0.0f, 0.0f, -200, 0.0f, null, 0);

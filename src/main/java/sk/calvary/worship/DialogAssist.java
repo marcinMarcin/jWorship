@@ -43,7 +43,7 @@ public class DialogAssist implements PropertyChangeListener {
         if (component instanceof JTextComponent)
             return ((JTextComponent) component).getText();
         if (component instanceof AbstractButton)
-            return Boolean.valueOf(((AbstractButton) component).isSelected());
+            return ((AbstractButton) component).isSelected();
         if (component instanceof FloatSlider)
             return ((FloatSlider) component).getFValue();
         if (component instanceof JComboBox)

@@ -481,10 +481,9 @@ public class App extends JFrame implements ActionListener {
         Transition old = this.currentTransition;
         this.currentTransition = transition;
 
-        for (int i = 0; i < liveScreens.length; i++) {
-            ScreenView s = liveScreens[i];
-            if (s != null)
-                s.setTransition(currentTransition);
+        for (ScreenView screenView : liveScreens) {
+            if (screenView != null)
+                screenView.setTransition(currentTransition);
         }
 
         firePropertyChange("currentTransition", old, this.currentTransition);
@@ -687,10 +686,9 @@ public class App extends JFrame implements ActionListener {
                     .setMaxFrameRate(isFullScreen ? 4 : 0);
         }
 
-        for (int i = 0; i < liveScreens.length; i++) {
-            ScreenView s = liveScreens[i];
-            if (s != null)
-                s.setScreen(screenLive);
+        for (ScreenView screenView : liveScreens) {
+            if (screenView != null)
+                screenView.setScreen(screenLive);
         }
 
         if (immediateFullScreen && liveScreens[SCREEN_FULLSCREEN_MY] == null)
@@ -978,7 +976,7 @@ public class App extends JFrame implements ActionListener {
     }
 
     /**
-     * initalizing done in event quewe
+     * initializing done in event quewe
      */
     void initializeEQ() {
         if (autoInitProjector && isDoubleScreen()) {
