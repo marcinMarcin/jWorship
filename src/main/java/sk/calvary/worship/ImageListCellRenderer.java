@@ -13,13 +13,9 @@ import java.io.File;
 
 public class ImageListCellRenderer extends DefaultListCellRenderer {
     private static final long serialVersionUID = -9063091792011363300L;
-
-    JLabel jLabelImage = new JLabel();
-
-    JPanel jPanel = new JPanel();
-
     private final App app;
-
+    JLabel jLabelImage = new JLabel();
+    JPanel jPanel = new JPanel();
     Font myFont = Font.decode("Arial-PLAIN-10");
 
     public ImageListCellRenderer(App app) {
@@ -36,6 +32,18 @@ public class ImageListCellRenderer extends DefaultListCellRenderer {
         jLabelImage.setHorizontalAlignment(SwingConstants.CENTER);
 
         jPanel.setBorder(new EtchedBorder());
+    }
+
+    public static String getMedia(Object value) {
+        if (value instanceof File) {
+            File f = (File) value;
+            return f.toString();
+        }
+        if (value instanceof Bookmark) {
+            Bookmark b = (Bookmark) value;
+            return (String) b.getValue();
+        }
+        return null;
     }
 
     public Component getListCellRendererComponent(JList list, Object value,
@@ -56,17 +64,5 @@ public class ImageListCellRenderer extends DefaultListCellRenderer {
         jPanel.setBackground(getBackground());
 
         return jPanel;
-    }
-
-    public static String getMedia(Object value) {
-        if (value instanceof File) {
-            File f = (File) value;
-            return f.toString();
-        }
-        if (value instanceof Bookmark) {
-            Bookmark b = (Bookmark) value;
-            return (String) b.getValue();
-        }
-        return null;
     }
 }

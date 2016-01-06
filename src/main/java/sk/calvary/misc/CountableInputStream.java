@@ -14,14 +14,11 @@ import java.net.URLConnection;
 
 public class CountableInputStream extends InputStream {
 
-    private InputStream in = null;
-
     public String name = "";
-
     //
     public long length = -1;
-
     public long read = 0;
+    private InputStream in = null;
 
     //
     public CountableInputStream(InputStream is) throws IOException {

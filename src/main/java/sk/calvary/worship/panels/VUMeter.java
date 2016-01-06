@@ -11,6 +11,8 @@ import java.awt.*;
 
 public class VUMeter extends JComponent {
     private static final long serialVersionUID = 189919284563640827L;
+    private final Object lock = new Object();
+    private float values[] = new float[1];
 
     public VUMeter() {
         Dimension d = new Dimension(15, 50);
@@ -18,10 +20,6 @@ public class VUMeter extends JComponent {
         setPreferredSize(d);
         setCurrentVolume(new float[]{0.3f, 0.9f});
     }
-
-    private float values[] = new float[1];
-
-    private final Object lock = new Object();
 
     public void setCurrentVolume(float[] v) {
         synchronized (lock) {

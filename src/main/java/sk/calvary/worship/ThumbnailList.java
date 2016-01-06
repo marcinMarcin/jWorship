@@ -15,24 +15,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class ThumbnailList extends JList {
-    private final class MyListener implements PropertyChangeListener,
-            ListSelectionListener {
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (selector instanceof DirBrowser)
-                if (evt.getPropertyName().equals("selectedFiles")) {
-                    updateContent();
-                }
-        }
-
-        public void valueChanged(ListSelectionEvent e) {
-            updateContent();
-        }
-    }
-
     private static final long serialVersionUID = -3877050415800945471L;
-
+    public final ObjectListModel files = new ObjectListModel();
     private final App app;
-
+    public Bookmarks<?> selectedBookmarks;
+    MyListener listener = new MyListener();
     private Object selector;
 
     public ThumbnailList() {
@@ -49,8 +36,6 @@ public class ThumbnailList extends JList {
             setPrototypeCellValue(app.getDirPictures());
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-
-    MyListener listener = new MyListener();
 
     public void updateContent() {
         selectedBookmarks = null;
@@ -104,10 +89,6 @@ public class ThumbnailList extends JList {
         throw new IllegalArgumentException();
     }
 
-    public final ObjectListModel files = new ObjectListModel();
-
-    public Bookmarks<?> selectedBookmarks;
-
     public String getSelectedMedia() {
         return ImageListCellRenderer.getMedia(getSelectedValue());
     }
@@ -128,5 +109,19 @@ public class ThumbnailList extends JList {
             }
         }
         return false;
+    }
+
+    private final class MyListener implements PropertyChangeListener,
+            ListSelectionListener {
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (selector instanceof DirBrowser)
+                if (evt.getPropertyName().equals("selectedFiles")) {
+                    updateContent();
+                }
+        }
+
+        public void valueChanged(ListSelectionEvent e) {
+            updateContent();
+        }
     }
 }

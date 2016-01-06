@@ -56,27 +56,6 @@ public class SearchInfo {
         return sb.toString();
     }
 
-    /**
-     * @param string
-     * @return
-     */
-    public boolean matchWord(String s) {
-        String w = " " + s;
-        if (title != null && title.indexOf(w) >= 0)
-            return true;
-        if (text != null && text.indexOf(w) >= 0)
-            return true;
-        return false;
-    }
-
-    public float match(String w, String nw) {
-        float titleR = match0(title, w, nw);
-        float textR = match0(text, w, nw);
-        if (titleR < 0 && textR < 0)
-            return -1;
-        return 3 * Math.max(titleR, 0) + Math.max(textR, 0);
-    }
-
     private static float match0(String text, String w, String nw) {
         int maxc = 5;
         int c1 = 0, c2 = 0;
@@ -104,5 +83,26 @@ public class SearchInfo {
         if (nw != null && text.indexOf(w + " " + nw) >= 0)
             res += 3;
         return res;
+    }
+
+    /**
+     * @param string
+     * @return
+     */
+    public boolean matchWord(String s) {
+        String w = " " + s;
+        if (title != null && title.indexOf(w) >= 0)
+            return true;
+        if (text != null && text.indexOf(w) >= 0)
+            return true;
+        return false;
+    }
+
+    public float match(String w, String nw) {
+        float titleR = match0(title, w, nw);
+        float textR = match0(text, w, nw);
+        if (titleR < 0 && textR < 0)
+            return -1;
+        return 3 * Math.max(titleR, 0) + Math.max(textR, 0);
     }
 }

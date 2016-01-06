@@ -20,19 +20,19 @@ public class Pair implements Serializable, Cloneable {
         this.right = right;
     }
 
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Pair))
-            return false;
-        Pair o = (Pair) obj;
-        return equals(this.left, o.left) && equals(this.right, o.right);
-    }
-
     private static boolean equals(Object o1, Object o2) {
         if (o1 == o2)
             return true;
         if (o1 == null || o2 == null)
             return false;
         return o1.equals(o2);
+    }
+
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Pair))
+            return false;
+        Pair o = (Pair) obj;
+        return equals(this.left, o.left) && equals(this.right, o.right);
     }
 
     public int hashCode() {

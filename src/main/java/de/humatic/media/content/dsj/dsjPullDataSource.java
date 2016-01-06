@@ -211,7 +211,7 @@ public class dsjPullDataSource extends PullBufferDataSource implements PullBuffe
         /** To use a specific capture device with specific format:**/
 
 		/*DSFilterInfo[][] devices = DSCapture.queryDevices();
-		devices[0][1].setPreferredFormat(6);
+        devices[0][1].setPreferredFormat(6);
 		dsfg = new DSCapture(flags, devices[0][1], false, null, null);*/
 
         System.out.println(dsfg.getInfo());

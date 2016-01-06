@@ -21,41 +21,27 @@ import java.util.Vector;
 
 public class Handler implements javax.media.Player, ControllerListener, BufferTransferHandler {
 
-    private DSFiltergraph dsfg;
-
+    protected final TimeBase defaultTimeBase = Manager.getSystemTimeBase();
+    protected final ThreadGroup handlerThreadGroup = new ThreadGroup("DSJ ThreadGroup");
     public Time duration;
-
     TimeBase tb;
-
     DataSource dataSrc;
-
     // a Player must always track its previous, current and target states.
     int previousState,
             currentState,
             targetState,
             currentMediaTime;
-
-    private javax.media.Time startLatency;
-
     boolean realizeCompleted,
             prefetchCompleted;
-
-    private float rateFactor;
-
     Thread realizer,
             prefetcher;
-
     Control[] controls;
-
     Vector controllerListeners; // vector of ControllerListeners
-
+    private DSFiltergraph dsfg;
+    private javax.media.Time startLatency;
+    private float rateFactor;
     private Buffer buffer;
-
     private java.awt.Component controlPanelComp;
-
-    protected final TimeBase defaultTimeBase = Manager.getSystemTimeBase();
-
-    protected final ThreadGroup handlerThreadGroup = new ThreadGroup("DSJ ThreadGroup");
 
     public Handler() {
 
@@ -335,12 +321,16 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
         return (this.targetState);
     }
 
+    void setTargetState(int state) {
+        this.targetState = state;
+    }
+
+    // prevents listener from retrieving events
+
     // causes events to be posted by the listener specified by listener
     public synchronized void addControllerListener(ControllerListener listener) {
         controllerListeners.addElement(listener);
     }
-
-    // prevents listener from retrieving events
 
     public synchronized void removeControllerListener(ControllerListener listener) {
         controllerListeners.removeElement(listener);
@@ -361,41 +351,43 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
         return startLatency;
     }
 
-
     public Control[] getControls() {
         return controls;
     }
-
 
     public Control getControl(String forName) {
         return null;
 
     }
 
-    // we don't support setting a new time base
-    // this would be required if we were to allow this handler to
-    // be a slave.
-    public void setTimeBase(TimeBase master) throws IncompatibleTimeBaseException {
-        throw new IncompatibleTimeBaseException();
-    }
-
-
     public void syncStart(Time tbTime) {
         return;
     }
-
-
-    public void setStopTime(Time t) {
-        return;
-    }
-
 
     public Time getStopTime() {
         return null;
     }
 
+    public void setStopTime(Time t) {
+        return;
+    }
+
     // changes the Player's mediatime
 
+    public void setPosAdvise(Time frequency) {
+        int advisefrequency = (int) frequency.getSeconds() * 1000;
+    }
+
+
+    // this method lets applications control how frequently the Player reports
+    // media time events.
+
+    // reports the current media time
+    public Time getMediaTime() {
+
+        Time curr = new Time((double) (currentMediaTime / 1000));
+        return (curr);
+    }
 
     public void setMediaTime(Time now) {
         // need to add code for managed controller's here........
@@ -403,21 +395,6 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
         // wait for thread to complete......
         System.out.println("Setting media time.......");
 
-    }
-
-
-    // this method lets applications control how frequently the Player reports
-    // media time events.
-
-    public void setPosAdvise(Time frequency) {
-        int advisefrequency = (int) frequency.getSeconds() * 1000;
-    }
-
-    // reports the current media time
-    public Time getMediaTime() {
-
-        Time curr = new Time((double) (currentMediaTime / 1000));
-        return (curr);
     }
 
     // returns the current time in nano-seconds
@@ -442,14 +419,16 @@ public class Handler implements javax.media.Player, ControllerListener, BufferTr
         return tb;
     }
 
+    // we don't support setting a new time base
+    // this would be required if we were to allow this handler to
+    // be a slave.
+    public void setTimeBase(TimeBase master) throws IncompatibleTimeBaseException {
+        throw new IncompatibleTimeBaseException();
+    }
+
     void setCurrentState(int state) {
         this.currentState = state;
     }
-
-    void setTargetState(int state) {
-        this.targetState = state;
-    }
-
 
     void setPreviousState(int state) {
         this.previousState = state;

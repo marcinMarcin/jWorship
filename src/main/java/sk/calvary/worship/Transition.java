@@ -17,17 +17,12 @@ import java.awt.*;
  *         Preferences - Java - Code Style - Code Templates
  */
 public abstract class Transition extends Freezable {
-    private ScreenView view;
-
-    private Dimension size;
-
-    private float scale = 1;
-
-    private Screen previousScreen;
-
-    private Screen nextScreen;
-
     double duration = 1.0;
+    private ScreenView view;
+    private Dimension size;
+    private float scale = 1;
+    private Screen previousScreen;
+    private Screen nextScreen;
 
     public void init(ScreenView view, Dimension size, float targetScale,
                      Screen previous, Screen next) {
@@ -74,6 +69,14 @@ public abstract class Transition extends Freezable {
         return duration;
     }
 
+    /**
+     * @param duration The duration to set.
+     */
+    public void setDuration(double duration) {
+        checkFreeze();
+        this.duration = duration;
+    }
+
     public abstract void prepare();
 
     public abstract void paint(float pos, Graphics2D g);
@@ -100,13 +103,5 @@ public abstract class Transition extends Freezable {
 
     public String toString() {
         return getClass().getName() + " " + duration + " sec";
-    }
-
-    /**
-     * @param duration The duration to set.
-     */
-    public void setDuration(double duration) {
-        checkFreeze();
-        this.duration = duration;
     }
 }

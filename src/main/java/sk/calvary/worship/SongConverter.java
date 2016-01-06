@@ -38,6 +38,10 @@ public class SongConverter extends JFrame {
         initialize();
     }
 
+    public static void main(String[] args) {
+        new SongConverter().setVisible(true);
+    }
+
     /**
      * This method initializes this
      *
@@ -168,9 +172,5 @@ public class SongConverter extends JFrame {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        new SongConverter().setVisible(true);
     }
 } // @jve:decl-index=0:visual-constraint="10,10"

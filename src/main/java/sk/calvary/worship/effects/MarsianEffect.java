@@ -23,9 +23,8 @@ public class MarsianEffect implements Effect {
     double[] cosTable;
 
     double[] rateTable;
-
+    int rowBuf[], rowBuf2[], rowBuf3[];
     private int count = 0;
-
     private int num;
 
     public MarsianEffect() {
@@ -103,8 +102,6 @@ public class MarsianEffect implements Effect {
         //System.out.println("final outputformat = " + outputFormat);
         return outputFormat;
     }
-
-    int rowBuf[], rowBuf2[], rowBuf3[];
 
     public int process(Buffer inBuffer, Buffer outBuffer) {
         int outputDataLength = ((VideoFormat) outputFormat).getMaxDataLength();

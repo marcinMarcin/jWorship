@@ -27,6 +27,23 @@ public class FloatSlider extends JSlider {
 
     boolean aligning = false;
 
+    public FloatSlider() {
+        super();
+        init();
+    }
+
+    public FloatSlider(int orientation) {
+        super(orientation);
+        init();
+    }
+
+    public FloatSlider(int orientation, float min, float max) {
+        super(orientation);
+        setFMin(min);
+        setFMax(max);
+        init();
+    }
+
     void init() {
         internalUpdate();
         addChangeListener(new ChangeListener() {
@@ -51,23 +68,6 @@ public class FloatSlider extends JSlider {
         setMaximum(10000);
         if (fMin < fMax)
             setValue((int) ((fValue - fMin) / (fMax - fMin) * 10000));
-    }
-
-    public FloatSlider() {
-        super();
-        init();
-    }
-
-    public FloatSlider(int orientation) {
-        super(orientation);
-        init();
-    }
-
-    public FloatSlider(int orientation, float min, float max) {
-        super(orientation);
-        setFMin(min);
-        setFMax(max);
-        init();
     }
 
     public float getFMax() {

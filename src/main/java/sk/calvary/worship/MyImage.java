@@ -19,6 +19,8 @@ import java.util.Vector;
 
 public class MyImage extends BufferedImage {
 
+    final Vector<NewFrameListener> newFrameListeners = new Vector<NewFrameListener>();
+
     public MyImage(int width, int height) {
         super(ColorModel.getRGBdefault(), new MyRaster(width, height,
                 GL.GL_RGBA), false, null);
@@ -63,43 +65,8 @@ public class MyImage extends BufferedImage {
                 DataBuffer.TYPE_BYTE);
     }
 
-    public static class MyRaster extends WritableRaster {
-        private int glType;
-
-        public MyRaster(int width, int height, int glType) {
-            this(width, height, glType, null);
-        }
-
-        public MyRaster(int width, int height, int glType, byte data[]) {
-            this(width, height, glType, pixelStride(glType), data);
-        }
-
-        private MyRaster(int width, int height, int glType, int pixelStride,
-                         byte data[]) {
-            super(new PixelInterleavedSampleModel(DataBuffer.TYPE_BYTE, width,
-                            height, pixelStride, pixelStride * width,
-                            bandOffsets(glType)), new DataBufferByte(
-                            data != null ? data : (data = new byte[width * height
-                                    * pixelStride]), width * height * pixelStride, 0),
-                    new Point(0, 0));
-            this.data = data;
-            this.glType = glType;
-            this.buffer = ByteBuffer.wrap(this.data);
-        }
-
-        byte data[];
-
-        ByteBuffer buffer;
-    }
-
     public void dispose() {
     }
-
-    public static interface NewFrameListener {
-        void newFrame(MyImage i);
-    }
-
-    final Vector<NewFrameListener> newFrameListeners = new Vector<NewFrameListener>();
 
     public void addNewFrameListener(NewFrameListener l) {
         synchronized (newFrameListeners) {
@@ -135,5 +102,36 @@ public class MyImage extends BufferedImage {
 
     public Buffer getBuffer() {
         return raster().buffer;
+    }
+
+    public static interface NewFrameListener {
+        void newFrame(MyImage i);
+    }
+
+    public static class MyRaster extends WritableRaster {
+        byte data[];
+        ByteBuffer buffer;
+        private int glType;
+
+        public MyRaster(int width, int height, int glType) {
+            this(width, height, glType, null);
+        }
+
+        public MyRaster(int width, int height, int glType, byte data[]) {
+            this(width, height, glType, pixelStride(glType), data);
+        }
+
+        private MyRaster(int width, int height, int glType, int pixelStride,
+                         byte data[]) {
+            super(new PixelInterleavedSampleModel(DataBuffer.TYPE_BYTE, width,
+                            height, pixelStride, pixelStride * width,
+                            bandOffsets(glType)), new DataBufferByte(
+                            data != null ? data : (data = new byte[width * height
+                                    * pixelStride]), width * height * pixelStride, 0),
+                    new Point(0, 0));
+            this.data = data;
+            this.glType = glType;
+            this.buffer = ByteBuffer.wrap(this.data);
+        }
     }
 }

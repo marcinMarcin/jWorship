@@ -39,34 +39,20 @@ public final class Screen extends Freezable implements Cloneable {
     // public static final int BACKGROUND_POSITION = 4;
     //
     // public static final int TEXT_POSITION = 8;
-
-    private transient App app;
-
+    public static final int ALIGN_LEFT = 0;
+    public static final int ALIGN_CENTER = 1;
+    public static final int ALIGN_RIGHT = 2;
+    public static final int PART_ALL = 0;
+    public static final int PART_TOP = 1;
+    public static final int PART_BOTTOM = 2;
+    public static final int PART_TOP_2THIRDS = 3;
     private transient final PropertyChangeSupport changeSupport = new PropertyChangeSupport(
             this);
-
+    private transient App app;
     private float height = 0.75f; // width=1
-
     private float fontHeight = 0.1f;
-
     private float textHeight = 0.9f;
-
     private float textWidth = 0.9f;
-
-    public static final int ALIGN_LEFT = 0;
-
-    public static final int ALIGN_CENTER = 1;
-
-    public static final int ALIGN_RIGHT = 2;
-
-    public static final int PART_ALL = 0;
-
-    public static final int PART_TOP = 1;
-
-    public static final int PART_BOTTOM = 2;
-
-    public static final int PART_TOP_2THIRDS = 3;
-
     private int textAlign = ALIGN_CENTER;
 
     private int textAreaPart = PART_ALL;
@@ -228,7 +214,7 @@ public final class Screen extends Freezable implements Cloneable {
 
             y += tl.getDescent();
         }
-		/*
+        /*
 		 * LineBreakMeasurer measurer = new LineBreakMeasurer(as.getIterator(),
 		 * g .getFontRenderContext()); float y = 0; while
 		 * (measurer.getPosition() < t.length()) {
@@ -323,14 +309,6 @@ public final class Screen extends Freezable implements Cloneable {
         return o;
     }
 
-    /**
-     * @param v
-     */
-    public void setText(AttributedString v) {
-        checkFreeze();
-        text = v;
-    }
-
     public Screen getFrozenInstance() {
         if (frozen)
             return this;
@@ -362,6 +340,14 @@ public final class Screen extends Freezable implements Cloneable {
 
     public AttributedString getText() {
         return text;
+    }
+
+    /**
+     * @param v
+     */
+    public void setText(AttributedString v) {
+        checkFreeze();
+        text = v;
     }
 
     public float getTextHeight() {

@@ -20,31 +20,16 @@ import java.awt.image.WritableRaster;
 import java.util.Vector;
 
 public class Video2Image implements ControllerListener {
-    private MediaLocator mediaLocator;
-
-    private DataSource dataSource;
-
-    private Processor p;
-
-    private BufferedImage image;
-
+    final Renderer renderer = new MyRenderer();
     private final Vector<Video2ImageListener> listeners = new Vector<Video2ImageListener>();
-
+    private MediaLocator mediaLocator;
+    private DataSource dataSource;
+    private Processor p;
+    private BufferedImage image;
     private Effect effects[];
-
     private Format configureFormat;
-
     private String errorMessage = "";
-
     private Object tag;
-
-    public synchronized void addVideo2ImageListener(Video2ImageListener l) {
-        listeners.add(l);
-    }
-
-    public synchronized void removeVideo2ImageListener(Video2ImageListener l) {
-        listeners.remove(l);
-    }
 
     public Video2Image(MediaLocator ml) {
         mediaLocator = ml;
@@ -63,6 +48,14 @@ public class Video2Image implements ControllerListener {
                 return supported[i];
         }
         return null;
+    }
+
+    public synchronized void addVideo2ImageListener(Video2ImageListener l) {
+        listeners.add(l);
+    }
+
+    public synchronized void removeVideo2ImageListener(Video2ImageListener l) {
+        listeners.remove(l);
     }
 
     public void open() {
@@ -226,21 +219,62 @@ public class Video2Image implements ControllerListener {
         }
     }
 
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    synchronized void sendNewFrame() {
+        for (Video2ImageListener l : listeners) {
+            l.newFrame(this);
+        }
+    }
+
+    public Effect[] getEffects() {
+        return effects;
+    }
+
+    public void setEffects(Effect[] effects) {
+        this.effects = effects;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public Object getTag() {
+        return tag;
+    }
+
+    public void setTag(Object tag) {
+        this.tag = tag;
+    }
+
+    public void close() {
+        p.close();
+    }
+
+    public boolean isError() {
+        return !"".equals(errorMessage);
+    }
+
+    public Format getConfigureFormat() {
+        return configureFormat;
+    }
+
+    public void setConfigureFormat(Format configureFormat) {
+        this.configureFormat = configureFormat;
+    }
+
     class MyRenderer implements VideoRenderer {
         private static final String name = "Video2Image";
 
         protected Format[] supportedFormats;
-
-        private RGBFormat supportedRGB;
-
         protected RGBFormat inputFormat;
-
         protected int inHeight = 0;
-
         protected int inWidth = 0;
-
         protected boolean started = false;
-
+        int rowBuffer[];
+        private RGBFormat supportedRGB;
         private WritableRaster raster;
 
         public MyRenderer() {
@@ -259,11 +293,11 @@ public class Video2Image implements ControllerListener {
             return false;
         }
 
-        public void setBounds(Rectangle arg0) {
-        }
-
         public Rectangle getBounds() {
             return null;
+        }
+
+        public void setBounds(Rectangle arg0) {
         }
 
         public Format[] getSupportedInputFormats() {
@@ -293,8 +327,6 @@ public class Video2Image implements ControllerListener {
         public void stop() {
             started = false;
         }
-
-        int rowBuffer[];
 
         public int process(Buffer buffer) {
             if (image == null || image.getWidth() != inWidth
@@ -360,53 +392,5 @@ public class Video2Image implements ControllerListener {
         public Object getControl(String arg0) {
             return null;
         }
-    }
-
-    final Renderer renderer = new MyRenderer();
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    synchronized void sendNewFrame() {
-        for (Video2ImageListener l : listeners) {
-            l.newFrame(this);
-        }
-    }
-
-    public Effect[] getEffects() {
-        return effects;
-    }
-
-    public void setEffects(Effect[] effects) {
-        this.effects = effects;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public Object getTag() {
-        return tag;
-    }
-
-    public void setTag(Object tag) {
-        this.tag = tag;
-    }
-
-    public void close() {
-        p.close();
-    }
-
-    public boolean isError() {
-        return !"".equals(errorMessage);
-    }
-
-    public Format getConfigureFormat() {
-        return configureFormat;
-    }
-
-    public void setConfigureFormat(Format configureFormat) {
-        this.configureFormat = configureFormat;
     }
 }

@@ -4,37 +4,31 @@ import javax.media.*;
 import javax.media.format.AudioFormat;
 
 public class VolumeEffect implements Effect {
-    int maxSample[] = new int[2];
-
     /**
      * The effect name *
      */
     private static String EffectName = "GainEffect";
-
     /**
      * chosen input Format *
      */
     protected AudioFormat inputFormat;
-
     /**
      * chosen output Format *
      */
     protected AudioFormat outputFormat;
-
     /**
      * supported input Formats *
      */
     protected Format[] supportedInputFormats = new Format[0];
-
     /**
      * supported output Formats *
      */
     protected Format[] supportedOutputFormats = new Format[0];
-
     /**
      * selected Gain *
      */
     protected float gain = 1F;
+    int maxSample[] = new int[2];
 
     /**
      * initialize the formats

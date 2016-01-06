@@ -76,6 +76,28 @@ public class ObjectPropertyTableModel extends
     }
 
     /**
+     * Insert the method's description here. Creation date: (31.3.2004 16:37:53)
+     *
+     * @param newColumnsAsString java.lang.String
+     */
+    public synchronized void setColumnsAsString(
+            java.lang.String newColumnsAsString) {
+        newColumnsAsString = newColumnsAsString.replace(',', ' ');
+        columnsAsString = newColumnsAsString;
+
+        Vector v = new Vector();
+        StringTokenizer st = new StringTokenizer(columnsAsString);
+        while (st.hasMoreTokens()) {
+            v.addElement(st.nextToken());
+        }
+
+        columns = new String[v.size()];
+        v.copyInto(columns);
+
+        fireTableStructureChanged();
+    }
+
+    /**
      * getRowCount method comment.
      */
     public int getRowCount() {
@@ -113,28 +135,6 @@ public class ObjectPropertyTableModel extends
      */
     public void intervalRemoved(javax.swing.event.ListDataEvent e) {
         setObjects((ListModel) e.getSource());
-    }
-
-    /**
-     * Insert the method's description here. Creation date: (31.3.2004 16:37:53)
-     *
-     * @param newColumnsAsString java.lang.String
-     */
-    public synchronized void setColumnsAsString(
-            java.lang.String newColumnsAsString) {
-        newColumnsAsString = newColumnsAsString.replace(',', ' ');
-        columnsAsString = newColumnsAsString;
-
-        Vector v = new Vector();
-        StringTokenizer st = new StringTokenizer(columnsAsString);
-        while (st.hasMoreTokens()) {
-            v.addElement(st.nextToken());
-        }
-
-        columns = new String[v.size()];
-        v.copyInto(columns);
-
-        fireTableStructureChanged();
     }
 
     /**

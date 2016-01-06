@@ -27,9 +27,12 @@ import java.util.Vector;
  */
 public class ListPropertyTableModel extends AbstractTableModel {
     private static final long serialVersionUID = -5852131851499438176L;
-
+    static SimpleDateFormat csvDateFormat = new SimpleDateFormat(
+            "yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
     ProxyListModel proxyList;
     Class<?> rowClass;
+    String columns[] = new String[0];
+    String columnsAsString = "";
 
     public ListPropertyTableModel(ListModel list) {
         proxyList = new ProxyListModel(list);
@@ -57,7 +60,7 @@ public class ListPropertyTableModel extends AbstractTableModel {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.table.TableModel#getColumnCount()
      */
     public int getColumnCount() {
@@ -66,7 +69,7 @@ public class ListPropertyTableModel extends AbstractTableModel {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.table.AbstractTableModel#getColumnName(int)
      */
     public String getColumnName(int column) {
@@ -75,7 +78,7 @@ public class ListPropertyTableModel extends AbstractTableModel {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.table.TableModel#getRowCount()
      */
     public int getRowCount() {
@@ -84,7 +87,7 @@ public class ListPropertyTableModel extends AbstractTableModel {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.table.TableModel#getValueAt(int, int)
      */
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -96,10 +99,6 @@ public class ListPropertyTableModel extends AbstractTableModel {
             return null;
         }
     }
-
-    String columns[] = new String[0];
-
-    String columnsAsString = "";
 
     public Object getElementAt(int rowIndex) {
         return proxyList.getElementAt(rowIndex);
@@ -136,9 +135,6 @@ public class ListPropertyTableModel extends AbstractTableModel {
 
         fireTableStructureChanged();
     }
-
-    static SimpleDateFormat csvDateFormat = new SimpleDateFormat(
-            "yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
 
     public String csvString(boolean columnNames) {
         StringBuffer sb = new StringBuffer();

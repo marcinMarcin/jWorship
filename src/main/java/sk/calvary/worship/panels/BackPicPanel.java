@@ -21,17 +21,10 @@ import java.awt.event.MouseEvent;
  */
 public class BackPicPanel extends AppPanel {
     private static final long serialVersionUID = 5111069517158426699L;
-
-    public final Action actionRemovePic = new MyAction(this, app.ls(1037), null,
-            KeyStroke.getKeyStroke("DELETE")) {
-        private static final long serialVersionUID = 1637304553286228016L;
-
-        public void actionPerformed(ActionEvent e) {
-            removePic();
-        }
-
-    }; // @jve:decl-index=0:
-
+    private final DialogAssist daScreen = new DialogAssist(); // @jve:decl-index=0:
+    private DirBrowser dirBrowser = null;
+    private JScrollPane jScrollPane = null;
+    private ThumbnailList thumbnailList = null;
     public final Action actionBookmarkPic = new MyAction(this, app.ls(1038), null,
             KeyStroke.getKeyStroke("ctrl B")) {
         private static final long serialVersionUID = -1407583743912564851L;
@@ -41,7 +34,6 @@ public class BackPicPanel extends AppPanel {
         }
 
     }; // @jve:decl-index=0:
-
     public final Action actionHistoryPic = new MyAction(this, app.ls(1039), null,
             KeyStroke.getKeyStroke("ctrl H")) {
         private static final long serialVersionUID = -6305234775374608370L;
@@ -51,21 +43,53 @@ public class BackPicPanel extends AppPanel {
         }
 
     }; // @jve:decl-index=0:
-
-    public final Action actionRemoveBookmarks = new MyAction(this, app.ls(1040), null, null) {
-        private static final long serialVersionUID = 1823815217552737074L;
+    public final Action actionRemovePic = new MyAction(this, app.ls(1037), null,
+            KeyStroke.getKeyStroke("DELETE")) {
+        private static final long serialVersionUID = 1637304553286228016L;
 
         public void actionPerformed(ActionEvent e) {
-            PictureBookmarks b = (PictureBookmarks) getJListPictureBookmarks()
-                    .getSelectedValue();
-            if (b == null)
-                return;
-            if (JOptionPane.showConfirmDialog(BackPicPanel.this, app.ls(1041)) == JOptionPane.OK_OPTION) {
-                app.getPictureBookmarksList().remove(b);
+            removePic();
+        }
+
+    }; // @jve:decl-index=0:
+    private JPanel jPanel = null;
+    private JButton jButton = null;
+    private FormatButton formatButton = null;
+    private JPanel jPanel1 = null;
+    private JPanel jPanel2 = null;
+    private ClickButton clickButton = null;
+    private ClickButton clickButton1 = null;
+    private JTabbedPane jTabbedPane = null;
+    private JPanel jPanel3 = null;
+    private JPanel jPanel4 = null;
+    private JPanel jPanel5 = null;
+    private JScrollPane jScrollPane1 = null;
+    private JList jListPictureBookmarks = null;
+    public final Action actionAddBookmarks = new MyAction(this, app.ls(1044),
+            null, null) {
+        private static final long serialVersionUID = 6655503401860183564L;
+
+        public void actionPerformed(ActionEvent e) {
+            String s = JOptionPane.showInputDialog(BackPicPanel.this, app.ls(1030) + ":",
+                    app.ls(1044));
+            if (s != null && !s.isEmpty()) {
+                PictureBookmarks b = app.getPictureBookmarksList()
+                        .addNewBookmarks(s);
+                getJListPictureBookmarks().setSelectedValue(b, true);
             }
         }
     }; // @jve:decl-index=0:
+    public final Action actionSelectBookmarks = new MyAction(this, app.ls(1043), null, null) {
+        private static final long serialVersionUID = 285881004414684182L;
 
+        public void actionPerformed(ActionEvent e) {
+            PictureBookmarks b = (PictureBookmarks) getJListPictureBookmarks().getSelectedValue();
+            if (b == null)
+                return;
+            app.getPictureBookmarksList().setSelectedForAdd(b);
+            getJListPictureBookmarks().repaint();
+        }
+    }; // @jve:decl-index=0:
     public final Action actionRenameBookmarks = new MyAction(this, app.ls(1042), null, null) {
         private static final long serialVersionUID = -4877382953894655110L;
 
@@ -81,68 +105,19 @@ public class BackPicPanel extends AppPanel {
             }
         }
     }; // @jve:decl-index=0:
-
-    public final Action actionSelectBookmarks = new MyAction(this, app.ls(1043), null, null) {
-        private static final long serialVersionUID = 285881004414684182L;
+    public final Action actionRemoveBookmarks = new MyAction(this, app.ls(1040), null, null) {
+        private static final long serialVersionUID = 1823815217552737074L;
 
         public void actionPerformed(ActionEvent e) {
-            PictureBookmarks b = (PictureBookmarks) getJListPictureBookmarks().getSelectedValue();
+            PictureBookmarks b = (PictureBookmarks) getJListPictureBookmarks()
+                    .getSelectedValue();
             if (b == null)
                 return;
-            app.getPictureBookmarksList().setSelectedForAdd(b);
-            getJListPictureBookmarks().repaint();
-        }
-    }; // @jve:decl-index=0:
-
-    public final Action actionAddBookmarks = new MyAction(this, app.ls(1044),
-            null, null) {
-        private static final long serialVersionUID = 6655503401860183564L;
-
-        public void actionPerformed(ActionEvent e) {
-            String s = JOptionPane.showInputDialog(BackPicPanel.this, app.ls(1030) + ":",
-                    app.ls(1044));
-            if (s != null && !s.isEmpty()) {
-                PictureBookmarks b = app.getPictureBookmarksList()
-                        .addNewBookmarks(s);
-                getJListPictureBookmarks().setSelectedValue(b, true);
+            if (JOptionPane.showConfirmDialog(BackPicPanel.this, app.ls(1041)) == JOptionPane.OK_OPTION) {
+                app.getPictureBookmarksList().remove(b);
             }
         }
     }; // @jve:decl-index=0:
-
-    private final DialogAssist daScreen = new DialogAssist(); // @jve:decl-index=0:
-
-    private DirBrowser dirBrowser = null;
-
-    private JScrollPane jScrollPane = null;
-
-    private ThumbnailList thumbnailList = null;
-
-    private JPanel jPanel = null;
-
-    private JButton jButton = null;
-
-    private FormatButton formatButton = null;
-
-    private JPanel jPanel1 = null;
-
-    private JPanel jPanel2 = null;
-
-    private ClickButton clickButton = null;
-
-    private ClickButton clickButton1 = null;
-
-    private JTabbedPane jTabbedPane = null;
-
-    private JPanel jPanel3 = null;
-
-    private JPanel jPanel4 = null;
-
-    private JPanel jPanel5 = null;
-
-    private JScrollPane jScrollPane1 = null;
-
-    private JList jListPictureBookmarks = null;
-
     private ClickButton clickButton2 = null;
 
     private ClickButton clickButton21 = null;

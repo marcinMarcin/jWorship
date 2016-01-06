@@ -27,14 +27,33 @@ import java.util.TimerTask;
 //import com.jogamp.opengl.GL;
 
 public class MultimediaChannel extends JPanel implements PropertyChangeListener {
+    static final int STATE_CLOSED = 1;
+    static final int STATE_OPENING = 2;
+    static final int STATE_OPENED = 3;
+    static final int STATE_PREPARED = 4;
+    static final int STATE_LIVE = 5;
     final String media;
-
-    private volatile DSFiltergraph dsfg;
-
-    private volatile MyImage image;
-
+    private final MultimediaPanel panel;
+    private final App app;
     boolean positionAligning = false;
-
+    ImageIcon iconClosed = icon("mediaClosed.png");
+    ImageIcon iconOpening = icon("mediaOpening.png");
+    ImageIcon iconOpened = icon("mediaOpened.png");
+    ImageIcon iconPrepared = icon("mediaPrepared.png");
+    ImageIcon iconLive = icon("mediaLive.png");
+    ImageIcon iconPlay = icon("play.png");
+    ImageIcon iconPause = icon("pause.png");
+    private volatile DSFiltergraph dsfg;
+    private volatile MyImage image;
+    private ClickButton stateButton = null;
+    private MultimediaChannel.VideoComponent videoComponent = null;
+    private JPanel jPanel = null;
+    private ClickButton clickButtonOpen = null;
+    private JPanel jPanel1 = null;
+    private ClickButton clickButtonClose = null;
+    private JPanel jPanel2 = null;
+    private ClickButton clickButtonPlay = null;
+    private FloatSlider sliderPosition = null;
     private final Refresher refresher = new Refresher(4) {
         public void refresh() {
             synchronized (this) {
@@ -62,85 +81,6 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
             }
         }
     };
-
-    static final int STATE_CLOSED = 1;
-
-    static final int STATE_OPENING = 2;
-
-    static final int STATE_OPENED = 3;
-
-    static final int STATE_PREPARED = 4;
-
-    static final int STATE_LIVE = 5;
-
-    ImageIcon iconClosed = icon("mediaClosed.png");
-
-    ImageIcon iconOpening = icon("mediaOpening.png");
-
-    ImageIcon iconOpened = icon("mediaOpened.png");
-
-    ImageIcon iconPrepared = icon("mediaPrepared.png");
-
-    ImageIcon iconLive = icon("mediaLive.png");
-
-    ImageIcon iconPlay = icon("play.png");
-
-    ImageIcon iconPause = icon("pause.png");
-
-    ImageIcon icon(String name) {
-        return new ImageIcon(getClass().getResource("/sk/calvary/worship/" + name));
-    }
-
-    static public class VideoComponent extends JComponent {
-        private Image image;
-
-        public VideoComponent() {
-            super();
-            Dimension d = new Dimension(360, 240);
-            setPreferredSize(d);
-            setMinimumSize(d);
-        }
-
-        public void refresh() {
-            repaint();
-        }
-
-        public void setImage(Image image) {
-            this.image = image;
-            refresh();
-        }
-
-        protected void paintComponent(Graphics g) {
-            g.setColor(getBackground());
-            g.fillRect(0, 0, 1000, 1000);
-            if (image != null)
-                GraphicsTools.fitImage((Graphics2D) g, new Rectangle(
-                        getWidth(), getHeight()), image, false);
-        }
-    }
-
-    private final MultimediaPanel panel;
-
-    private ClickButton stateButton = null;
-
-    private MultimediaChannel.VideoComponent videoComponent = null;
-
-    private JPanel jPanel = null;
-
-    private ClickButton clickButtonOpen = null;
-
-    private JPanel jPanel1 = null;
-
-    private ClickButton clickButtonClose = null;
-
-    private final App app;
-
-    private JPanel jPanel2 = null;
-
-    private ClickButton clickButtonPlay = null;
-
-    private FloatSlider sliderPosition = null;
-
     private VUMeter VUMeter = null;
 
     public MultimediaChannel(MultimediaPanel panel) {
@@ -170,6 +110,10 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
                         }
                     }
                 }, 5000, 5000);
+    }
+
+    ImageIcon icon(String name) {
+        return new ImageIcon(getClass().getResource("/sk/calvary/worship/" + name));
     }
 
     /**
@@ -601,5 +545,33 @@ public class MultimediaChannel extends JPanel implements PropertyChangeListener 
 
         // updateButtons();
         // System.out.println(evt);
+    }
+
+    static public class VideoComponent extends JComponent {
+        private Image image;
+
+        public VideoComponent() {
+            super();
+            Dimension d = new Dimension(360, 240);
+            setPreferredSize(d);
+            setMinimumSize(d);
+        }
+
+        public void refresh() {
+            repaint();
+        }
+
+        public void setImage(Image image) {
+            this.image = image;
+            refresh();
+        }
+
+        protected void paintComponent(Graphics g) {
+            g.setColor(getBackground());
+            g.fillRect(0, 0, 1000, 1000);
+            if (image != null)
+                GraphicsTools.fitImage((Graphics2D) g, new Rectangle(
+                        getWidth(), getHeight()), image, false);
+        }
     }
 } // @jve:decl-index=0:visual-constraint="10,10"

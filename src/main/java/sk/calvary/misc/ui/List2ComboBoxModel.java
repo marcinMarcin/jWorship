@@ -16,12 +16,11 @@ import javax.swing.*;
  */
 public class List2ComboBoxModel extends ProxyListModel implements ComboBoxModel {
     private static final long serialVersionUID = 3329229849479091151L;
+    Object selectedItem;
 
     public List2ComboBoxModel(ListModel source) {
         super(source);
     }
-
-    Object selectedItem;
 
     /*
      * (non-Javadoc)

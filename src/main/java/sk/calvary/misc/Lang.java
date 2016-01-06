@@ -12,163 +12,17 @@ import java.util.*;
  * @author marsian
  */
 public class Lang {
-    private boolean changed = false;
-
     /**
      * Komentar na zaciatku
      */
     String introComment = "";
-
     /**
      * stringy
      */
     Vector<LangString> strings = new Vector<LangString>();
     Vector<String> langs = new Vector<String>();
-
     File filename = null;
-
-    class LangString {
-        LangString(String key) {
-            this.key = key;
-        }
-
-        String key;
-        String introComment = "";
-        String link = null;
-        Hashtable<String, String> strings = new Hashtable<String, String>();
-
-        public boolean isLink() {
-            return link != null;
-        }
-
-        public boolean hasLang(String lang) {
-            return strings.containsKey(lang);
-        }
-
-        private void dieIfLink() {
-            if (isLink())
-                throw new UnsupportedOperationException();
-        }
-
-        public void setLink(String link) {
-            if (!isLink())
-                throw new NullPointerException();
-            if (!strings.isEmpty())
-                throw new UnsupportedOperationException();
-
-            this.link = link;
-        }
-
-        /**
-         * @param lang
-         * @param text
-         */
-        public void set(String lang, String text) {
-            dieIfLink();
-
-            strings.put(lang, text);
-
-            if (!langs.contains(lang))
-                langs.add(lang);
-
-            changed();
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.lang.Object#toString()
-         */
-        public String toString() {
-            return key;
-        }
-
-        public String toHTML() {
-            StringBuffer sb = new StringBuffer();
-            sb.append("<h1>" + key + "</h1>");
-            Object[] langs = getLangs();
-
-            for (int i = 0; i < langs.length; i++) {
-                String l = (String) langs[i];
-                sb.append("<h2>" + l + "</h2>");
-                sb.append(get(l));
-            }
-
-            return sb.toString();
-        }
-
-        /**
-         * @param l
-         * @return
-         */
-        public String get(String lang) {
-            dieIfLink();
-
-            String string = strings.get(lang);
-
-            return (string == null) ? "" : string;
-        }
-
-        public String getWithAlternative(String lang) {
-            dieIfLink();
-
-            String s = get(lang);
-
-            if (s.equals(""))
-                s = get(defaultReplaceLang(lang));
-
-            return s;
-        }
-
-        public String getWithLink(String lang) {
-            if (isLink())
-                return Lang.this.get(link).getWithLink(lang);
-            else
-                return get(lang);
-        }
-
-        /**
-         * @return Returns the key.
-         */
-        public String getKey() {
-            return key;
-        }
-
-        /**
-         * @param origLang
-         * @param newLang
-         */
-        public void renameLang(String origLang, String newLang) {
-            if (!isLink()) {
-                String s = strings.get(origLang);
-                if (s != null) {
-                    strings.remove(origLang);
-                    strings.put(newLang, s);
-                    changed();
-                }
-            }
-        }
-
-        public boolean isEmpty() {
-            for (String s : strings.values()) {
-                if (s.length() > 0)
-                    return false;
-            }
-            return true;
-        }
-
-        Set<String> getWords(String lang) {
-            HashSet<String> res = new HashSet<String>();
-            StringTokenizer t = new StringTokenizer(get(lang),
-                    " 0123456789\r\n\t.,;:?\\/\"'{}|()%-+*<>");
-
-            while (t.hasMoreTokens()) {
-                res.add(t.nextToken().toLowerCase());
-            }
-
-            return res;
-        }
-    }
+    private boolean changed = false;
 
     public static Lang parse(InputStream in) throws IOException {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(in));
@@ -236,6 +90,28 @@ public class Lang {
         langObj.setChanged(false);
 
         return langObj;
+    }
+
+    public static void copyDefaultLangFile(File target) throws IOException, URISyntaxException {
+        Lang lang = new Lang();
+        InputStream in = lang.getClass().getResourceAsStream("/sk/calvary/misc/lang.lng");
+        copyInputStreamToFile(in, target);
+        target.createNewFile();
+    }
+
+    private static void copyInputStreamToFile(InputStream in, File file) {
+        try {
+            OutputStream out = new FileOutputStream(file);
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            out.close();
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void save(OutputStream os) throws IOException {
@@ -417,12 +293,12 @@ public class Lang {
         setChanged(true);
     }
 
-    void setChanged(boolean changed) {
-        this.changed = changed;
-    }
-
     boolean isChanged() {
         return changed;
+    }
+
+    void setChanged(boolean changed) {
+        this.changed = changed;
     }
 
     public LangString find(String lang, String text) {
@@ -434,25 +310,145 @@ public class Lang {
         return null;
     }
 
-    public static void copyDefaultLangFile(File target) throws IOException, URISyntaxException {
-        Lang lang = new Lang();
-        InputStream in = lang.getClass().getResourceAsStream("/sk/calvary/misc/lang.lng");
-        copyInputStreamToFile(in, target);
-        target.createNewFile();
-    }
+    class LangString {
+        String key;
+        String introComment = "";
+        String link = null;
+        Hashtable<String, String> strings = new Hashtable<String, String>();
+        LangString(String key) {
+            this.key = key;
+        }
 
-    private static void copyInputStreamToFile(InputStream in, File file) {
-        try {
-            OutputStream out = new FileOutputStream(file);
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
+        public boolean isLink() {
+            return link != null;
+        }
+
+        public void setLink(String link) {
+            if (!isLink())
+                throw new NullPointerException();
+            if (!strings.isEmpty())
+                throw new UnsupportedOperationException();
+
+            this.link = link;
+        }
+
+        public boolean hasLang(String lang) {
+            return strings.containsKey(lang);
+        }
+
+        private void dieIfLink() {
+            if (isLink())
+                throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @param lang
+         * @param text
+         */
+        public void set(String lang, String text) {
+            dieIfLink();
+
+            strings.put(lang, text);
+
+            if (!langs.contains(lang))
+                langs.add(lang);
+
+            changed();
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see java.lang.Object#toString()
+         */
+        public String toString() {
+            return key;
+        }
+
+        public String toHTML() {
+            StringBuffer sb = new StringBuffer();
+            sb.append("<h1>" + key + "</h1>");
+            Object[] langs = getLangs();
+
+            for (int i = 0; i < langs.length; i++) {
+                String l = (String) langs[i];
+                sb.append("<h2>" + l + "</h2>");
+                sb.append(get(l));
             }
-            out.close();
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            return sb.toString();
+        }
+
+        /**
+         * @param l
+         * @return
+         */
+        public String get(String lang) {
+            dieIfLink();
+
+            String string = strings.get(lang);
+
+            return (string == null) ? "" : string;
+        }
+
+        public String getWithAlternative(String lang) {
+            dieIfLink();
+
+            String s = get(lang);
+
+            if (s.equals(""))
+                s = get(defaultReplaceLang(lang));
+
+            return s;
+        }
+
+        public String getWithLink(String lang) {
+            if (isLink())
+                return Lang.this.get(link).getWithLink(lang);
+            else
+                return get(lang);
+        }
+
+        /**
+         * @return Returns the key.
+         */
+        public String getKey() {
+            return key;
+        }
+
+        /**
+         * @param origLang
+         * @param newLang
+         */
+        public void renameLang(String origLang, String newLang) {
+            if (!isLink()) {
+                String s = strings.get(origLang);
+                if (s != null) {
+                    strings.remove(origLang);
+                    strings.put(newLang, s);
+                    changed();
+                }
+            }
+        }
+
+        public boolean isEmpty() {
+            for (String s : strings.values()) {
+                if (s.length() > 0)
+                    return false;
+            }
+            return true;
+        }
+
+        Set<String> getWords(String lang) {
+            HashSet<String> res = new HashSet<String>();
+            StringTokenizer t = new StringTokenizer(get(lang),
+                    " 0123456789\r\n\t.,;:?\\/\"'{}|()%-+*<>");
+
+            while (t.hasMoreTokens()) {
+                res.add(t.nextToken().toLowerCase());
+            }
+
+            return res;
         }
     }
 }

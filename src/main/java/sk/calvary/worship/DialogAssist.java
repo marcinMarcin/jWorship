@@ -28,24 +28,248 @@ import java.util.Vector;
  */
 public class DialogAssist implements PropertyChangeListener {
 
+    public static final int ACTION_CHANGE = 1;
+    public static final int ACTION_OK = 2;
+    public static final int ACTION_CANCEL = 3;
+    public static final int ACTION_BEFORE_OK = 4;
+    protected EventListenerList listenerList = new EventListenerList();
+    JDialog dialog;
+    boolean changed = false;
+    boolean immediateMode = true;
+    Object object;
+    private Vector<Link> links = new Vector<Link>();
+
+    public static Object getComponentValue(Object component) {
+        if (component instanceof JTextComponent)
+            return ((JTextComponent) component).getText();
+        if (component instanceof AbstractButton)
+            return new Boolean(((AbstractButton) component).isSelected());
+        if (component instanceof FloatSlider)
+            return new Float(((FloatSlider) component).getFValue());
+        if (component instanceof JComboBox)
+            return ((JComboBox) component).getSelectedItem();
+        throw new IllegalArgumentException();
+    }
+
+    public static void setComponentValue(Object component, Object value) {
+        if (component instanceof JTextComponent) {
+            ((JTextComponent) component).setText((String) value);
+            return;
+        }
+        if (component instanceof AbstractButton) {
+            ((AbstractButton) component).setSelected(((Boolean) value)
+                    .booleanValue());
+            return;
+        }
+        if (component instanceof FloatSlider) {
+            ((FloatSlider) component).setFValue(((Float) value).floatValue());
+            return;
+        }
+        if (component instanceof JComboBox) {
+            ((JComboBox) component).setSelectedItem(value);
+            return;
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public void addActionListener(ActionListener l) {
+        listenerList.add(ActionListener.class, l);
+    }
+
+    /**
+     *
+     */
+    protected void cancelButton() {
+        fireActionPerformed(new ActionEvent(this, ACTION_CANCEL, ""));
+        dialog.dispose();
+    }
+
+    protected void fireActionPerformed(ActionEvent event) {
+        Object[] listeners = listenerList.getListenerList();
+        ActionEvent e = event;
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == ActionListener.class) {
+                ((ActionListener) listeners[i + 1]).actionPerformed(e);
+            }
+        }
+    }
+
+    protected void change(Link link) {
+        try {
+            changed = true;
+            if (immediateMode)
+                link.write();
+            fireActionPerformed(new ActionEvent(this, ACTION_CHANGE,
+                    link.property));
+        } catch (NoSuchFieldException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void link(String property, Object component) {
+        Link l = new Link(property, component, Link.BUTTONMODE_BOOLEAN, null,
+                null);
+        links.add(l);
+    }
+
+    public void link(String property, Object component, Object radioValue) {
+        Link l = new Link(property, component, Link.BUTTONMODE_TRUEVALUE,
+                radioValue, null);
+        links.add(l);
+    }
+
+    public void linkToggle(String property, Object component,
+                           Boolean radioValue, Boolean radioValueFalse) {
+        Link l = new Link(property, component, Link.BUTTONMODE_TRUEFALSEVALUE,
+                radioValue, radioValueFalse);
+        links.add(l);
+    }
+
+    public void linkToggleBoolean(String property, Object component) {
+        linkToggle(property, component, Boolean.TRUE, Boolean.FALSE);
+    }
+
+    public void linkToggleBooleanReversed(String property, Object component) {
+        linkToggle(property, component, Boolean.FALSE, Boolean.TRUE);
+    }
+
+    /**
+     *
+     */
+    protected void okButton() {
+        try {
+            fireActionPerformed(new ActionEvent(this, ACTION_BEFORE_OK, ""));
+        } catch (CancelExceptionRuntime e) {
+            return;
+        }
+        writeAll();
+        try {
+            fireActionPerformed(new ActionEvent(this, ACTION_OK, ""));
+        } catch (CancelExceptionRuntime e) {
+            return;
+        }
+        dialog.dispose();
+    }
+
+    public void standardDialog(JDialog dialog, JButton okButton,
+                               JButton cancelButton) {
+        this.dialog = dialog;
+        this.dialog.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                cancelButton();
+            }
+        });
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                okButton();
+            }
+        });
+        cancelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cancelButton();
+            }
+        });
+    }
+
+    protected void writeAll() {
+        for (int i = 0; i < links.size(); i++) {
+            Link l = links.elementAt(i);
+            try {
+                l.write();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Object getComponentValue(String property) {
+        for (int i = 0; i < links.size(); i++) {
+            Link l = links.elementAt(i);
+            if (l.property.equals(property))
+                return l.getComponentValue0();
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getSource() == object) {
+            if (immediateMode) {
+                String name = evt.getPropertyName();
+                for (Link l : links) {
+                    if (name.equals(l.property)) {
+                        try {
+                            l.read();
+                        } catch (NoSuchFieldException e) {
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object o) throws NoSuchFieldException {
+        if (o == object)
+            return;
+        if (object != null) {
+            // remove property change listener from old object
+            try {
+                Method m = object.getClass().getMethod(
+                        "removePropertyChangeListener",
+                        new Class[]{PropertyChangeListener.class});
+                m.invoke(object, new Object[]{this});
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        object = o;
+
+        // add property change listener
+        try {
+            Method m = object.getClass().getMethod("addPropertyChangeListener",
+                    new Class[]{PropertyChangeListener.class});
+            m.invoke(object, new Object[]{this});
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        // read data from object
+        for (int i = 0; i < links.size(); i++) {
+            Link l = (Link) links.elementAt(i);
+            l.read();
+        }
+    }
+
     class Link implements ActionListener, PropertyChangeListener, ItemListener {
         private static final int BUTTONMODE_BOOLEAN = 0;
 
         private static final int BUTTONMODE_TRUEVALUE = 1;
 
         private static final int BUTTONMODE_TRUEFALSEVALUE = 2;
-
-        boolean aligning;
-
         final int buttonMode;
-
         final Object component;
-
         final String property;
-
         final Object radioValue;
-
         final Object radioValueFalse;
+        boolean aligning;
 
         Link(String p, Object c, int mode, Object rv, Object rvFalse) {
             property = p;
@@ -144,245 +368,6 @@ public class DialogAssist implements PropertyChangeListener {
                 return;
             change(this);
         }
-    }
-
-    public static final int ACTION_CHANGE = 1;
-
-    public static final int ACTION_OK = 2;
-
-    public static final int ACTION_CANCEL = 3;
-
-    public static final int ACTION_BEFORE_OK = 4;
-
-    public static Object getComponentValue(Object component) {
-        if (component instanceof JTextComponent)
-            return ((JTextComponent) component).getText();
-        if (component instanceof AbstractButton)
-            return new Boolean(((AbstractButton) component).isSelected());
-        if (component instanceof FloatSlider)
-            return new Float(((FloatSlider) component).getFValue());
-        if (component instanceof JComboBox)
-            return ((JComboBox) component).getSelectedItem();
-        throw new IllegalArgumentException();
-    }
-
-    public static void setComponentValue(Object component, Object value) {
-        if (component instanceof JTextComponent) {
-            ((JTextComponent) component).setText((String) value);
-            return;
-        }
-        if (component instanceof AbstractButton) {
-            ((AbstractButton) component).setSelected(((Boolean) value)
-                    .booleanValue());
-            return;
-        }
-        if (component instanceof FloatSlider) {
-            ((FloatSlider) component).setFValue(((Float) value).floatValue());
-            return;
-        }
-        if (component instanceof JComboBox) {
-            ((JComboBox) component).setSelectedItem(value);
-            return;
-        }
-        throw new IllegalArgumentException();
-    }
-
-    JDialog dialog;
-
-    boolean changed = false;
-
-    boolean immediateMode = true;
-
-    private Vector<Link> links = new Vector<Link>();
-
-    protected EventListenerList listenerList = new EventListenerList();
-
-    Object object;
-
-    public void addActionListener(ActionListener l) {
-        listenerList.add(ActionListener.class, l);
-    }
-
-    /**
-     *
-     */
-    protected void cancelButton() {
-        fireActionPerformed(new ActionEvent(this, ACTION_CANCEL, ""));
-        dialog.dispose();
-    }
-
-    protected void fireActionPerformed(ActionEvent event) {
-        Object[] listeners = listenerList.getListenerList();
-        ActionEvent e = event;
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ActionListener.class) {
-                ((ActionListener) listeners[i + 1]).actionPerformed(e);
-            }
-        }
-    }
-
-    protected void change(Link link) {
-        try {
-            changed = true;
-            if (immediateMode)
-                link.write();
-            fireActionPerformed(new ActionEvent(this, ACTION_CHANGE,
-                    link.property));
-        } catch (NoSuchFieldException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    public void link(String property, Object component) {
-        Link l = new Link(property, component, Link.BUTTONMODE_BOOLEAN, null,
-                null);
-        links.add(l);
-    }
-
-    public void link(String property, Object component, Object radioValue) {
-        Link l = new Link(property, component, Link.BUTTONMODE_TRUEVALUE,
-                radioValue, null);
-        links.add(l);
-    }
-
-    public void linkToggle(String property, Object component,
-                           Boolean radioValue, Boolean radioValueFalse) {
-        Link l = new Link(property, component, Link.BUTTONMODE_TRUEFALSEVALUE,
-                radioValue, radioValueFalse);
-        links.add(l);
-    }
-
-    public void linkToggleBoolean(String property, Object component) {
-        linkToggle(property, component, Boolean.TRUE, Boolean.FALSE);
-    }
-
-    public void linkToggleBooleanReversed(String property, Object component) {
-        linkToggle(property, component, Boolean.FALSE, Boolean.TRUE);
-    }
-
-    /**
-     *
-     */
-    protected void okButton() {
-        try {
-            fireActionPerformed(new ActionEvent(this, ACTION_BEFORE_OK, ""));
-        } catch (CancelExceptionRuntime e) {
-            return;
-        }
-        writeAll();
-        try {
-            fireActionPerformed(new ActionEvent(this, ACTION_OK, ""));
-        } catch (CancelExceptionRuntime e) {
-            return;
-        }
-        dialog.dispose();
-    }
-
-    public void setObject(Object o) throws NoSuchFieldException {
-        if (o == object)
-            return;
-        if (object != null) {
-            // remove property change listener from old object
-            try {
-                Method m = object.getClass().getMethod(
-                        "removePropertyChangeListener",
-                        new Class[]{PropertyChangeListener.class});
-                m.invoke(object, new Object[]{this});
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-        object = o;
-
-        // add property change listener
-        try {
-            Method m = object.getClass().getMethod("addPropertyChangeListener",
-                    new Class[]{PropertyChangeListener.class});
-            m.invoke(object, new Object[]{this});
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        // read data from object
-        for (int i = 0; i < links.size(); i++) {
-            Link l = (Link) links.elementAt(i);
-            l.read();
-        }
-    }
-
-    public void standardDialog(JDialog dialog, JButton okButton,
-                               JButton cancelButton) {
-        this.dialog = dialog;
-        this.dialog.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                cancelButton();
-            }
-        });
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                okButton();
-            }
-        });
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                cancelButton();
-            }
-        });
-    }
-
-    protected void writeAll() {
-        for (int i = 0; i < links.size(); i++) {
-            Link l = links.elementAt(i);
-            try {
-                l.write();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public Object getComponentValue(String property) {
-        for (int i = 0; i < links.size(); i++) {
-            Link l = links.elementAt(i);
-            if (l.property.equals(property))
-                return l.getComponentValue0();
-        }
-        throw new IllegalArgumentException();
-    }
-
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getSource() == object) {
-            if (immediateMode) {
-                String name = evt.getPropertyName();
-                for (Link l : links) {
-                    if (name.equals(l.property)) {
-                        try {
-                            l.read();
-                        } catch (NoSuchFieldException e) {
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public Object getObject() {
-        return object;
     }
 
 }

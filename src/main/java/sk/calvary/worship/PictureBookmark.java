@@ -12,6 +12,9 @@ import java.io.Serializable;
 public class PictureBookmark extends Bookmark implements Serializable {
 
     private static final long serialVersionUID = 3990063495003307532L;
+    String value;
+    private long fLength;
+    private long fModified;
 
     public PictureBookmark(String value) {
         super();
@@ -24,12 +27,6 @@ public class PictureBookmark extends Bookmark implements Serializable {
             fModified = f.lastModified();
         }
     }
-
-    String value;
-
-    private long fLength;
-
-    private long fModified;
 
     @Override
     public Object getValue() {

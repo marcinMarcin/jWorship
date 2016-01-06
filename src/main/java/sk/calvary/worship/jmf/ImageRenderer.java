@@ -15,18 +15,15 @@ public class ImageRenderer implements VideoRenderer {
     private static final String name = "Video2Image";
 
     protected Format[] supportedFormats;
-
-    private RGBFormat supportedRGB;
-
     protected RGBFormat inputFormat;
-
     protected int inHeight = 0;
-
     protected int inWidth = 0;
-
     protected boolean started = false;
-
+    int rowBuffer[];
+    private RGBFormat supportedRGB;
     private WritableRaster raster;
+    private BufferedImage image;
+    private NewFrameListener listener;
 
     public ImageRenderer() {
         supportedRGB = new RGBFormat(null, Format.NOT_SPECIFIED,
@@ -44,11 +41,11 @@ public class ImageRenderer implements VideoRenderer {
         return false;
     }
 
-    public void setBounds(Rectangle arg0) {
-    }
-
     public Rectangle getBounds() {
         return null;
+    }
+
+    public void setBounds(Rectangle arg0) {
     }
 
     public Format[] getSupportedInputFormats() {
@@ -78,10 +75,6 @@ public class ImageRenderer implements VideoRenderer {
     public void stop() {
         started = false;
     }
-
-    int rowBuffer[];
-
-    private BufferedImage image;
 
     public int process(Buffer buffer) {
         if (image == null || image.getWidth() != inWidth
@@ -127,12 +120,6 @@ public class ImageRenderer implements VideoRenderer {
         return BUFFER_PROCESSED_OK;
     }
 
-    public static interface NewFrameListener {
-        void newFrame(ImageRenderer renderer);
-    }
-
-    private NewFrameListener listener;
-
     private void sendNewFrame() {
         if (listener != null)
             listener.newFrame(this);
@@ -165,5 +152,9 @@ public class ImageRenderer implements VideoRenderer {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    public static interface NewFrameListener {
+        void newFrame(ImageRenderer renderer);
     }
 }

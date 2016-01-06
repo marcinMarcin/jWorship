@@ -62,6 +62,30 @@ public class dsJMFDemo extends Frame {
         });
     }
 
+    public static void main(String[] args) {
+        try {
+            dsJMFDemo djmf = new dsJMFDemo("dsj - JMF");
+
+            djmf.setVisible(true);
+
+            String[] options = {"file", "capture"};
+
+            int result = javax.swing.JOptionPane.showOptionDialog(new Frame(),
+                    "DSMovie type:",
+                    "?",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+
+            if (!djmf.initialise(result)) System.out.println("dsj failed");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public boolean initialise(int demo) throws Exception {
 
@@ -144,7 +168,6 @@ public class dsJMFDemo extends Frame {
         return false;
     }
 
-
     boolean registerPackagePrefix(String prefix, boolean verbose) {
 
         Vector packagePrefixes = PackageManager.getContentPrefixList();
@@ -185,31 +208,6 @@ public class dsJMFDemo extends Frame {
         if (verbose)
             System.out.println("Protocol package prefix: " + prefix + " registered");
         return true;
-    }
-
-    public static void main(String[] args) {
-        try {
-            dsJMFDemo djmf = new dsJMFDemo("dsj - JMF");
-
-            djmf.setVisible(true);
-
-            String[] options = {"file", "capture"};
-
-            int result = javax.swing.JOptionPane.showOptionDialog(new Frame(),
-                    "DSMovie type:",
-                    "?",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null,
-                    options,
-                    options[0]
-            );
-
-            if (!djmf.initialise(result)) System.out.println("dsj failed");
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }
 

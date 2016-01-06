@@ -11,6 +11,14 @@ public abstract class Refresher {
 
     float maxFrameRate = 0;
 
+    public Refresher() {
+        this(0);
+    }
+
+    public Refresher(float maxFrameRate) {
+        setMaxFrameRate(maxFrameRate);
+    }
+
     public void newFrame() {
         long time = System.currentTimeMillis();
         long minDelta;
@@ -34,13 +42,5 @@ public abstract class Refresher {
         if (maxFrameRate < 0)
             throw new IllegalArgumentException();
         this.maxFrameRate = maxFrameRate;
-    }
-
-    public Refresher() {
-        this(0);
-    }
-
-    public Refresher(float maxFrameRate) {
-        setMaxFrameRate(maxFrameRate);
     }
 }

@@ -123,11 +123,36 @@ public class Song implements Serializable, ObjectInputValidation {
         return sb.toString();
     }
 
+    public void setPlainText(String text) {
+        text = text.replace("\r", "");
+        verses.removeAllElements();
+        int i = 0;
+        while (true) {
+            int j = text.indexOf("\n@", i);
+            if (j < 0) {
+                addPotentionalVerse(text.substring(i));
+                break;
+            }
+            addPotentionalVerse(text.substring(i, j));
+            i = j + 2;
+        }
+        searchInfo = null;
+    }
+
     /**
      * @return Returns the title.
      */
     public String getTitle() {
         return title;
+    }
+
+    /**
+     * @param title The title to set.
+     */
+    public void setTitle(String title) {
+        if (title == null)
+            throw new NullPointerException();
+        this.title = title;
     }
 
     public AttributedString getVerse(int i) {
@@ -147,31 +172,6 @@ public class Song implements Serializable, ObjectInputValidation {
             r[i] = new AttributedString(verses.elementAt(i));
         }
         return r;
-    }
-
-    public void setPlainText(String text) {
-        text = text.replace("\r", "");
-        verses.removeAllElements();
-        int i = 0;
-        while (true) {
-            int j = text.indexOf("\n@", i);
-            if (j < 0) {
-                addPotentionalVerse(text.substring(i));
-                break;
-            }
-            addPotentionalVerse(text.substring(i, j));
-            i = j + 2;
-        }
-        searchInfo = null;
-    }
-
-    /**
-     * @param title The title to set.
-     */
-    public void setTitle(String title) {
-        if (title == null)
-            throw new NullPointerException();
-        this.title = title;
     }
 
     /*

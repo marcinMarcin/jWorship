@@ -28,59 +28,13 @@ import java.util.Vector;
  */
 public class DirBrowser extends JPanel {
     private static final long serialVersionUID = 21096700074897497L;
-
-    File base;
-
-    Set<String> extensions = new HashSet<String>();
-
-    private JScrollPane jScrollPane = null;
-
-    private JTree jTree = null;
-
-    DefaultTreeModel treeModel = new DefaultTreeModel(null);
-
-    private DefaultTreeCellRenderer defaultTreeCellRenderer = null;
-
     private final App app;
-
-    class MyTreeNode extends JTree.DynamicUtilTreeNode {
-        private static final long serialVersionUID = 7866835395459018498L;
-
-        MyTreeNode(File dir) {
-            super(dir.getName(), new Object[]{});
-            childValue = dir;
-
-            // check for subdirs
-            boolean expand = false;
-            File[] ls = dir.listFiles();
-            if (ls != null) {
-                for (int i = 0; i < ls.length; i++) {
-                    if (ls[i].isDirectory()) {
-                        expand = true;
-                        break;
-                    }
-                }
-            }
-            setAllowsChildren(expand);
-        }
-
-        protected void loadChildren() {
-            // setAllowsChildren(true);
-            loadedChildren = true;
-            File dir = (File) childValue;
-            String[] ls = dir.list();
-            for (int i = 0; i < ls.length; i++) {
-                File sub = new File(dir, ls[i]);
-                if (!sub.isDirectory())
-                    continue;
-                this.add(new MyTreeNode(sub));
-            }
-        }
-
-        public File getDir() {
-            return (File) childValue;
-        }
-    }
+    File base;
+    Set<String> extensions = new HashSet<String>();
+    DefaultTreeModel treeModel = new DefaultTreeModel(null);
+    private JScrollPane jScrollPane = null;
+    private JTree jTree = null;
+    private DefaultTreeCellRenderer defaultTreeCellRenderer = null;
 
     public DirBrowser() {
         this(null);
@@ -167,5 +121,44 @@ public class DirBrowser extends JPanel {
         File res[] = new File[v.size()];
         v.copyInto(res);
         return res;
+    }
+
+    class MyTreeNode extends JTree.DynamicUtilTreeNode {
+        private static final long serialVersionUID = 7866835395459018498L;
+
+        MyTreeNode(File dir) {
+            super(dir.getName(), new Object[]{});
+            childValue = dir;
+
+            // check for subdirs
+            boolean expand = false;
+            File[] ls = dir.listFiles();
+            if (ls != null) {
+                for (int i = 0; i < ls.length; i++) {
+                    if (ls[i].isDirectory()) {
+                        expand = true;
+                        break;
+                    }
+                }
+            }
+            setAllowsChildren(expand);
+        }
+
+        protected void loadChildren() {
+            // setAllowsChildren(true);
+            loadedChildren = true;
+            File dir = (File) childValue;
+            String[] ls = dir.list();
+            for (int i = 0; i < ls.length; i++) {
+                File sub = new File(dir, ls[i]);
+                if (!sub.isDirectory())
+                    continue;
+                this.add(new MyTreeNode(sub));
+            }
+        }
+
+        public File getDir() {
+            return (File) childValue;
+        }
     }
 } // @jve:decl-index=0:visual-constraint="10,10"

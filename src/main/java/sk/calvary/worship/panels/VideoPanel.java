@@ -35,21 +35,13 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
     private static final String videoMediaType = "videos";
 
     private static final long serialVersionUID = -8217739536296508777L;
-
-    private JButton jButton1 = null;
-
     private final Vector<Video2Image> videos = new Vector<Video2Image>();
-
-    private Video2Image currentVideo;
-
-    private VideoPanel.VideoComponent videoComponent = null;
-
-    private JPanel jPanel = null;
-
-    private DirBrowser dirBrowser = null;
-
     private final ObjectListModel files = new ObjectListModel();
-
+    private JButton jButton1 = null;
+    private Video2Image currentVideo;
+    private VideoPanel.VideoComponent videoComponent = null;
+    private JPanel jPanel = null;
+    private DirBrowser dirBrowser = null;
     private JScrollPane jScrollPane = null;
 
     private JList jList = null;
@@ -127,37 +119,6 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
 
     public boolean isMediaDynamic(String media) {
         return true;
-    }
-
-    static public class VideoComponent extends JComponent {
-        private Image image;
-
-        public VideoComponent() {
-            super();
-            Dimension d = new Dimension(160, 120);
-            setPreferredSize(d);
-            setMinimumSize(d);
-        }
-
-        public void refresh() {
-            repaint();
-        }
-
-        public Image getImage() {
-            return image;
-        }
-
-        public void setImage(Image image) {
-            this.image = image;
-            refresh();
-        }
-
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null)
-                GraphicsTools.fitImage((Graphics2D) g, new Rectangle(
-                        getWidth(), getHeight()), image, false);
-        }
     }
 
     /**
@@ -395,6 +356,37 @@ public class VideoPanel extends AppPanel implements Video2ImageListener {
             setCurrentVideo(null);
         } else {
             setCurrentVideo(getVideo(f.toString(), 1));
+        }
+    }
+
+    static public class VideoComponent extends JComponent {
+        private Image image;
+
+        public VideoComponent() {
+            super();
+            Dimension d = new Dimension(160, 120);
+            setPreferredSize(d);
+            setMinimumSize(d);
+        }
+
+        public void refresh() {
+            repaint();
+        }
+
+        public Image getImage() {
+            return image;
+        }
+
+        public void setImage(Image image) {
+            this.image = image;
+            refresh();
+        }
+
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (image != null)
+                GraphicsTools.fitImage((Graphics2D) g, new Rectangle(
+                        getWidth(), getHeight()), image, false);
         }
     }
 } // @jve:decl-index=0:visual-constraint="10,10"

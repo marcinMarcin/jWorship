@@ -36,34 +36,181 @@ import java.util.Timer;
  */
 public class App extends JFrame implements ActionListener {
     private static final long serialVersionUID = 5202531162861036082L;
-
+    private static final int SCREEN_FULLSCREEN_MY = 1;
+    private static final int SCREEN_FULLSCREEN_OTHER = 2;
+    private static final int SCREEN_PREVIEW = 0;
+    private static final int SCREEN_TESTSCREEN = 3;
+    public static ImageLoader imageLoader = new ImageLoader();
+    public static Thumbnails thumbnails = new Thumbnails(imageLoader, 60, 45);
+    public static Timer timer = new Timer(App.class + " timer", true);
+    public static boolean testMode = false;
+    public static boolean debugmarsian = new File("debugmarsian.txt").isFile();
+    public static boolean dump = debugmarsian;
+    public static String version = "3.0.1";
     public final Action actionGo;
     public final Action actionReverseGo;
     public final Action actionGoText;
     public final Action actionGoBackground;
     public final Action actionSongSearch;
     public final Action actionSaveAll;
-
     public final int SETTING_LANGUAGE = 1;
-
-    public static ImageLoader imageLoader = new ImageLoader();
-
-    public static Thumbnails thumbnails = new Thumbnails(imageLoader, 60, 45);
-
-    private static final int SCREEN_FULLSCREEN_MY = 1;
-
-    private static final int SCREEN_FULLSCREEN_OTHER = 2;
-
-    private static final int SCREEN_PREVIEW = 0;
-
-    private static final int SCREEN_TESTSCREEN = 3;
-
-    public static Timer timer = new Timer(App.class + " timer", true);
-
-    public static boolean testMode = false;
-
-    private Lang langObj = null;
+    final Vector<AppPanel> panels = new Vector<AppPanel>(); // @jve:decl-index=0:
+    final Set<AppPanel> panelsSelected = new HashSet<AppPanel>(); // @jve:decl-index=0:
+    final Screen screenPrepared = new Screen(this);
+    private final Object lock = new Object();
     public String language = null;
+    public boolean immediateFullScreen = false;
+    public boolean autoInitProjector = true;
+    Transition currentTransition;
+    File dirPictures = new File(getApplicationDataFolderPath() + "pictures"); // @jve:decl-index=0:
+    File dirSongs = new File(getApplicationDataFolderPath() + "songs");
+    File dirVideos = new File(getApplicationDataFolderPath() + "videos");
+    File dirSettings = new File(getApplicationDataFolderPath() + "settings"); // @jve:decl-index=0:
+    ScreenView[] liveScreens = new ScreenView[4];
+    Screen screenLive = new Screen(this); // @jve:decl-index=0:
+    Song selectedSong = new Song();
+    Vector<Song> songs = new Vector<Song>();
+    ObjectListModel songsLM = new ObjectListModel(songs, true);
+    Vector<Transition> transitions = new Vector<Transition>();
+    ObjectListModel transitionsLM = new ObjectListModel(transitions, true);
+    PictureBookmarksList pictureBookmarksList = new PictureBookmarksList(this); // @jve:decl-index=0:
+    ObjectListModel pictureBookmarksListLM = new ObjectListModel();
+    PictureBookmarksList pictureHistoryList = new PictureBookmarksList(this);
+    ObjectListModel pictureHistoryListLM = new ObjectListModel();
+    HashMap<Integer, String> generalSettings = new HashMap<Integer, String>();
+    private Lang langObj = null;
+    private boolean separateVersesWithBlankLine = true;
+    private JButton jButton = null;
+    private JPanel jContentPane = null;
+    private JPanel jPanel = null;
+    private JPanel jPanel1 = null;
+    private JPanel jPanel2 = null;
+    private JSplitPane jSplitPane = null;
+    private ScreenViewSwing screenViewLive = null;
+    private ScreenViewSwing screenViewPrepared = null;
+    private JMenuBar jJMenuBar = null;
+    private JMenu jMenuScreens = null;
+    private JMenuItem jMenuItemScreenProjector = null;
+    private JMenuItem jMenuItemScreenThis = null;
+    private JMenuItem jMenuItemScreenTest = null;
+    private JMenuItem jMenuItemScreenCancelAll = null;
+    private JMenu jMenuAkcie = null;
+    private SongsPanel songsPanel;
+    private JMenu jMenuFile = null;
+    private PanelSelector panelSelector = null;
+
+    /**
+     * This method initializes
+     */
+    public App() {
+        super();
+
+        checkDirs();
+
+        loadSettings();
+        loadLangs();
+
+        actionGo = new MyAction(ls(1000), null, KeyStroke.getKeyStroke("F5")) {
+            private static final long serialVersionUID = 6665128924643456924L;
+
+            public void actionPerformed(ActionEvent e) {
+                go(Screen.ALL);
+            }
+        };
+        actionReverseGo = new MyAction(ls(1001), null, KeyStroke.getKeyStroke("shift F5")) {
+            private static final long serialVersionUID = -3635843279198182926L;
+
+            public void actionPerformed(ActionEvent e) {
+                screenPrepared.copyFrom(screenLive, Screen.ALL);
+                updatePrepared();
+            }
+        };
+        actionGoText = new MyAction(ls(1002), null, null) {
+            private static final long serialVersionUID = 5193745723654508998L;
+
+            public void actionPerformed(ActionEvent e) {
+                go(Screen.TEXT);
+            }
+
+        };
+        actionGoBackground = new MyAction(ls(1003), null, null) {
+            private static final long serialVersionUID = 7804404775984692581L;
+
+            public void actionPerformed(ActionEvent e) {
+                go(Screen.BACKGROUND); // @jve:decl-index=0:
+            }
+
+        };
+        actionSongSearch = new MyAction(ls(1004), null, KeyStroke.getKeyStroke("ctrl F")) {
+            private static final long serialVersionUID = -6286284389819879458L;
+
+            public void actionPerformed(ActionEvent e) {
+                getPanelSelector().ensureVisible(songsPanel);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        JTextField tfs = songsPanel.getJTextFieldSearch();
+                        tfs.selectAll();
+                        tfs.requestFocus(); // @jve:decl-index=0:
+                    }
+                });
+            }
+        };
+        actionSaveAll = new MyAction(ls(1005), null, KeyStroke.getKeyStroke("ctrl S")) {
+            private static final long serialVersionUID = 2857605349748326463L;
+
+            public void actionPerformed(ActionEvent e) {
+                saveAll();
+            }
+        };
+
+        pictureBookmarksChanged();
+        pictureHistoryChanged();
+
+        loadPanels();
+
+        screenPrepared.setText(new AttributedString(""));
+        screenPrepared.blockFreeze();
+        screenLive = screenPrepared.getFrozenInstance();
+
+        initialize();
+
+        //
+        try {
+            loadSongs();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        songsLM.refresh();
+
+        loadTransitions();
+        transitionsLM.refresh();
+
+        setCurrentTransition(transitions.elementAt(1));
+    }
+
+    public static void main(String[] args) throws InvocationTargetException,
+            InterruptedException {
+        if (args.length > 0 && args[0].equals("-testmode"))
+            testMode = true;
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager
+                            .getSystemLookAndFeelClassName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                new App().setVisible(true);
+
+            }
+        });
+    }
+
+    public static void dump(String s) {
+        if (dump)
+            System.out.println(s);
+    }
 
     /**
      * This method initializes jJMenuBar
@@ -213,213 +360,11 @@ public class App extends JFrame implements ActionListener {
         return jMenuFile;
     }
 
-
     private PanelSelector getPanelSelector() {
         if (panelSelector == null) {
             panelSelector = new PanelSelector(this);
         }
         return panelSelector;
-    }
-
-    public static void main(String[] args) throws InvocationTargetException,
-            InterruptedException {
-        if (args.length > 0 && args[0].equals("-testmode"))
-            testMode = true;
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager
-                            .getSystemLookAndFeelClassName());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                new App().setVisible(true);
-
-            }
-        });
-    }
-
-    Transition currentTransition;
-
-    File dirPictures = new File(getApplicationDataFolderPath() + "pictures"); // @jve:decl-index=0:
-
-    File dirSongs = new File(getApplicationDataFolderPath() + "songs");
-
-    File dirVideos = new File(getApplicationDataFolderPath() + "videos");
-
-    File dirSettings = new File(getApplicationDataFolderPath() + "settings"); // @jve:decl-index=0:
-
-    public boolean immediateFullScreen = false;
-
-    public boolean autoInitProjector = true;
-
-    private boolean separateVersesWithBlankLine = true;
-
-    private JButton jButton = null;
-
-    private JPanel jContentPane = null;
-
-    private JPanel jPanel = null;
-
-    private JPanel jPanel1 = null;
-
-    private JPanel jPanel2 = null;
-
-    private JSplitPane jSplitPane = null;
-
-    ScreenView[] liveScreens = new ScreenView[4];
-
-    final Vector<AppPanel> panels = new Vector<AppPanel>(); // @jve:decl-index=0:
-
-    final Set<AppPanel> panelsSelected = new HashSet<AppPanel>(); // @jve:decl-index=0:
-
-    Screen screenLive = new Screen(this); // @jve:decl-index=0:
-
-    final Screen screenPrepared = new Screen(this);
-
-    private ScreenViewSwing screenViewLive = null;
-
-    private ScreenViewSwing screenViewPrepared = null;
-
-    private final Object lock = new Object();
-
-    Song selectedSong = new Song();
-
-    Vector<Song> songs = new Vector<Song>();
-
-    ObjectListModel songsLM = new ObjectListModel(songs, true);
-
-    Vector<Transition> transitions = new Vector<Transition>();
-
-    ObjectListModel transitionsLM = new ObjectListModel(transitions, true);
-
-    PictureBookmarksList pictureBookmarksList = new PictureBookmarksList(this); // @jve:decl-index=0:
-
-    ObjectListModel pictureBookmarksListLM = new ObjectListModel();
-
-    PictureBookmarksList pictureHistoryList = new PictureBookmarksList(this);
-
-    ObjectListModel pictureHistoryListLM = new ObjectListModel();
-
-    HashMap<Integer, String> generalSettings = new HashMap<Integer, String>();
-
-    private JMenuBar jJMenuBar = null;
-
-    private JMenu jMenuScreens = null;
-
-    private JMenuItem jMenuItemScreenProjector = null;
-
-    private JMenuItem jMenuItemScreenThis = null;
-
-    private JMenuItem jMenuItemScreenTest = null;
-
-    private JMenuItem jMenuItemScreenCancelAll = null;
-
-    private JMenu jMenuAkcie = null;
-
-    private SongsPanel songsPanel;
-
-    private JMenu jMenuFile = null;
-
-    private PanelSelector panelSelector = null;
-
-    public static boolean debugmarsian = new File("debugmarsian.txt").isFile();
-
-    public static boolean dump = debugmarsian;
-
-    public static void dump(String s) {
-        if (dump)
-            System.out.println(s);
-    }
-
-    /**
-     * This method initializes
-     */
-    public App() {
-        super();
-
-        checkDirs();
-
-        loadSettings();
-        loadLangs();
-
-        actionGo = new MyAction(ls(1000), null, KeyStroke.getKeyStroke("F5")) {
-            private static final long serialVersionUID = 6665128924643456924L;
-
-            public void actionPerformed(ActionEvent e) {
-                go(Screen.ALL);
-            }
-        };
-        actionReverseGo = new MyAction(ls(1001), null, KeyStroke.getKeyStroke("shift F5")) {
-            private static final long serialVersionUID = -3635843279198182926L;
-
-            public void actionPerformed(ActionEvent e) {
-                screenPrepared.copyFrom(screenLive, Screen.ALL);
-                updatePrepared();
-            }
-        };
-        actionGoText = new MyAction(ls(1002), null, null) {
-            private static final long serialVersionUID = 5193745723654508998L;
-
-            public void actionPerformed(ActionEvent e) {
-                go(Screen.TEXT);
-            }
-
-        };
-        actionGoBackground = new MyAction(ls(1003), null, null) {
-            private static final long serialVersionUID = 7804404775984692581L;
-
-            public void actionPerformed(ActionEvent e) {
-                go(Screen.BACKGROUND); // @jve:decl-index=0:
-            }
-
-        };
-        actionSongSearch = new MyAction(ls(1004), null, KeyStroke.getKeyStroke("ctrl F")) {
-            private static final long serialVersionUID = -6286284389819879458L;
-
-            public void actionPerformed(ActionEvent e) {
-                getPanelSelector().ensureVisible(songsPanel);
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        JTextField tfs = songsPanel.getJTextFieldSearch();
-                        tfs.selectAll();
-                        tfs.requestFocus(); // @jve:decl-index=0:
-                    }
-                });
-            }
-        };
-        actionSaveAll = new MyAction(ls(1005), null, KeyStroke.getKeyStroke("ctrl S")) {
-            private static final long serialVersionUID = 2857605349748326463L;
-
-            public void actionPerformed(ActionEvent e) {
-                saveAll();
-            }
-        };
-
-        pictureBookmarksChanged();
-        pictureHistoryChanged();
-
-        loadPanels();
-
-        screenPrepared.setText(new AttributedString(""));
-        screenPrepared.blockFreeze();
-        screenLive = screenPrepared.getFrozenInstance();
-
-        initialize();
-
-        //
-        try {
-            loadSongs();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        songsLM.refresh();
-
-        loadTransitions();
-        transitionsLM.refresh();
-
-        setCurrentTransition(transitions.elementAt(1));
     }
 
     private void checkDirs() {
@@ -530,6 +475,19 @@ public class App extends JFrame implements ActionListener {
 
     public Transition getCurrentTransition() {
         return currentTransition;
+    }
+
+    public void setCurrentTransition(Transition transition) {
+        Transition old = this.currentTransition;
+        this.currentTransition = transition;
+
+        for (int i = 0; i < liveScreens.length; i++) {
+            ScreenView s = liveScreens[i];
+            if (s != null)
+                s.setTransition(currentTransition);
+        }
+
+        firePropertyChange("currentTransition", old, this.currentTransition);
     }
 
     /**
@@ -648,7 +606,6 @@ public class App extends JFrame implements ActionListener {
         return jSplitPane;
     }
 
-
     private ScreenViewSwing getScreenViewLive() {
         if (screenViewLive == null) {
             screenViewLive = new ScreenViewSwing();
@@ -660,7 +617,6 @@ public class App extends JFrame implements ActionListener {
         }
         return screenViewLive;
     }
-
 
     private ScreenViewSwing getScreenViewPrepared() {
         if (screenViewPrepared == null) {
@@ -679,6 +635,15 @@ public class App extends JFrame implements ActionListener {
      */
     public Song getSelectedSong() {
         return selectedSong;
+    }
+
+    /**
+     * @param selectedSong The selectedSong to set.
+     */
+    public void setSelectedSong(Song selectedSong) {
+        Song old = this.selectedSong;
+        this.selectedSong = selectedSong;
+        firePropertyChange("selectedSong", old, selectedSong);
     }
 
     protected void go(int what) {
@@ -733,8 +698,6 @@ public class App extends JFrame implements ActionListener {
         if (immediateFullScreen && liveScreens[SCREEN_FULLSCREEN_MY] == null)
             showOnThisScreen();
     }
-
-    public static String version = "3.0.1";
 
     /**
      * This method initializes this
@@ -908,19 +871,6 @@ public class App extends JFrame implements ActionListener {
         transitions.add(slow);
     }
 
-    public void setCurrentTransition(Transition transition) {
-        Transition old = this.currentTransition;
-        this.currentTransition = transition;
-
-        for (int i = 0; i < liveScreens.length; i++) {
-            ScreenView s = liveScreens[i];
-            if (s != null)
-                s.setTransition(currentTransition);
-        }
-
-        firePropertyChange("currentTransition", old, this.currentTransition);
-    }
-
     public void setCurrentLanguage(int language) {
         String value = langObj.getLangs()[language];
 
@@ -944,15 +894,6 @@ public class App extends JFrame implements ActionListener {
         this.dispose();
 
         new App().setVisible(true);
-    }
-
-    /**
-     * @param selectedSong The selectedSong to set.
-     */
-    public void setSelectedSong(Song selectedSong) {
-        Song old = this.selectedSong;
-        this.selectedSong = selectedSong;
-        firePropertyChange("selectedSong", old, selectedSong);
     }
 
     /**
@@ -1117,26 +1058,21 @@ public class App extends JFrame implements ActionListener {
             pictureHistoryChanged();
     }
 
-    private String getApplicationDataFolderPath()
-    {
-         String workingDirectory;
-         String OS = (System.getProperty("os.name")).toUpperCase();
+    private String getApplicationDataFolderPath() {
+        String workingDirectory;
+        String OS = (System.getProperty("os.name")).toUpperCase();
 
-        if (OS.contains("WIN"))
-        {
+        if (OS.contains("WIN")) {
             workingDirectory = System.getenv("AppData");
-        }
-        else
-        {
+        } else {
             //in either case, we would start in the user's home directory
             workingDirectory = System.getProperty("user.home");
-            if(OS.contains("MAC"))
-            {
+            if (OS.contains("MAC")) {
                 //if we are on a Mac, we are not done, we look for "Application Support"
                 workingDirectory += "/Library/Application Support";
             }
         }
-        workingDirectory+="/jWorship/";
+        workingDirectory += "/jWorship/";
         return workingDirectory;
     }
 } // @jve:decl-index=0:visual-constraint="10,10"

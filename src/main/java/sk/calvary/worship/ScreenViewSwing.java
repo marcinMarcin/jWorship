@@ -24,26 +24,14 @@ import java.util.TimerTask;
  *         Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class ScreenViewSwing extends JComponent implements ScreenView, Runnable {
-    Refresher refresher = new Refresher() {
-        public void refresh() {
-            ScreenViewSwing.this.refresh();
-        }
-    };
-
-    private static final long serialVersionUID = 6735428947591824020L;
-
     public static final int MODE_FLIP = 0;
-
     public static final int MODE_BLT = 1;
-
     public static final int MODE_SWING = 2;
-
     public static final int MODE_TEST = 3;
-
+    private static final long serialVersionUID = 6735428947591824020L;
     private final App app;
-
     private final int index;
-
+    private final Object fullScreenChangedLock = new Object();
     private Screen screen; // @jve:decl-index=0:
 
     private Transition transition = null;
@@ -69,42 +57,12 @@ public class ScreenViewSwing extends JComponent implements ScreenView, Runnable 
     private Thread fullScreenThread;
 
     private boolean fullScreenChangedFlag = false;
-
-    private final Object fullScreenChangedLock = new Object();
-
     private int fullScreenMode = MODE_FLIP;
-
-    /**
-     * @param screen The screen to set.
-     */
-    public void setScreen(Screen screen) {
-        Screen oldScreen = this.screen;
-        this.screen = screen.getFrozenInstance();
-        recomputeTargetRectangle();
-
-        if (!disableTransitions && transition != null
-                && screen.getHeight() == oldScreen.getHeight()) {
-
-            transition.init(this, new Dimension(targetRect.width,
-                    targetRect.height), targetScale, oldScreen, screen);
-
-            transitionStart = System.currentTimeMillis();
-            transitionDuration = transition.getDuration();
-        } else {
-            transitionStart = -1;
-            transitionDuration = 1;
-            targetRect = null;
+    Refresher refresher = new Refresher() {
+        public void refresh() {
+            ScreenViewSwing.this.refresh();
         }
-
-        if (isUsingBufferStrategy()) {
-            synchronized (fullScreenChangedLock) {
-                fullScreenChangedFlag = true;
-                fullScreenChangedLock.notifyAll();
-            }
-        } else {
-            repaint();
-        }
-    }
+    };
 
     public ScreenViewSwing() {
         this.app = null;
@@ -138,6 +96,38 @@ public class ScreenViewSwing extends JComponent implements ScreenView, Runnable 
         fullScreenFrame.setLayout(new BorderLayout());
         fullScreenFrame.add(this, BorderLayout.CENTER);
         setBackground(Color.BLACK);
+    }
+
+    /**
+     * @param screen The screen to set.
+     */
+    public void setScreen(Screen screen) {
+        Screen oldScreen = this.screen;
+        this.screen = screen.getFrozenInstance();
+        recomputeTargetRectangle();
+
+        if (!disableTransitions && transition != null
+                && screen.getHeight() == oldScreen.getHeight()) {
+
+            transition.init(this, new Dimension(targetRect.width,
+                    targetRect.height), targetScale, oldScreen, screen);
+
+            transitionStart = System.currentTimeMillis();
+            transitionDuration = transition.getDuration();
+        } else {
+            transitionStart = -1;
+            transitionDuration = 1;
+            targetRect = null;
+        }
+
+        if (isUsingBufferStrategy()) {
+            synchronized (fullScreenChangedLock) {
+                fullScreenChangedFlag = true;
+                fullScreenChangedLock.notifyAll();
+            }
+        } else {
+            repaint();
+        }
     }
 
     public void grabFullScreen() {

@@ -337,6 +337,44 @@ public class JMFUtils {
         return mngrSession;
     }
 
+    public static TrackControl getVideoTrack(Processor p) {
+        // obtain the track control
+        TrackControl[] tc = p.getTrackControls();
+
+        if (tc == null) {
+            return null;
+        }
+
+        TrackControl vtc = null;
+
+        for (int i = 0; i < tc.length; i++) {
+            if (tc[i].getFormat() instanceof VideoFormat) {
+                return tc[i];
+            }
+        }
+
+        return null;
+    }
+
+    public static TrackControl getAudioTrack(Processor p) {
+        // obtain the track control
+        TrackControl[] tc = p.getTrackControls();
+
+        if (tc == null) {
+            return null;
+        }
+
+        TrackControl vtc = null;
+
+        for (int i = 0; i < tc.length; i++) {
+            if (tc[i].getFormat() instanceof AudioFormat) {
+                return tc[i];
+            }
+        }
+
+        return null;
+    }
+
     public static class StateHelper implements javax.media.ControllerListener {
 
         Player player = null;
@@ -485,43 +523,5 @@ public class JMFUtils {
             }
             notifyAll();
         }
-    }
-
-    public static TrackControl getVideoTrack(Processor p) {
-        // obtain the track control
-        TrackControl[] tc = p.getTrackControls();
-
-        if (tc == null) {
-            return null;
-        }
-
-        TrackControl vtc = null;
-
-        for (int i = 0; i < tc.length; i++) {
-            if (tc[i].getFormat() instanceof VideoFormat) {
-                return tc[i];
-            }
-        }
-
-        return null;
-    }
-
-    public static TrackControl getAudioTrack(Processor p) {
-        // obtain the track control
-        TrackControl[] tc = p.getTrackControls();
-
-        if (tc == null) {
-            return null;
-        }
-
-        TrackControl vtc = null;
-
-        for (int i = 0; i < tc.length; i++) {
-            if (tc[i].getFormat() instanceof AudioFormat) {
-                return tc[i];
-            }
-        }
-
-        return null;
     }
 }

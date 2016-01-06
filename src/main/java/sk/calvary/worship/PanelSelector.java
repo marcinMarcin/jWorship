@@ -19,12 +19,11 @@ public class PanelSelector extends JPanel {
     private static final long serialVersionUID = 1L;
 
     App app;
+    JTabbedPane tabs = new JTabbedPane();
 
     public PanelSelector() {
 
     }
-
-    JTabbedPane tabs = new JTabbedPane();
 
     public PanelSelector(App app) {
         this.app = app;
@@ -118,42 +117,6 @@ public class PanelSelector extends JPanel {
         return (AppPanel[][]) v.toArray(new AppPanel[0][0]);
     }
 
-    class TabPanelSwitcher extends JPanel implements ChangeListener {
-        private static final long serialVersionUID = 1L;
-
-        private final JPanel tab;
-
-        private final AppPanel panel;
-
-        TabPanelSwitcher(JPanel tab, AppPanel panel) {
-            if (tab == null)
-                tab = this;
-            this.tab = tab;
-            this.panel = panel;
-
-            setLayout(new BorderLayout());
-
-            if (panel.getParent() == null)
-                addToMe();
-
-            tabs.addChangeListener(this);
-        }
-
-        private void addToMe() {
-            add(panel, BorderLayout.CENTER);
-        }
-
-        TabPanelSwitcher(AppPanel panel) {
-            this(null, panel);
-        }
-
-        public void stateChanged(ChangeEvent e) {
-            if (tabs.getSelectedComponent() == tab) {
-                addToMe();
-            }
-        }
-    }
-
     public void ensureVisible(SongsPanel panel) {
         AppPanel[][] ls = getPanelLayout();
         int i = tabs.getSelectedIndex();
@@ -178,5 +141,41 @@ public class PanelSelector extends JPanel {
         }
         if (best >= 0)
             tabs.setSelectedIndex(best);
+    }
+
+    class TabPanelSwitcher extends JPanel implements ChangeListener {
+        private static final long serialVersionUID = 1L;
+
+        private final JPanel tab;
+
+        private final AppPanel panel;
+
+        TabPanelSwitcher(JPanel tab, AppPanel panel) {
+            if (tab == null)
+                tab = this;
+            this.tab = tab;
+            this.panel = panel;
+
+            setLayout(new BorderLayout());
+
+            if (panel.getParent() == null)
+                addToMe();
+
+            tabs.addChangeListener(this);
+        }
+
+        TabPanelSwitcher(AppPanel panel) {
+            this(null, panel);
+        }
+
+        private void addToMe() {
+            add(panel, BorderLayout.CENTER);
+        }
+
+        public void stateChanged(ChangeEvent e) {
+            if (tabs.getSelectedComponent() == tab) {
+                addToMe();
+            }
+        }
     }
 }

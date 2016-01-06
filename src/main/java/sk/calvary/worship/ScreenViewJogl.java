@@ -19,6 +19,9 @@ public class ScreenViewJogl extends GLCanvas implements ScreenView,
     private Frame fullScreenFrame;
 
     private Screen screen;
+    private float view_rotx = 20.0f, view_roty = 30.0f, view_rotz = 0.0f;
+    private int gear1, gear2, gear3;
+    private float angle = 0.0f;
 
     public ScreenViewJogl(App app, int screen, GraphicsDevice gd) {
         this.app = app;
@@ -30,182 +33,6 @@ public class ScreenViewJogl extends GLCanvas implements ScreenView,
         fullScreenFrame.add(this, BorderLayout.CENTER);
 
         addGLEventListener(this);
-    }
-
-    public void cancelFullScreen() {
-        fullScreenFrame.setVisible(false);
-        fullScreenFrame.dispose();
-    }
-
-    public void grabFullScreen() {
-        Rectangle b = new Rectangle(0, 0, 800, 600);
-        fullScreenFrame.setBounds(b);
-        fullScreenFrame.setVisible(true);
-        // new Animator(this).start();
-    }
-
-    public void newMediaFrame(String media) {
-        if (media.equals(screen.getBackgroundMedia()))
-            display();
-    }
-
-    public void setScreen(Screen s) {
-        this.screen = s.getFrozenInstance();
-        display();
-    }
-
-    public void setTransition(Transition currentTransition) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void display(GLAutoDrawable drawable) {
-        angle += 2.0f;
-
-        GL gl = drawable.getGL();
-        if ((drawable instanceof GLJPanel)
-                && !((GLJPanel) drawable).isOpaque()
-                && ((GLJPanel) drawable)
-                .shouldPreserveColorBufferIfTranslucent()) {
-            gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
-        } else {
-            gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        }
-
-        // gl.glPushMatrix();
-        // gl.glRotatef(view_rotx, 1.0f, 0.0f, 0.0f);
-        // gl.glRotatef(view_roty, 0.0f, 1.0f, 0.0f);
-        // gl.glRotatef(view_rotz, 0.0f, 0.0f, 1.0f);
-        //
-        // gl.glPushMatrix();
-        // gl.glTranslatef(-3.0f, -2.0f, 0.0f);
-        // gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-        // gl.glCallList(gear1);
-        // gl.glPopMatrix();
-        //
-        // gl.glPushMatrix();
-        // gl.glTranslatef(3.1f, -2.0f, 0.0f);
-        // gl.glRotatef(-2.0f * angle - 9.0f, 0.0f, 0.0f, 1.0f);
-        // gl.glCallList(gear2);
-        // gl.glPopMatrix();
-        //
-        // gl.glPushMatrix();
-        // gl.glTranslatef(-3.1f, 4.2f, 0.0f);
-        // gl.glRotatef(-2.0f * angle - 25.0f, 0.0f, 0.0f, 1.0f);
-        // gl.glCallList(gear3);
-        // gl.glPopMatrix();
-        //
-        // gl.glPopMatrix();
-
-        // raster test
-        byte rasters[] = new byte[]{(byte) 0xc0, 0x00, (byte) 0xc0, 0x00,
-                (byte) 0xc0, 0x00, (byte) 0xc0, 0x00, (byte) 0xc0, 0x00,
-                (byte) 0xff, 0x00, (byte) 0xff, 0x00, (byte) 0xc0, 0x00,
-                (byte) 0xc0, 0x00, (byte) 0xc0, 0x00, (byte) 0xff, (byte) 0xc0,
-                (byte) 0xff, (byte) 0xc0};
-
-        gl.glShadeModel(gl.GL_FLAT);
-        // gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, new float[] {
-        // 0, 0, 0, 0 }, 0);
-        // gl.glMaterialfv(GL.GL_FRONT, GL.GL_EMISSION,
-        // new float[] { 1, 1, 1, 1 }, 0);
-        gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1);
-        gl.glColor3f(1.0f, 0.0f, 1.0f);
-        gl.glRasterPos3f(-8, 4, 0);
-        // gl.glBitmap(0, 0, 0.0f, 0.0f, -200, 0.0f, null, 0);
-        // gl.glBitmap(10, 12, 0.0f, 0.0f, 11.0f, 0.0f, rasters, 0);
-        // gl.glBitmap(10, 12, 0.0f, 0.0f, 11.0f, 0.0f, rasters, 0);
-        // gl.glBitmap(10, 12, 0.0f, 0.0f, 11.0f, 0.0f, rasters, 0);
-
-        Image im = app.getMediaImage(screen.getBackgroundMedia());
-        if (im instanceof MyImage) {
-            MyImage mim = (MyImage) im;
-            gl.glPixelZoom(4f, -4f);
-            gl.glDrawPixels(mim.getWidth(), mim.getHeight(), mim.getGlType(),
-                    GL.GL_UNSIGNED_BYTE, mim.getBuffer());
-            mim.addNewFrameListener(this);
-            // BufferedImage bim = (BufferedImage) im;
-            // DataBuffer b = bim.getRaster().getDataBuffer();
-            // if (b instanceof DataBufferByte) {
-            // byte[] data = ((DataBufferByte) b).getData();
-            // gl.glPixelZoom(1f, -1f);
-            // gl.glDrawPixels(bim.getWidth(), bim.getHeight(), GL.GL_BGR,
-            // GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(data));
-            // }
-        }
-    }
-
-    public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
-        // TODO Auto-generated method stub
-
-    }
-
-    private float view_rotx = 20.0f, view_roty = 30.0f, view_rotz = 0.0f;
-
-    private int gear1, gear2, gear3;
-
-    private float angle = 0.0f;
-
-    public void init(GLAutoDrawable drawable) {
-        // Use debug pipeline
-        drawable.setGL(new DebugGL(drawable.getGL()));
-
-        GL gl = drawable.getGL();
-
-        App.dump("INIT GL IS: " + gl.getClass().getName());
-
-        gl.setSwapInterval(1);
-
-        float pos[] = {5.0f, 5.0f, 10.0f, 0.0f};
-        float red[] = {0.8f, 0.1f, 0.0f, 1.0f};
-        float green[] = {0.0f, 0.8f, 0.2f, 1.0f};
-        float blue[] = {0.2f, 0.2f, 1.0f, 1.0f};
-
-        gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, pos, 0);
-        // gl.glEnable(GL.GL_CULL_FACE);
-        // gl.glEnable(GL.GL_LIGHTING);
-        // gl.glEnable(GL.GL_LIGHT0);
-        // gl.glEnable(GL.GL_DEPTH_TEST);
-
-		/* make the gears */
-        gear1 = gl.glGenLists(1);
-        gl.glNewList(gear1, GL.GL_COMPILE);
-        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, red, 0);
-        gear(gl, 1.0f, 4.0f, 1.0f, 20, 0.7f);
-        gl.glEndList();
-
-        gear2 = gl.glGenLists(1);
-        gl.glNewList(gear2, GL.GL_COMPILE);
-        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, green, 0);
-        gear(gl, 0.5f, 2.0f, 2.0f, 10, 0.7f);
-        gl.glEndList();
-
-        gear3 = gl.glGenLists(1);
-        gl.glNewList(gear3, GL.GL_COMPILE);
-        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, blue, 0);
-        gear(gl, 1.3f, 2.0f, 0.5f, 10, 0.7f);
-        gl.glEndList();
-
-        gl.glEnable(GL.GL_NORMALIZE);
-    }
-
-    public void reshape(GLAutoDrawable drawable, int x, int y, int width,
-                        int height) {
-        GL gl = drawable.getGL();
-
-        float h = (float) height / (float) width;
-
-        gl.glMatrixMode(GL.GL_PROJECTION);
-
-        System.err.println("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR));
-        System.err.println("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER));
-        System.err.println("GL_VERSION: " + gl.glGetString(GL.GL_VERSION));
-
-        gl.glLoadIdentity();
-        gl.glFrustum(-1.0f, 1.0f, -h, h, 5.0f, 60.0f);
-        gl.glMatrixMode(GL.GL_MODELVIEW);
-        gl.glLoadIdentity();
-        gl.glTranslatef(0.0f, 0.0f, -40.0f);
     }
 
     public static void gear(GL gl, float inner_radius, float outer_radius,
@@ -345,6 +172,176 @@ public class ScreenViewJogl extends GLCanvas implements ScreenView,
                     * (float) Math.sin(angle), width * 0.5f);
         }
         gl.glEnd();
+    }
+
+    public void cancelFullScreen() {
+        fullScreenFrame.setVisible(false);
+        fullScreenFrame.dispose();
+    }
+
+    public void grabFullScreen() {
+        Rectangle b = new Rectangle(0, 0, 800, 600);
+        fullScreenFrame.setBounds(b);
+        fullScreenFrame.setVisible(true);
+        // new Animator(this).start();
+    }
+
+    public void newMediaFrame(String media) {
+        if (media.equals(screen.getBackgroundMedia()))
+            display();
+    }
+
+    public void setScreen(Screen s) {
+        this.screen = s.getFrozenInstance();
+        display();
+    }
+
+    public void setTransition(Transition currentTransition) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void display(GLAutoDrawable drawable) {
+        angle += 2.0f;
+
+        GL gl = drawable.getGL();
+        if ((drawable instanceof GLJPanel)
+                && !((GLJPanel) drawable).isOpaque()
+                && ((GLJPanel) drawable)
+                .shouldPreserveColorBufferIfTranslucent()) {
+            gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        } else {
+            gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+        }
+
+        // gl.glPushMatrix();
+        // gl.glRotatef(view_rotx, 1.0f, 0.0f, 0.0f);
+        // gl.glRotatef(view_roty, 0.0f, 1.0f, 0.0f);
+        // gl.glRotatef(view_rotz, 0.0f, 0.0f, 1.0f);
+        //
+        // gl.glPushMatrix();
+        // gl.glTranslatef(-3.0f, -2.0f, 0.0f);
+        // gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+        // gl.glCallList(gear1);
+        // gl.glPopMatrix();
+        //
+        // gl.glPushMatrix();
+        // gl.glTranslatef(3.1f, -2.0f, 0.0f);
+        // gl.glRotatef(-2.0f * angle - 9.0f, 0.0f, 0.0f, 1.0f);
+        // gl.glCallList(gear2);
+        // gl.glPopMatrix();
+        //
+        // gl.glPushMatrix();
+        // gl.glTranslatef(-3.1f, 4.2f, 0.0f);
+        // gl.glRotatef(-2.0f * angle - 25.0f, 0.0f, 0.0f, 1.0f);
+        // gl.glCallList(gear3);
+        // gl.glPopMatrix();
+        //
+        // gl.glPopMatrix();
+
+        // raster test
+        byte rasters[] = new byte[]{(byte) 0xc0, 0x00, (byte) 0xc0, 0x00,
+                (byte) 0xc0, 0x00, (byte) 0xc0, 0x00, (byte) 0xc0, 0x00,
+                (byte) 0xff, 0x00, (byte) 0xff, 0x00, (byte) 0xc0, 0x00,
+                (byte) 0xc0, 0x00, (byte) 0xc0, 0x00, (byte) 0xff, (byte) 0xc0,
+                (byte) 0xff, (byte) 0xc0};
+
+        gl.glShadeModel(gl.GL_FLAT);
+        // gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, new float[] {
+        // 0, 0, 0, 0 }, 0);
+        // gl.glMaterialfv(GL.GL_FRONT, GL.GL_EMISSION,
+        // new float[] { 1, 1, 1, 1 }, 0);
+        gl.glPixelStorei(gl.GL_UNPACK_ALIGNMENT, 1);
+        gl.glColor3f(1.0f, 0.0f, 1.0f);
+        gl.glRasterPos3f(-8, 4, 0);
+        // gl.glBitmap(0, 0, 0.0f, 0.0f, -200, 0.0f, null, 0);
+        // gl.glBitmap(10, 12, 0.0f, 0.0f, 11.0f, 0.0f, rasters, 0);
+        // gl.glBitmap(10, 12, 0.0f, 0.0f, 11.0f, 0.0f, rasters, 0);
+        // gl.glBitmap(10, 12, 0.0f, 0.0f, 11.0f, 0.0f, rasters, 0);
+
+        Image im = app.getMediaImage(screen.getBackgroundMedia());
+        if (im instanceof MyImage) {
+            MyImage mim = (MyImage) im;
+            gl.glPixelZoom(4f, -4f);
+            gl.glDrawPixels(mim.getWidth(), mim.getHeight(), mim.getGlType(),
+                    GL.GL_UNSIGNED_BYTE, mim.getBuffer());
+            mim.addNewFrameListener(this);
+            // BufferedImage bim = (BufferedImage) im;
+            // DataBuffer b = bim.getRaster().getDataBuffer();
+            // if (b instanceof DataBufferByte) {
+            // byte[] data = ((DataBufferByte) b).getData();
+            // gl.glPixelZoom(1f, -1f);
+            // gl.glDrawPixels(bim.getWidth(), bim.getHeight(), GL.GL_BGR,
+            // GL.GL_UNSIGNED_BYTE, ByteBuffer.wrap(data));
+            // }
+        }
+    }
+
+    public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void init(GLAutoDrawable drawable) {
+        // Use debug pipeline
+        drawable.setGL(new DebugGL(drawable.getGL()));
+
+        GL gl = drawable.getGL();
+
+        App.dump("INIT GL IS: " + gl.getClass().getName());
+
+        gl.setSwapInterval(1);
+
+        float pos[] = {5.0f, 5.0f, 10.0f, 0.0f};
+        float red[] = {0.8f, 0.1f, 0.0f, 1.0f};
+        float green[] = {0.0f, 0.8f, 0.2f, 1.0f};
+        float blue[] = {0.2f, 0.2f, 1.0f, 1.0f};
+
+        gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, pos, 0);
+        // gl.glEnable(GL.GL_CULL_FACE);
+        // gl.glEnable(GL.GL_LIGHTING);
+        // gl.glEnable(GL.GL_LIGHT0);
+        // gl.glEnable(GL.GL_DEPTH_TEST);
+
+		/* make the gears */
+        gear1 = gl.glGenLists(1);
+        gl.glNewList(gear1, GL.GL_COMPILE);
+        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, red, 0);
+        gear(gl, 1.0f, 4.0f, 1.0f, 20, 0.7f);
+        gl.glEndList();
+
+        gear2 = gl.glGenLists(1);
+        gl.glNewList(gear2, GL.GL_COMPILE);
+        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, green, 0);
+        gear(gl, 0.5f, 2.0f, 2.0f, 10, 0.7f);
+        gl.glEndList();
+
+        gear3 = gl.glGenLists(1);
+        gl.glNewList(gear3, GL.GL_COMPILE);
+        gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, blue, 0);
+        gear(gl, 1.3f, 2.0f, 0.5f, 10, 0.7f);
+        gl.glEndList();
+
+        gl.glEnable(GL.GL_NORMALIZE);
+    }
+
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width,
+                        int height) {
+        GL gl = drawable.getGL();
+
+        float h = (float) height / (float) width;
+
+        gl.glMatrixMode(GL.GL_PROJECTION);
+
+        System.err.println("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR));
+        System.err.println("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER));
+        System.err.println("GL_VERSION: " + gl.glGetString(GL.GL_VERSION));
+
+        gl.glLoadIdentity();
+        gl.glFrustum(-1.0f, 1.0f, -h, h, 5.0f, 60.0f);
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glLoadIdentity();
+        gl.glTranslatef(0.0f, 0.0f, -40.0f);
     }
 
     public void newFrame(MyImage i) {

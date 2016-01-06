@@ -16,10 +16,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MultimediaPanel extends AppPanel {
-    private JScrollPane jScrollPane = null;
-
+    public static final String mediaType = "multimedia";
     final Map<String, MultimediaChannel> channels = new LinkedHashMap<String, MultimediaChannel>();
-
+    private JScrollPane jScrollPane = null;
     private JPanel jPanelChannels = null;
 
     public MultimediaPanel(App app) {
@@ -81,8 +80,6 @@ public class MultimediaPanel extends AppPanel {
         }
         return jPanelChannels;
     }
-
-    public static final String mediaType = "multimedia";
 
     public Image getMediaImage(String media) {
         MultimediaChannel c = channels.get(media);

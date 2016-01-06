@@ -53,6 +53,11 @@ public class SongEditor extends JDialog {
         initialize();
     }
 
+    public static void main(String[] args) {
+        SongEditor songEditor = new SongEditor(null);
+        songEditor.show();
+    }
+
     private JPanel getJContentPane() {
         if (jContentPane == null) {
             GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
@@ -332,10 +337,5 @@ public class SongEditor extends JDialog {
             });
         }
         return jButton;
-    }
-
-    public static void main(String[] args) {
-        SongEditor songEditor = new SongEditor(null);
-        songEditor.show();
     }
 } // @jve:decl-index=0:visual-constraint="10,10"

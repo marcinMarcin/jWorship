@@ -15,17 +15,25 @@ public abstract class BookmarksList<B extends Bookmarks<?>> implements Serializa
     Vector<B> bookmarks = new Vector<B>();
 
     transient B selectedForAdd;
+    transient boolean modified;
+    transient App app;
+
+    public BookmarksList() {
+    }
 
     protected abstract B[] getBlankArray();
 
-    transient boolean modified;
-
     protected abstract B newBookmarksInstance();
-
-    transient App app;
 
     public B getSelectedForAdd() {
         return selectedForAdd;
+    }
+
+    public synchronized void setSelectedForAdd(B selectedForAdd) {
+        if (!bookmarks.contains(selectedForAdd))
+            throw new IllegalArgumentException();
+        this.selectedForAdd = selectedForAdd;
+        changed();
     }
 
     public B getSelectedForAddOrCreate() {
@@ -49,18 +57,8 @@ public abstract class BookmarksList<B extends Bookmarks<?>> implements Serializa
         return selectedForAdd;
     }
 
-    public synchronized void setSelectedForAdd(B selectedForAdd) {
-        if (!bookmarks.contains(selectedForAdd))
-            throw new IllegalArgumentException();
-        this.selectedForAdd = selectedForAdd;
-        changed();
-    }
-
     public synchronized B[] getBookmarks() {
         return bookmarks.toArray(getBlankArray());
-    }
-
-    public BookmarksList() {
     }
 
     protected void changed() {

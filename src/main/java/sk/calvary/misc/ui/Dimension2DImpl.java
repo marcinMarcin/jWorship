@@ -19,6 +19,14 @@ public final class Dimension2DImpl extends Dimension2D {
 
     double height;
 
+    public Dimension2DImpl(double width, double height) {
+        setSize(width, height);
+    }
+
+    public Dimension2DImpl(Dimension2D d) {
+        this(d.getWidth(), d.getHeight());
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -45,13 +53,5 @@ public final class Dimension2DImpl extends Dimension2D {
     public void setSize(double width, double height) {
         this.width = width;
         this.height = height;
-    }
-
-    public Dimension2DImpl(double width, double height) {
-        setSize(width, height);
-    }
-
-    public Dimension2DImpl(Dimension2D d) {
-        this(d.getWidth(), d.getHeight());
     }
 }

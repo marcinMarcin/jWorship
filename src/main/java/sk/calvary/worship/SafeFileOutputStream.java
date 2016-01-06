@@ -16,31 +16,8 @@ public class SafeFileOutputStream extends OutputStream {
 
     boolean closed = false;
 
-    @Override
-    public void write(int b) throws IOException {
-        buffer.write(b);
-    }
-
-    @Override
-    public void write(byte[] b, int off, int len) throws IOException {
-        buffer.write(b, off, len);
-    }
-
     SafeFileOutputStream(File f) {
         file = f;
-    }
-
-    @Override
-    public void close() throws IOException {
-        if (closed)
-            return;
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(buffer.toByteArray());
-            fos.close();
-        } finally {
-            closed = true;
-        }
     }
 
     public static void safeSave(File f, Object o) throws IOException {
@@ -59,6 +36,29 @@ public class SafeFileOutputStream extends OutputStream {
             return s.readObject();
         } finally {
             s.close();
+        }
+    }
+
+    @Override
+    public void write(int b) throws IOException {
+        buffer.write(b);
+    }
+
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        buffer.write(b, off, len);
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (closed)
+            return;
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(buffer.toByteArray());
+            fos.close();
+        } finally {
+            closed = true;
         }
     }
 }

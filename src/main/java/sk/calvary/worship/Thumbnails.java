@@ -23,23 +23,14 @@ import java.util.Vector;
 
 public class Thumbnails {
     private static final int MAX_STRONG_REFERENCES = 100;
-
-    private boolean immediateLoadThunbnail = false;
-
     private final Map<File, SoftReference<Image>> cache = new Hashtable<File, SoftReference<Image>>();
-
     private final Hashtable<File, Vector<Component>> waiters = new Hashtable<File, Vector<Component>>();
-
     private final LinkedHashSet<Image> recent = new LinkedHashSet<Image>();
-
     private final ImageLoader imageLoader;
-
     private final int maxWidth;
-
     private final int maxHeight;
-
     private final Vector<File> todo = new Vector<File>();
-
+    private boolean immediateLoadThunbnail = false;
     private Thread generator;
 
     public Thumbnails(ImageLoader imageLoader, int maxWidth, int maxHeight) {
