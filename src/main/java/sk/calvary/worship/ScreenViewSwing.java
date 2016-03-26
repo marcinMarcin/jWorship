@@ -145,7 +145,11 @@ public class ScreenViewSwing extends JComponent implements ScreenView, Runnable 
                 b.width = 800;
                 b.height = 600;
             }
-            fullScreenGraphicsDevice.setFullScreenWindow(fullScreenFrame);
+
+            String OS = (System.getProperty("os.name")).toUpperCase();
+            if (OS.contains("MAC")) {
+                fullScreenGraphicsDevice.setFullScreenWindow(fullScreenFrame);
+            }
 
             fullScreenFrame.setBounds(b);
             fullScreenFrame.setVisible(true);
